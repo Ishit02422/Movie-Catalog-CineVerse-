@@ -1,0 +1,361 @@
+import mongoose from "mongoose";
+import dotenv from "dotenv";
+import { Movie } from "../models/Movie.js";
+
+dotenv.config();
+
+const sampleMovies = [
+  {
+    title: "Inception",
+    genre: "Sci-Fi",
+    release_year: 2010,
+    description: "A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O.",
+    image_url: "https://image.tmdb.org/t/p/original/xlaY2zyzMfkhk0HSC5VUwzoZPU1.jpg",
+    status: "active",
+    is_featured: true,
+    rating: 8.8,
+    views_count: 1420,
+  },
+  {
+    title: "The Dark Knight",
+    genre: "Action",
+    release_year: 2008,
+    description: "When the menace known as the Joker wreaks havoc and chaos on the people of Gotham, Batman must accept one of the greatest psychological and physical tests of his ability to fight injustice.",
+    image_url: "https://image.tmdb.org/t/p/original/qJ2tW6WMUDux911r6m7haRef0WH.jpg",
+    status: "active",
+    is_featured: true,
+    rating: 9.0,
+    views_count: 1850,
+  },
+  {
+    title: "Interstellar",
+    genre: "Sci-Fi",
+    release_year: 2014,
+    description: "When Earth becomes uninhabitable in the future, a farmer and ex-NASA pilot, Joseph Cooper, is tasked to pilot a spacecraft, along with a team of researchers, to find a new planet for humans.",
+    image_url: "https://www.tallengestore.com/cdn/shop/products/Interstellar_-_Tallenge_Hollywood_Sci-Fi_Art_Movie_Poster_Collection_6400e127-641e-4478-8a06-f699ae526fad.jpg",
+    status: "active",
+    is_featured: true,
+    rating: 8.7,
+    views_count: 1620,
+  },
+  {
+    title: "Pulp Fiction",
+    genre: "Crime",
+    release_year: 1994,
+    description: "The lives of two mob hitmen, a boxer, a gangster and his wife, and a pair of diner bandits intertwine in four tales of violence and redemption.",
+    image_url: "https://image.tmdb.org/t/p/original/d5iIlFn5s0ImszYzBPb8JPIfbXD.jpg",
+    status: "active",
+    is_featured: false,
+    rating: 8.9,
+    views_count: 980,
+  },
+  {
+    title: "Spider-Man: Into the Spider-Verse",
+    genre: "Animation",
+    release_year: 2018,
+    description: "Teen Miles Morales becomes the new Spider-Man and joins other Spider-Heroes from various parallel universes to stop a threat to all reality.",
+    image_url: "https://image.tmdb.org/t/p/original/iiZZdoQBEYBv6id8su7ImL0oCbD.jpg",
+    status: "active",
+    is_featured: true,
+    rating: 8.4,
+    views_count: 1100,
+  },
+  {
+    title: "Oppenheimer",
+    genre: "Drama",
+    release_year: 2023,
+    description: "The story of American scientist J. Robert Oppenheimer and his role in the development of the atomic bomb during World War II.",
+    image_url: "https://www.tallengestore.com/cdn/shop/products/Oppenheimer-CillianMurphy-ChristopherNolan-HollywoodMoviePoster_e0f44b57-75a5-4a51-a4e9-65f9f9a49106.jpg?v=1691369035",
+    status: "active",
+    is_featured: true,
+    rating: 8.9,
+    views_count: 2100,
+  },
+  {
+    title: "Parasite",
+    genre: "Thriller",
+    release_year: 2019,
+    description: "Greed and class discrimination threaten the newly formed symbiotic relationship between the wealthy Park family and the destitute Kim clan.",
+    image_url: "https://image.tmdb.org/t/p/original/7IiTTgloJzvGI1TAYymCfbfl3vT.jpg",
+    status: "active",
+    is_featured: false,
+    rating: 8.5,
+    views_count: 890,
+  },
+  {
+    title: "Dune: Part Two",
+    genre: "Sci-Fi",
+    release_year: 2024,
+    description: "Paul Atreides unites with Chani and the Fremen while seeking revenge against the conspirators who destroyed his family.",
+    image_url: "https://image.tmdb.org/t/p/original/1pdfLvkbY9ohJlCjQH2CZjjYVvJ.jpg",
+    status: "active",
+    is_featured: true,
+    rating: 8.6,
+    views_count: 1950,
+  },
+  {
+    title: "The Shawshank Redemption",
+    genre: "Drama",
+    release_year: 1994,
+    description: "Over the course of several years, two convicts form a friendship, seeking solace and, eventually, redemption through basic compassion.",
+    image_url: "https://image.tmdb.org/t/p/original/9cqNxx0GxF0bflZmeSMuL5tnGzr.jpg",
+    status: "active",
+    is_featured: false,
+    rating: 9.3,
+    views_count: 2400,
+  },
+  {
+    title: "Spirited Away",
+    genre: "Animation",
+    release_year: 2001,
+    description: "During her family's move to the suburbs, a sullen 10-year-old girl wanders into a world ruled by gods, witches, and spirits, a world where humans are changed into beasts.",
+    image_url: "https://image.tmdb.org/t/p/original/39wmItIWsg5sZMyRUHLkWBcuVCM.jpg",
+    status: "active",
+    is_featured: false,
+    rating: 8.6,
+    views_count: 760,
+  },
+  {
+    title: "The Godfather",
+    genre: "Crime",
+    release_year: 1972,
+    description: "The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.",
+    image_url: "https://image.tmdb.org/t/p/original/3bhkrj58Vtu7enYsRolD1fZdja1.jpg",
+    status: "active",
+    is_featured: false,
+    rating: 9.2,
+    views_count: 1300,
+  },
+  {
+    title: "Fight Club",
+    genre: "Drama",
+    release_year: 1999,
+    description: "An insomniac office worker and a devil-may-care soap maker form an underground fight club that evolves into much more.",
+    image_url: "https://image.tmdb.org/t/p/original/pB8BM7pdSp6B6Ih7QZ4DrQ3PmJK.jpg",
+    status: "active",
+    is_featured: false,
+    rating: 8.8,
+    views_count: 1150,
+  },
+  {
+    title: "The Matrix",
+    genre: "Action",
+    release_year: 1999,
+    description: "When a beautiful stranger leads computer hacker Neo to a forbidding underworld, he discovers the shocking truth--the life he knows is the elaborate deception of an evil cyber-intelligence.",
+    image_url: "https://image.tmdb.org/t/p/original/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg",
+    status: "active",
+    is_featured: false,
+    rating: 8.7,
+    views_count: 1550,
+  },
+  {
+    title: "Gladiator",
+    genre: "Action",
+    release_year: 2000,
+    description: "A former Roman General sets out to exact vengeance against the corrupt emperor who murdered his family and sent him into slavery.",
+    image_url: "https://image.tmdb.org/t/p/original/ty8TGRuvJLPUmAR1H1nRIsgwvim.jpg",
+    status: "active",
+    is_featured: false,
+    rating: 8.5,
+    views_count: 940,
+  },
+  {
+    title: "Whiplash",
+    genre: "Drama",
+    release_year: 2014,
+    description: "A promising young drummer enrolls at a cut-throat music conservatory where his dreams of greatness are mentored by an instructor who will stop at nothing to realize a student's potential.",
+    image_url: "https://image.tmdb.org/t/p/original/7fn624j5lj3xTme2SgiLCeuedmO.jpg",
+    status: "active",
+    is_featured: false,
+    rating: 8.5,
+    views_count: 670,
+  },
+  {
+    title: "Grand Budapest Hotel",
+    genre: "Comedy",
+    release_year: 2014,
+    description: "A writer encounters the owner of an aging high-class hotel, who tells him of his early years serving as a lobby boy in the hotel's glorious years under an exceptional concierge.",
+    image_url: "https://image.tmdb.org/t/p/original/eWdyYQreja6JGCzqHWXpWHDrrPo.jpg",
+    status: "active",
+    is_featured: false,
+    rating: 8.1,
+    views_count: 530,
+  },
+  {
+    title: "3 Idiots",
+    genre: "Comedy",
+    release_year: 2009,
+    description: "Two friends search for their long lost companion while recalling memories of their college friend who inspired them to think differently.",
+    image_url: "https://image.tmdb.org/t/p/original/66A9MqXOyVFCssoloscw79z8Tew.jpg",
+    status: "active",
+    is_featured: true,
+    rating: 8.4,
+    views_count: 2750,
+  },
+  {
+    title: "Dangal",
+    genre: "Drama",
+    release_year: 2016,
+    description: "Former wrestler Mahavir Singh Phogat trains his daughters Geeta and Babita to become world-class wrestlers against societal norms.",
+    image_url: "https://upload.wikimedia.org/wikipedia/en/9/99/Dangal_Poster.jpg",
+    status: "active",
+    is_featured: true,
+    rating: 8.3,
+    views_count: 2600,
+  },
+  {
+    title: "Dilwale Dulhania Le Jayenge",
+    genre: "Romance",
+    release_year: 1995,
+    description: "When Raj meets Simran in Europe, it isn't love at first sight but when Simran moves to India for an arranged marriage, Raj follows to win her over.",
+    image_url: "https://image.tmdb.org/t/p/original/2CAL2433ZeIihfX1Hb2139CX0pW.jpg",
+    status: "active",
+    is_featured: true,
+    rating: 8.0,
+    views_count: 3100,
+  },
+  {
+    title: "PK",
+    genre: "Comedy",
+    release_year: 2014,
+    description: "An innocent alien stranded on Earth loses his communication remote and questions the religious dogmas and superstitions of mankind.",
+    image_url: "https://image.tmdb.org/t/p/original/oHysAhhXCfm1RYKIb68FJbRNPu6.jpg",
+    status: "active",
+    is_featured: false,
+    rating: 8.1,
+    views_count: 2200,
+  },
+  {
+    title: "RRR",
+    genre: "Action",
+    release_year: 2022,
+    description: "A fearless revolutionary and an officer in the British force develop a profound friendship before embarking on a dangerous historic journey.",
+    image_url: "https://image.tmdb.org/t/p/original/wE0I6efAW4cDDmZQWtwZMOW44EJ.jpg",
+    status: "active",
+    is_featured: true,
+    rating: 8.0,
+    views_count: 2900,
+  },
+  {
+    title: "Baahubali 2: The Conclusion",
+    genre: "Action",
+    release_year: 2017,
+    description: "When Shiva, the son of Bahubali, learns about his heritage, he begins to look for answers while avenging his father's betrayal.",
+    image_url: "https://image.tmdb.org/t/p/original/21sC2assImQIYCEDA84Qh9d1RsK.jpg",
+    status: "active",
+    is_featured: false,
+    rating: 8.2,
+    views_count: 2450,
+  },
+  {
+    title: "Jab We Met",
+    genre: "Romance",
+    release_year: 2007,
+    description: "A depressed wealthy businessman finds his life changing after he meets a spunky, carefree young woman on a train.",
+    image_url: "https://image.tmdb.org/t/p/original/sQ7A7jyTbkK90vjd8yCRuoyL9CK.jpg",
+    status: "active",
+    is_featured: true,
+    rating: 7.9,
+    views_count: 2850,
+  },
+  {
+    title: "Yeh Jawaani Hai Deewani",
+    genre: "Romance",
+    release_year: 2013,
+    description: "Kabir and Naina bond during a trekking trip. Before Naina can express her feelings, Kabir leaves to pursue his career dreams abroad.",
+    image_url: "https://image.tmdb.org/t/p/original/em39H81XLCDgXsI7V4IcBZseEO6.jpg",
+    status: "active",
+    is_featured: true,
+    rating: 7.2,
+    views_count: 3100,
+  },
+  {
+    title: "Kal Ho Naa Ho",
+    genre: "Romance",
+    release_year: 2003,
+    description: "Naina, an introverted student, falls in love with her charming neighbor Aman, who harbors a secret that changes all their lives forever.",
+    image_url: "https://image.tmdb.org/t/p/original/zhMI6I0kSLnewTMwE0A8Tz3Cj2f.jpg",
+    status: "active",
+    is_featured: false,
+    rating: 7.9,
+    views_count: 2600,
+  },
+  {
+    title: "Aashiqui 2",
+    genre: "Romance",
+    release_year: 2013,
+    description: "Rahul, a singing sensation, falls in love with Aarohi, a bar singer. He helps her become a star, but his own demons threaten their future.",
+    image_url: "https://upload.wikimedia.org/wikipedia/en/f/f3/Aashiqui_2_%28Poster%29.jpg",
+    status: "active",
+    is_featured: false,
+    rating: 7.1,
+    views_count: 2400,
+  },
+  {
+    title: "Barfi!",
+    genre: "Romance",
+    release_year: 2012,
+    description: "Set in the 1970s, the bittersweet tale of a deaf-mute young man and his unique bond with two beautiful women.",
+    image_url: "https://image.tmdb.org/t/p/original/5cJIx2zKjDoUtPSliou23xsReb1.jpg",
+    status: "active",
+    is_featured: false,
+    rating: 8.1,
+    views_count: 2150,
+  },
+  {
+    title: "Shershaah",
+    genre: "Romance",
+    release_year: 2021,
+    description: "The life of Indian army captain Vikram Batra, PVC, and his heartfelt love story with Dimple Cheema during turbulent wartime.",
+    image_url: "https://image.tmdb.org/t/p/original/zGvFnwoXJKrYnKhoVPytqkqCJ8V.jpg",
+    status: "active",
+    is_featured: true,
+    rating: 8.3,
+    views_count: 2950,
+  },
+  {
+    title: "Rockstar",
+    genre: "Romance",
+    release_year: 2011,
+    description: "Janardhan Jakhar chases his dream of becoming a rock star and experiences heartbreak when he falls deeply in love with Heer.",
+    image_url: "https://image.tmdb.org/t/p/original/cJZC9riwrdATBUonkZJZD6y9g40.jpg",
+    status: "active",
+    is_featured: false,
+    rating: 7.7,
+    views_count: 2300,
+  },
+];
+
+const seedDatabase = async () => {
+  try {
+    const mongoURI =
+      process.env.MONGO_URI || "mongodb://127.0.0.1:27017/movie_catalog";
+
+    console.log("⏳ Connecting to MongoDB...");
+    await mongoose.connect(mongoURI);
+    console.log("✅ Connected to MongoDB successfully.");
+
+    console.log("🧹 Clearing existing movies...");
+    await Movie.deleteMany({});
+
+    console.log("🌱 Seeding sample movies...");
+    const createdMovies = await Movie.insertMany(sampleMovies);
+
+    console.log(`🎉 Successfully seeded ${createdMovies.length} movies into the database!`);
+    console.log("-----------------------------------------");
+    createdMovies.slice(0, 5).forEach((m, idx) => {
+      console.log(`${idx + 1}. [${m.genre}] ${m.title} (${m.release_year}) - ID: ${m._id}`);
+    });
+    console.log(`... and ${createdMovies.length - 5} more.`);
+    console.log("-----------------------------------------");
+
+    await mongoose.disconnect();
+    console.log("👋 Disconnected from database cleanly.");
+    process.exit(0);
+  } catch (error: any) {
+    console.error(" Seeding Error:", error.message);
+    process.exit(1);
+  }
+};
+
+seedDatabase();
