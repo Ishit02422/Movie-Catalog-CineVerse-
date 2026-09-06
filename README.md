@@ -43,7 +43,6 @@ Movie Catalog Application/
 │   │   ├── types/movie.ts          # Backend TypeScript interfaces
 │   │   ├── utils/seed.ts           # Database Seeder (16 sample movies)
 │   │   └── server.ts               # Express application entrypoint
-│   ├── .env.example
 │   ├── package.json
 │   └── tsconfig.json
 ├── frontend/                       # Next.js 16 (App Router) + Tailwind CSS
@@ -63,7 +62,6 @@ Movie Catalog Application/
 │   │   ├── hooks/useDebounce.ts    # Custom Debounce Hook
 │   │   ├── lib/api.ts              # Type-safe API Client
 │   │   └── types/movie.ts          # Frontend TypeScript definitions
-│   ├── .env.example
 │   ├── next.config.ts
 │   └── package.json
 ├── package.json                    # Root scripts for running full-stack
@@ -76,7 +74,7 @@ Movie Catalog Application/
 
 ### Prerequisites
 - [Node.js](https://nodejs.org/) (v18 or higher)
-- [MongoDB](https://www.mongodb.com/) running locally on `mongodb://localhost:27017/movie_catalog` (or MongoDB Atlas URI)
+- [MongoDB](https://www.mongodb.com/) running locally on `mongodb://localhost:27017/movie_catalog`
 
 ---
 
@@ -88,24 +86,8 @@ npm run install:all
 
 ---
 
-### Step 2: Configure Environment Variables
-
-**Backend (`backend/.env`):**
-```env
-PORT=5000
-MONGODB_URI=mongodb://127.0.0.1:27017/movie_catalog
-NODE_ENV=development
-```
-
-**Frontend (`frontend/.env.local`):**
-```env
-NEXT_PUBLIC_API_URL=http://localhost:5000/api
-```
-
----
-
-### Step 3: Seed the Database
-Populate MongoDB with 16 sample movies:
+### Step 2: Seed the Database
+Populate MongoDB with sample movies:
 ```bash
 npm run seed --workspace=backend
 # or cd backend && npm run seed
@@ -113,7 +95,7 @@ npm run seed --workspace=backend
 
 ---
 
-### Step 4: Run the Application
+### Step 3: Run the Application
 Run both backend and frontend concurrently with a single command:
 ```bash
 npm run dev
