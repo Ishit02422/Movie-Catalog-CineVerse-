@@ -108,10 +108,10 @@ export default function Home() {
     }
   }, [debouncedSearch, selectedGenre, selectedYear, selectedSort, isAuthenticated]);
 
-  // Comprehensive list of all release years from 2026 down to 1960 (Always complete and stable)
+  // Comprehensive list of all release years from 2026 down to 1900 (Full 126+ years of cinema)
   const availableYears = useMemo(() => {
     const years: number[] = [];
-    for (let y = 2026; y >= 1960; y--) {
+    for (let y = 2026; y >= 1900; y--) {
       years.push(y);
     }
     return years;
