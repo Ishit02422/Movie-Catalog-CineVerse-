@@ -16,7 +16,10 @@ interface WatchlistContextType {
 const WatchlistContext = createContext<WatchlistContextType | undefined>(undefined);
 
 const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+  process.env.NEXT_PUBLIC_API_URL ||
+  (typeof window !== "undefined" && window.location.hostname !== "localhost" && window.location.hostname !== "127.0.0.1"
+    ? "https://movie-catalog-cineverse.onrender.com/api"
+    : "http://localhost:5000/api");
 
 export const WatchlistProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
