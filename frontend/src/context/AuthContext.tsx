@@ -57,12 +57,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  // Load user & token from localStorage on boot and validate session
+  // Load user & token from sessionStorage on boot and validate session
+  // sessionStorage automatically resets when the browser / tab is closed
   useEffect(() => {
     async function loadSession() {
       try {
-        const storedToken = localStorage.getItem("cineverse_token");
-        const storedUser = localStorage.getItem("cineverse_user");
+        // Clear any old legacy permanent localStorage token
+        localStorage.removeItem("cineverse_token");
+        localStorage.removeItem("cineverse_user");
+
+        const storedToken = sessionStorage.getItem("cineverse_token");
+        const storedUser = sessionStorage.getItem("cineverse_user");
 
         if (storedToken && storedUser) {
           setToken(storedToken);
@@ -76,11 +81,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
             if (res.ok) {
               const data = await res.json();
               setUser(data.data);
-              localStorage.setItem("cineverse_user", JSON.stringify(data.data));
+              sessionStorage.setItem("cineverse_user", JSON.stringify(data.data));
             } else if (res.status === 401) {
               // Dead token/user -> clear it
-              localStorage.removeItem("cineverse_token");
-              localStorage.removeItem("cineverse_user");
+              sessionStorage.removeItem("cineverse_token");
+              sessionStorage.removeItem("cineverse_user");
               setToken(null);
               setUser(null);
             }
@@ -89,7 +94,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
           }
         }
       } catch (err) {
-        console.error("Failed to restore session from localStorage:", err);
+        console.error("Failed to restore session from sessionStorage:", err);
       } finally {
         setIsLoading(false);
       }
@@ -114,8 +119,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
     setToken(data.token);
     setUser(data.data);
-    localStorage.setItem("cineverse_token", data.token);
-    localStorage.setItem("cineverse_user", JSON.stringify(data.data));
+    sessionStorage.setItem("cineverse_token", data.token);
+    sessionStorage.setItem("cineverse_user", JSON.stringify(data.data));
   };
 
   const register = async (credentials: RegisterCredentials): Promise<void> => {
@@ -207,8 +212,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
     setToken(data.token);
     setUser(data.data);
-    localStorage.setItem("cineverse_token", data.token);
-    localStorage.setItem("cineverse_user", JSON.stringify(data.data));
+    sessionStorage.setItem("cineverse_token", data.token);
+    sessionStorage.setItem("cineverse_user", JSON.stringify(data.data));
   };
 
   const updateProfile = async (data: {
@@ -242,11 +247,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
     if (resData.token) {
       setToken(resData.token);
-      localStorage.setItem("cineverse_token", resData.token);
+      sessionStorage.setItem("cineverse_token", resData.token);
     }
 
     setUser(resData.data);
-    localStorage.setItem("cineverse_user", JSON.stringify(resData.data));
+    sessionStorage.setItem("cineverse_user", JSON.stringify(resData.data));
   };
 
   const deleteAccount = async (): Promise<void> => {
@@ -294,8 +299,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
       setToken(data.token);
       setUser(data.data);
-      localStorage.setItem("cineverse_token", data.token);
-      localStorage.setItem("cineverse_user", JSON.stringify(data.data));
+      sessionStorage.setItem("cineverse_token", data.token);
+      sessionStorage.setItem("cineverse_user", JSON.stringify(data.data));
     } catch (err: any) {
       if (err.code === "auth/popup-closed-by-user") {
         console.log("User closed Google login popup.");
@@ -308,6 +313,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const logout = () => {
     setUser(null);
     setToken(null);
+    sessionStorage.removeItem("cineverse_token");
+    sessionStorage.removeItem("cineverse_user");
     localStorage.removeItem("cineverse_token");
     localStorage.removeItem("cineverse_user");
   };
