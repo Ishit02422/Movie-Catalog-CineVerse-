@@ -699,55 +699,76 @@ export default function MovieDetailsPage() {
                 </div>
               </div>
 
-              {/* Video Player / Fallback Content */}
-              <div className="relative w-full aspect-video bg-black flex items-center justify-center">
-                {trailerId ? (
-                  <iframe
-                    src={`https://www.youtube-nocookie.com/embed/${trailerId}?autoplay=1&rel=0&modestbranding=1`}
-                    title={`${movie.title} Official Trailer`}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowFullScreen
-                    className="w-full h-full border-0"
-                  />
-                ) : (
-                  <div className="relative w-full h-full flex flex-col items-center justify-center p-8 text-center bg-gradient-to-t from-black via-slate-950/90 to-slate-900">
-                    <div className="w-16 h-16 rounded-full bg-[#e50914]/20 border border-rose-500/30 flex items-center justify-center text-[#e50914] mb-4 shadow-xl shadow-rose-950/50 animate-pulse">
-                      <Play className="w-8 h-8 fill-[#e50914] translate-x-0.5" />
-                    </div>
-                    <h4 className="text-xl font-black text-white mb-1">
-                      {movie.title} Official Trailer
+              {/* Video Player & Cinema Showcase Card */}
+              <div className="relative w-full aspect-video bg-black flex items-center justify-center overflow-hidden group">
+                {/* Background Movie Backdrop with Cinematic Overlays */}
+                <Image
+                  src={movie.image_url || fallbackImage}
+                  alt={movie.title}
+                  fill
+                  priority
+                  className="object-cover object-center brightness-30 scale-105 group-hover:scale-110 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-slate-900/60" />
+                <div className="absolute inset-0 bg-gradient-to-r from-slate-950/80 via-transparent to-slate-950/80" />
+
+                {/* Central Cinema Interactive Launch Card */}
+                <div className="relative z-10 flex flex-col items-center justify-center p-6 sm:p-10 text-center max-w-xl mx-auto space-y-4">
+                  {/* Glowing Animated Play Trigger */}
+                  <a
+                    href={trailerId ? `https://www.youtube.com/watch?v=${trailerId}` : youtubeSearchUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-20 h-20 rounded-full bg-gradient-to-tr from-[#e50914] to-rose-600 border-2 border-white/30 flex items-center justify-center text-white shadow-2xl shadow-rose-600/60 hover:scale-110 active:scale-95 transition-all duration-300 cursor-pointer group/btn"
+                  >
+                    <Play className="w-9 h-9 fill-white translate-x-0.5 group-hover/btn:scale-110 transition-transform" />
+                  </a>
+
+                  <div className="space-y-1.5">
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider bg-rose-500/20 text-rose-400 border border-rose-500/30">
+                      <Sparkles className="w-3 h-3" />
+                      Official Studio Trailer • 1080p Full HD
+                    </span>
+                    <h4 className="text-2xl sm:text-3xl font-black text-white tracking-tight leading-tight">
+                      {movie.title}
                     </h4>
-                    <p className="text-xs text-slate-400 max-w-md mb-6 leading-relaxed">
-                      Watch the high-definition trailer and exclusive behind-the-scenes footage directly on YouTube.
+                    <p className="text-xs sm:text-sm text-slate-300 max-w-md mx-auto leading-relaxed line-clamp-2">
+                      {movie.description || "Experience the official cinema trailer with original soundtrack on YouTube."}
                     </p>
-                    <a
-                      href={youtubeSearchUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-6 py-3.5 rounded-2xl bg-gradient-to-r from-[#e50914] to-rose-600 hover:from-rose-600 hover:to-rose-700 text-white font-extrabold text-sm shadow-xl shadow-rose-600/40 transition-all hover:scale-105 active:scale-95"
-                    >
-                      <Play className="w-4 h-4 fill-white" />
-                      <span>▶️ Play Official Trailer on YouTube</span>
-                      <ExternalLink className="w-4 h-4 ml-1" />
-                    </a>
                   </div>
-                )}
+
+                  {/* Big Primary Action Launch Button */}
+                  <a
+                    href={trailerId ? `https://www.youtube.com/watch?v=${trailerId}` : youtubeSearchUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-2xl bg-gradient-to-r from-[#e50914] via-rose-600 to-rose-700 hover:from-rose-600 hover:to-rose-800 text-white font-extrabold text-sm sm:text-base shadow-xl shadow-rose-600/50 hover:shadow-rose-600/80 transition-all hover:scale-105 active:scale-95 cursor-pointer border border-rose-400/30"
+                  >
+                    <Play className="w-5 h-5 fill-white" />
+                    <span>▶️ Play Official Trailer on YouTube</span>
+                    <ExternalLink className="w-4 h-4 ml-1" />
+                  </a>
+                </div>
               </div>
 
               {/* Modal Footer */}
-              <div className="px-6 py-3 bg-slate-950 border-t border-white/5 flex items-center justify-between text-xs text-slate-400">
-                <span className="flex items-center gap-1.5">
+              <div className="px-6 py-3.5 bg-slate-900 border-t border-white/10 flex items-center justify-between text-xs text-slate-400">
+                <span className="flex items-center gap-2">
                   <Film className="w-3.5 h-3.5 text-rose-400" />
-                  <span>{movie.genre} • {movie.release_year} • {movie.rating?.toFixed(1) || "8.0"} ★</span>
+                  <span className="font-semibold text-slate-300">{movie.genre}</span>
+                  <span>•</span>
+                  <span>{movie.release_year}</span>
+                  <span>•</span>
+                  <span className="text-amber-400 font-bold">{movie.rating?.toFixed(1) || "8.0"} ★</span>
                 </span>
                 <a
-                  href={youtubeSearchUrl}
+                  href={trailerId ? `https://www.youtube.com/watch?v=${trailerId}` : youtubeSearchUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-rose-400 hover:text-rose-300 font-bold flex items-center gap-1 transition-colors"
+                  className="text-rose-400 hover:text-rose-300 font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
                 >
                   <span>Open Full Screen in YouTube</span>
-                  <ExternalLink className="w-3 h-3" />
+                  <ExternalLink className="w-3.5 h-3.5" />
                 </a>
               </div>
             </div>
