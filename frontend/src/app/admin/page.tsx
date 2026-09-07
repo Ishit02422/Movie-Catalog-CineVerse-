@@ -984,7 +984,7 @@ export default function AdminPage() {
               >
                 <div className="flex items-center gap-2.5">
                   <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]"></span>
-                  <span>🟢 Active (Live)</span>
+                  <span>Active (Live)</span>
                 </div>
                 <span className={`px-2.5 py-0.5 rounded-lg text-xs font-black ${
                   selectedNav === "status_active" ? "bg-black/40 text-white" : "bg-emerald-500/15 text-emerald-400 border border-emerald-500/20"
@@ -1003,8 +1003,8 @@ export default function AdminPage() {
                 }`}
               >
                 <div className="flex items-center gap-2.5">
-                  <span className="w-2.5 h-2.5 rounded-full bg-purple-400"></span>
-                  <span>👁️ Hidden (Private)</span>
+                  <span className="w-2.5 h-2.5 rounded-full bg-purple-400 shadow-[0_0_8px_#c084fc]"></span>
+                  <span>Hidden (Private)</span>
                 </div>
                 <span className={`px-2.5 py-0.5 rounded-lg text-xs font-black ${
                   selectedNav === "status_hidden" ? "bg-black/40 text-white" : "bg-purple-500/15 text-purple-300 border border-purple-500/20"
@@ -1023,8 +1023,8 @@ export default function AdminPage() {
                 }`}
               >
                 <div className="flex items-center gap-2.5">
-                  <span className="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
-                  <span>🟡 Under Review</span>
+                  <span className="w-2.5 h-2.5 rounded-full bg-amber-400 shadow-[0_0_8px_#fbbf24]"></span>
+                  <span>Under Review</span>
                 </div>
                 <span className={`px-2.5 py-0.5 rounded-lg text-xs font-black ${
                   selectedNav === "status_under_review" ? "bg-black/40 text-white" : "bg-amber-500/15 text-amber-400 border border-amber-500/20"
@@ -1043,8 +1043,8 @@ export default function AdminPage() {
                 }`}
               >
                 <div className="flex items-center gap-2.5">
-                  <span className="w-2.5 h-2.5 rounded-full bg-rose-400"></span>
-                  <span>🔴 Removed</span>
+                  <span className="w-2.5 h-2.5 rounded-full bg-rose-400 shadow-[0_0_8px_#fb7185]"></span>
+                  <span>Removed / Archived</span>
                 </div>
                 <span className={`px-2.5 py-0.5 rounded-lg text-xs font-black ${
                   selectedNav === "status_removed" ? "bg-black/40 text-white" : "bg-rose-500/15 text-rose-400 border border-rose-500/20"
