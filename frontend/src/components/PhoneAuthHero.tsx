@@ -169,18 +169,15 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
 
     setIsLoading(true);
     try {
-      // 1. Smart Check: Does this user already exist?
-      const checkRes = await checkUser(val);
-      if (checkRes.exists && checkRes.data) {
+      // Send dynamic real OTP (Email or Phone) in 1 fast call
+      const sendRes = await sendPhoneOtp(val);
+      if (sendRes.exists) {
         setAuthMode("signin");
-        setExistingUser(checkRes.data);
+        setExistingUser({ name: sendRes.user_name || "Member" });
       } else {
         setAuthMode("register");
         setExistingUser(null);
       }
-
-      // 2. Send dynamic real OTP (Email or Phone)
-      const sendRes = await sendPhoneOtp(val);
       setScreen("otp");
       setOtpCode("");
       setReceivedDevOtp(sendRes.dev_otp || null);
