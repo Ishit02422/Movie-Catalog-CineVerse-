@@ -37,6 +37,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
           src={imageError ? fallbackImage : movie.image_url}
           alt={movie.title}
           fill
+          unoptimized={Boolean(movie.image_url?.startsWith("data:")) || Boolean(imageError)}
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
           className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
           onError={() => setImageError(true)}

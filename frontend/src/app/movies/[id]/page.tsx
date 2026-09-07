@@ -335,6 +335,7 @@ export default function MovieDetailsPage() {
                     alt={movie.title}
                     fill
                     priority
+                    unoptimized={Boolean(movie.image_url?.startsWith("data:")) || Boolean(imageError)}
                     sizes="(max-width: 768px) 100vw, 400px"
                     className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
                     onError={() => setImageError(true)}
