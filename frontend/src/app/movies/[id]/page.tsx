@@ -703,7 +703,7 @@ export default function MovieDetailsPage() {
               <div className="relative w-full aspect-video bg-black flex items-center justify-center">
                 {trailerId ? (
                   <iframe
-                    src={`https://www.youtube.com/embed/${trailerId}?autoplay=1&rel=0&modestbranding=1`}
+                    src={`https://www.youtube-nocookie.com/embed/${trailerId}?autoplay=1&rel=0&modestbranding=1`}
                     title={`${movie.title} Official Trailer`}
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                     allowFullScreen
