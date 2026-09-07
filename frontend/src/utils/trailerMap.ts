@@ -10,7 +10,7 @@ export const TRAILER_MAP: Record<string, string> = {
   "spider-man: into the spider-verse": "g4Hbz2jLxvQ",
   "spider man into the spider verse": "g4Hbz2jLxvQ",
   "oppenheimer": "uYPbbksJxIg",
-  "parasite": "isOGD_7jNIY",
+  "parasite": "isOGD_7hNIY",
   "dune: part two": "Way9Dexny3w",
   "dune part two": "Way9Dexny3w",
   "dune": "Way9Dexny3w",
