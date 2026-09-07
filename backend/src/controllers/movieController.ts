@@ -94,7 +94,13 @@ export const getMovies = async (
       }
     }
 
-    const movies = await Movie.find(finalQuery).sort(sortOption);
+    let movieQuery = Movie.find(finalQuery);
+
+    if (sort === "title_asc" || sort === "title_desc") {
+      movieQuery = movieQuery.collation({ locale: "en", strength: 2 });
+    }
+
+    const movies = await movieQuery.sort(sortOption);
 
     res.status(200).json({
       success: true,

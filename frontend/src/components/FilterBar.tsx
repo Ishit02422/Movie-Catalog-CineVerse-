@@ -109,8 +109,10 @@ export const FilterBar: React.FC<FilterBarProps> = ({
             >
               <option value="year_desc">Latest Year</option>
               <option value="year_asc">Oldest Year</option>
-              <option value="rating_desc">Top Rated</option>
-              <option value="title_asc">Title A-Z</option>
+              <option value="rating_desc">Top Rated ★</option>
+              <option value="title_asc">Title (A - Z)</option>
+              <option value="title_desc">Title (Z - A)</option>
+              <option value="views_desc">Most Popular</option>
             </select>
             <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-slate-400">
               <ArrowUpDown className="w-3.5 h-3.5" />
