@@ -156,7 +156,39 @@ export default function Home() {
   };
 
   const isFiltering =
-    search.trim() !== "" || selectedGenre !== "All" || selectedYear !== "";
+    search.trim() !== "" || selectedGenre !== "All" || selectedYear !== "" || selectedSort !== "year_desc";
+
+  // Dynamic Title for Movie Catalog Grid based on exact active filter/sort
+  const catalogTitle = useMemo(() => {
+    if (search.trim()) {
+      return `Search Results for "${search.trim()}"`;
+    }
+    if (selectedGenre !== "All" && selectedYear) {
+      return `${selectedGenre} Movies (${selectedYear})`;
+    }
+    if (selectedGenre !== "All") {
+      return `${selectedGenre} Movies`;
+    }
+    if (selectedYear) {
+      return `Release Year ${selectedYear} Movies`;
+    }
+    switch (selectedSort) {
+      case "year_desc":
+        return "Latest Releases & Movies";
+      case "year_asc":
+        return "Classic & Oldest Movies";
+      case "rating_desc":
+        return "Highest Rated Movies (★ Top Rated)";
+      case "title_asc":
+        return "Movies in Alphabetical Order (A to Z)";
+      case "title_desc":
+        return "Movies in Reverse Order (Z to A)";
+      case "views_desc":
+        return "Most Popular & Trending";
+      default:
+        return "Explore Movies Catalog";
+    }
+  }, [search, selectedGenre, selectedYear, selectedSort]);
 
   // Loading state while checking session
   if (authLoading) {
@@ -337,11 +369,7 @@ export default function Home() {
               isLoading={isLoading}
               error={error}
               onRetry={loadFilteredMovies}
-              title={
-                isFiltering
-                  ? `Search Results (${movies.length})`
-                  : "Explore Movies Catalog"
-              }
+              title={catalogTitle}
             />
 
             {/* ========================================================================= */}
