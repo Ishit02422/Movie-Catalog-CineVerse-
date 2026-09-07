@@ -37,16 +37,16 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ movies }) => {
   return (
     <div className="relative w-full overflow-hidden rounded-3xl border border-slate-800/80 bg-slate-900/60 shadow-2xl shadow-rose-950/20 mb-10">
       {/* Background Poster / Backdrop with Rich Gradients */}
-      <div className="relative h-[420px] sm:h-[480px] lg:h-[520px] w-full">
+      <div className="relative h-[440px] sm:h-[500px] lg:h-[540px] w-full bg-slate-950">
         <img
           src={currentMovie.image_url}
           alt={currentMovie.title}
-          className="w-full h-full object-cover object-[center_20%] transition-all duration-700 brightness-60 scale-105"
+          className="w-full h-full object-cover object-center sm:object-[center_25%] transition-all duration-700 brightness-90 sm:brightness-100 scale-100"
         />
 
-        {/* Gradient overlays for cinema look */}
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/80 to-transparent" />
+        {/* Clean cinematic gradients so left text is readable while right artwork is 100% clear and full */}
+        <div className="absolute inset-y-0 left-0 w-full sm:w-2/3 md:w-1/2 bg-gradient-to-r from-[#070b13] via-[#070b13]/90 to-transparent z-[1]" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#070b13] via-[#070b13]/30 to-transparent z-[1]" />
 
         {/* Content Container */}
         <div className="absolute inset-0 flex flex-col justify-end p-6 sm:p-10 lg:p-12 max-w-3xl z-10 space-y-4">
