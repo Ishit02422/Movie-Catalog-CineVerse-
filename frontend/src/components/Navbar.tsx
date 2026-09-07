@@ -43,8 +43,12 @@ export const Navbar: React.FC<NavbarProps> = ({
               onClick={() => onSelectTab && onSelectTab("all")}
               className="flex items-center gap-2.5 group transition-transform duration-200 active:scale-95"
             >
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-rose-500 to-rose-700 flex items-center justify-center text-white shadow-lg shadow-rose-500/25 group-hover:shadow-rose-500/40 transition-all">
-                <Film className="w-4 h-4 transition-transform group-hover:rotate-12 duration-300" />
+              <div className="w-9 h-9 rounded-xl overflow-hidden shadow-lg shadow-rose-600/40 border border-white/15 group-hover:scale-105 transition-all">
+                <img
+                  src="/logo.png"
+                  alt="CineVerse"
+                  className="w-full h-full object-cover"
+                />
               </div>
               <span className="text-xl font-black tracking-tight text-white font-sans">
                 Cine<span className="text-[#e50914]">Verse</span>

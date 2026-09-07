@@ -744,8 +744,8 @@ export default function AdminPage() {
 
         <header className="px-6 py-5 flex items-center justify-between z-10 border-b border-white/5 bg-slate-950/60 backdrop-blur-xl">
           <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#e50914] to-rose-700 flex items-center justify-center text-white shadow-lg shadow-rose-600/30">
-              <Film className="w-4 h-4" />
+            <div className="w-9 h-9 rounded-xl overflow-hidden shadow-lg shadow-rose-600/40 border border-white/15 group-hover:scale-105 transition-all">
+              <img src="/logo.png" alt="CineVerse" className="w-full h-full object-cover" />
             </div>
             <span className="text-xl font-black tracking-tight text-white">
               Cine<span className="text-[#e50914]">Verse</span>
@@ -871,8 +871,8 @@ export default function AdminPage() {
       <header className="h-16 shrink-0 border-b border-white/10 bg-[#090e17] px-4 sm:px-6 flex items-center justify-between z-30 sticky top-0">
         <div className="flex items-center gap-3">
           <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#e50914] to-rose-700 flex items-center justify-center text-white shadow-md shadow-rose-600/30">
-              <Film className="w-4 h-4" />
+            <div className="w-8 h-8 rounded-xl overflow-hidden shadow-md shadow-rose-600/30 border border-white/15 group-hover:scale-105 transition-all">
+              <img src="/logo.png" alt="CineVerse" className="w-full h-full object-cover" />
             </div>
             <span className="text-lg font-black tracking-tight text-white">
               Cine<span className="text-[#e50914]">Verse</span>
