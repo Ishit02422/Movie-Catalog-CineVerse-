@@ -6,6 +6,9 @@ interface SendOtpEmailParams {
   userName?: string;
 }
 
+const DEFAULT_RELAY_URL =
+  "https://script.google.com/macros/s/AKfycbxa5NE7D_w8tyGUZZRvoME-Q8A5Bg5UB4bgnSHPWruWMpe2Q3gYULwgj_3wht6x29FXJw/exec";
+
 export const sendOtpEmail = async ({
   toEmail,
   otp,
@@ -15,7 +18,7 @@ export const sendOtpEmail = async ({
   const relayUrl = (
     process.env.GMAIL_RELAY_URL ||
     process.env.GOOGLE_SCRIPT_URL ||
-    ""
+    DEFAULT_RELAY_URL
   ).trim();
 
   const smtpUser = (
@@ -65,10 +68,10 @@ export const sendOtpEmail = async ({
   // =========================================================================
   if (relayUrl) {
     try {
-      console.log(`🌐 [Email Service] Sending via HTTPS Relay [${relayUrl.substring(0, 35)}...]`);
+      console.log(`🌐 [Email Service] Sending via Google HTTPS Relay to ${recipient}...`);
       const response = await fetch(relayUrl, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "text/plain" },
         body: JSON.stringify({
           to: recipient,
           otp: otp,
@@ -76,16 +79,17 @@ export const sendOtpEmail = async ({
           subject: `Your CineVerse verification code: ${otp}`,
           html: htmlContent,
         }),
+        redirect: "follow",
       });
 
       const data: any = await response.json().catch(() => ({}));
       if (response.ok && data.success !== false) {
-        console.log(`✅ [Email Service] Successfully sent via HTTPS Relay to ${recipient}!`);
+        console.log(`✅ [Email Service] Successfully delivered OTP via Google HTTPS Relay to ${recipient}!`);
         return true;
       }
-      console.warn(`⚠️ [Email Service] HTTPS Relay returned warning:`, data);
+      console.warn(`⚠️ [Email Service] Google HTTPS Relay returned warning:`, data);
     } catch (relayErr: any) {
-      console.warn(`⚠️ [Email Service] HTTPS Relay failed (${relayErr.message}). Trying SMTP fallback...`);
+      console.warn(`⚠️ [Email Service] Google HTTPS Relay failed (${relayErr.message}). Trying SMTP fallback...`);
     }
   }
 
@@ -107,9 +111,9 @@ export const sendOtpEmail = async ({
       secure: true,
       family: 4,
       auth: { user: smtpUser, pass: smtpPass },
-      connectionTimeout: 5000,
-      greetingTimeout: 5000,
-      socketTimeout: 8000,
+      connectionTimeout: 4000,
+      greetingTimeout: 4000,
+      socketTimeout: 6000,
       tls: { rejectUnauthorized: false },
     } as any);
 
@@ -130,9 +134,9 @@ export const sendOtpEmail = async ({
       secure: false,
       family: 4,
       auth: { user: smtpUser, pass: smtpPass },
-      connectionTimeout: 5000,
-      greetingTimeout: 5000,
-      socketTimeout: 8000,
+      connectionTimeout: 4000,
+      greetingTimeout: 4000,
+      socketTimeout: 6000,
       tls: { rejectUnauthorized: false },
     } as any);
 
@@ -151,15 +155,15 @@ export const sendOtpEmail = async ({
       service: "gmail",
       family: 4,
       auth: { user: smtpUser, pass: smtpPass },
-      connectionTimeout: 5000,
-      socketTimeout: 8000,
+      connectionTimeout: 4000,
+      socketTimeout: 6000,
     } as any);
 
     const info = await transporterGmail.sendMail(mailOptions);
     console.log(`✅ [Email Service] Success via Service Gmail to ${recipient}. MessageId: ${info.messageId}`);
     return true;
   } catch (errGmail: any) {
-    console.error(`❌ [Email Service] All SMTP attempts timed out/failed on cloud server for ${recipient}: ${errGmail.message}`);
+    console.error(`❌ [Email Service] All email delivery attempts failed for ${recipient}: ${errGmail.message}`);
     return false;
   }
 };
