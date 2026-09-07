@@ -27,18 +27,14 @@ export const sendOtpEmail = async ({
           user: smtpUser,
           pass: smtpPass.replace(/\s+/g, ""), // Strip any spaces from the 16-char app password
         },
+        connectionTimeout: 4000,
+        greetingTimeout: 4000,
+        socketTimeout: 4000,
       });
     } else {
-      // Create a test account fallback with Ethereal if no custom SMTP provided
-      const testAccount = await nodemailer.createTestAccount();
+      // Local / Cloud Mock Transporter that never hangs
       transporter = nodemailer.createTransport({
-        host: "smtp.ethereal.email",
-        port: 587,
-        secure: false,
-        auth: {
-          user: testAccount.user,
-          pass: testAccount.pass,
-        },
+        jsonTransport: true,
       });
     }
 

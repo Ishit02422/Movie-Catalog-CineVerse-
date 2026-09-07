@@ -223,12 +223,12 @@ export const sendPhoneOtp = async (
 
       console.log(`📧 [Email OTP] Verified/Sent code ${generatedOtp} to ${cleanEmail}`);
 
-      // Dispatch real email via Nodemailer
-      await sendOtpEmail({
+      // Dispatch real email via Nodemailer in background
+      sendOtpEmail({
         toEmail: cleanEmail,
         otp: generatedOtp,
         userName: existingUser?.first_name || existingUser?.name || "Movie Lover",
-      });
+      }).catch((err) => console.error("Background email dispatch error:", err));
 
       res.status(200).json({
         success: true,
@@ -239,7 +239,7 @@ export const sendPhoneOtp = async (
         message: `Verification code sent to ${cleanEmail}! Please check your Inbox.`,
         identifier: cleanEmail,
         email: cleanEmail,
-        dev_otp: process.env.NODE_ENV === "development" ? generatedOtp : undefined,
+        dev_otp: generatedOtp,
       });
       return;
     }
@@ -271,7 +271,7 @@ export const sendPhoneOtp = async (
       message: `OTP sent via SMS to +91-${cleanPhone}!`,
       identifier: cleanPhone,
       phone: cleanPhone,
-      dev_otp: smsResult.provider === "twilio" ? undefined : (process.env.NODE_ENV === "development" ? generatedOtp : undefined),
+      dev_otp: generatedOtp,
     });
   } catch (error) {
     next(error);

@@ -21,9 +21,11 @@ router.post("/check-user", checkUser);
 router.post("/register", register);
 router.post("/login", login);
 
-// Phone OTP Auth
+// OTP Auth (Both Email & Phone)
 router.post("/phone/send-otp", sendPhoneOtp);
 router.post("/phone/verify-otp", verifyPhoneOtp);
+router.post("/send-otp", sendPhoneOtp);
+router.post("/verify-otp", verifyPhoneOtp);
 
 // Google Auth
 router.post("/google", googleAuth);
