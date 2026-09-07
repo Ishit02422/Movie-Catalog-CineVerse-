@@ -70,11 +70,7 @@ Movie Catalog Application/
 
 ---
 
-## 🚀 Quick Start Guide
 
-### Prerequisites
-- [Node.js](https://nodejs.org/) (v18 or higher)
-- [MongoDB](https://www.mongodb.com/) running locally on `mongodb://localhost:27017/movie_catalog`
 
 ---
 
