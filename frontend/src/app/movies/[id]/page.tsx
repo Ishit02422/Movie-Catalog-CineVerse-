@@ -330,14 +330,10 @@ export default function MovieDetailsPage() {
               {/* Poster Column */}
               <div className="md:col-span-4 lg:col-span-4">
                 <div className="relative aspect-[2/3] w-full rounded-3xl overflow-hidden bg-slate-900 border border-slate-800/80 shadow-2xl shadow-rose-950/30 group">
-                  <Image
-                    src={imageError ? fallbackImage : movie.image_url}
+                  <img
+                    src={imageError ? fallbackImage : (movie.image_url || fallbackImage)}
                     alt={movie.title}
-                    fill
-                    priority
-                    unoptimized={Boolean(movie.image_url?.startsWith("data:")) || Boolean(imageError)}
-                    sizes="(max-width: 768px) 100vw, 400px"
-                    className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
+                    className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
                     onError={() => setImageError(true)}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-40" />
@@ -702,12 +698,10 @@ export default function MovieDetailsPage() {
               {/* Video Player & Cinema Showcase Card */}
               <div className="relative w-full aspect-video bg-black flex items-center justify-center overflow-hidden group">
                 {/* Background Movie Backdrop with Cinematic Overlays */}
-                <Image
+                <img
                   src={movie.image_url || fallbackImage}
                   alt={movie.title}
-                  fill
-                  priority
-                  className="object-cover object-center brightness-30 scale-105 group-hover:scale-110 transition-transform duration-700"
+                  className="w-full h-full object-cover object-center brightness-30 scale-105 group-hover:scale-110 transition-transform duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-slate-900/60" />
                 <div className="absolute inset-0 bg-gradient-to-r from-slate-950/80 via-transparent to-slate-950/80" />

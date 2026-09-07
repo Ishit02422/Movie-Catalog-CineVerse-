@@ -39,13 +39,10 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ movies }) => {
     <div className="relative w-full overflow-hidden rounded-3xl border border-slate-800/80 bg-slate-900/60 shadow-2xl shadow-rose-950/20 mb-10">
       {/* Background Poster / Backdrop with Rich Gradients */}
       <div className="relative h-[420px] sm:h-[480px] lg:h-[520px] w-full">
-        <Image
+        <img
           src={currentMovie.image_url}
           alt={currentMovie.title}
-          fill
-          priority
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 1200px"
-          className="object-cover object-center transition-all duration-700 brightness-40 scale-105"
+          className="w-full h-full object-cover object-center transition-all duration-700 brightness-40 scale-105"
         />
 
         {/* Gradient overlays for cinema look */}

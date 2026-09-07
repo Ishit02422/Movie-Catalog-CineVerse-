@@ -321,13 +321,11 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                     key={idx}
                     className="relative aspect-[2/3] w-full rounded-xl overflow-hidden bg-slate-900 shadow-xl shadow-black/90 border border-white/5"
                   >
-                    <Image
+                    <img
                       src={imgUrl}
                       alt="Movie poster"
-                      fill
-                      sizes="(max-width: 640px) 33vw, (max-width: 1024px) 25vw, 12.5vw"
-                      className="object-cover object-center"
-                      priority={idx < 8}
+                      className="w-full h-full object-cover object-center"
+                      loading={idx < 8 ? "eager" : "lazy"}
                     />
                     <div className="absolute inset-0 bg-black/25" />
                   </div>
@@ -421,12 +419,11 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                   onClick={() => setScreen("signin")}
                   className="group relative aspect-[2/3] w-full rounded-xl overflow-hidden bg-slate-900 border border-slate-800 hover:border-[#e50914] transition-all duration-300 hover:scale-105 cursor-pointer shadow-lg hover:shadow-red-950/40"
                 >
-                  <Image
+                  <img
                     src={imgUrl}
                     alt="Trending Movie"
-                    fill
-                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 16vw"
-                    className="object-cover object-center"
+                    className="w-full h-full object-cover object-center"
+                    loading="lazy"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
                 </div>

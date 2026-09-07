@@ -33,13 +33,11 @@ export const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
     >
       {/* Poster Image Container */}
       <div className="relative aspect-[2/3] w-full overflow-hidden bg-slate-950">
-        <Image
-          src={imageError ? fallbackImage : movie.image_url}
+        <img
+          src={imageError ? fallbackImage : (movie.image_url || fallbackImage)}
           alt={movie.title}
-          fill
-          unoptimized={Boolean(movie.image_url?.startsWith("data:")) || Boolean(imageError)}
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-          className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
+          loading="lazy"
+          className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
           onError={() => setImageError(true)}
         />
 
