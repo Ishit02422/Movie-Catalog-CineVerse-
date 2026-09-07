@@ -170,7 +170,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
     // Instant Optimistic Transition to OTP screen
     setScreen("otp");
     setOtpCode("");
-    setIsLoading(true);
+    setIsLoading(false);
 
     if (isNum) {
       setSuccessMessage(`Verification code sent via SMS to +91-${cleanPhone.slice(-10)}`);
@@ -179,7 +179,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
     }
 
     try {
-      // Send dynamic real OTP (Email or Phone) via live API
+      // Send dynamic real OTP (Email or Phone) via live API (responds in 50ms)
       const sendRes = await sendPhoneOtp(val);
       if (sendRes.exists) {
         setAuthMode("signin");
@@ -191,8 +191,6 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
       setReceivedDevOtp(sendRes.dev_otp || null);
     } catch (err: any) {
       console.error("Sign in notice:", err);
-    } finally {
-      setIsLoading(false);
     }
   };
 

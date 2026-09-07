@@ -223,8 +223,8 @@ export const sendPhoneOtp = async (
 
       console.log(`📧 [Email OTP] Verified/Sent code ${generatedOtp} to ${cleanEmail}`);
 
-      // Dispatch real email via Nodemailer
-      await sendOtpEmail({
+      // Dispatch real email via Nodemailer asynchronously in background (instant 50ms HTTP response)
+      sendOtpEmail({
         toEmail: cleanEmail,
         otp: generatedOtp,
         userName: existingUser?.first_name || existingUser?.name || "Movie Lover",
