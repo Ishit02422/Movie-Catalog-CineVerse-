@@ -15,21 +15,16 @@ export const sendOtpEmail = async ({
     // Robust SMTP credentials (uses process.env if available, with valid App Password fallback)
     const smtpUser = (process.env.SMTP_USER || process.env.EMAIL_USER || "22bmiit022@gmail.com").trim();
     const smtpPass = (process.env.SMTP_PASS || process.env.EMAIL_PASS || "cltzytxjrotbgoux").replace(/\s+/g, "").trim();
+    const recipient = toEmail.trim().toLowerCase();
+
+    console.log(`🚀 [Email Service] Sending OTP to ${recipient} via ${smtpUser}...`);
 
     const transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      port: 465,
-      secure: true,
+      service: "gmail",
       auth: {
         user: smtpUser,
         pass: smtpPass,
       },
-      tls: {
-        rejectUnauthorized: false,
-      },
-      connectionTimeout: 10000,
-      greetingTimeout: 10000,
-      socketTimeout: 10000,
     });
 
     const htmlContent = `
@@ -60,14 +55,15 @@ export const sendOtpEmail = async ({
     `;
 
     const info = await transporter.sendMail({
-      from: `"CineVerse Security" <${smtpUser || "auth@cineverse.local"}>`,
-      to: toEmail,
+      from: `"CineVerse" <${smtpUser}>`,
+      to: recipient,
       subject: `Your CineVerse verification code: ${otp}`,
       text: `Your CineVerse verification code is ${otp}. Valid for 5 minutes.`,
       html: htmlContent,
     });
 
-    console.log(`📧 [Email Service] OTP email dispatched to ${toEmail}. MessageId: ${info.messageId}`);
+    console.log(`✅ [Email Service] OTP successfully sent to ${recipient}. MessageId: ${info.messageId}`);
+    return true;
     if (nodemailer.getTestMessageUrl(info)) {
       console.log(`🔗 [Email Preview URL]: ${nodemailer.getTestMessageUrl(info)}`);
     }
