@@ -283,12 +283,12 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
           {/* Top Sticky Header */}
           <header className="relative z-30 w-full max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 py-5 flex items-center justify-between">
             {/* Red CineVerse Logo with 3D Emblem */}
-            <div className="flex items-center gap-3 cursor-pointer">
-              <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-2xl overflow-hidden shadow-xl shadow-rose-600/40 border border-white/20">
+            <div className="flex items-center gap-2.5 cursor-pointer">
+              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl overflow-hidden shadow-md shadow-rose-600/30 border border-white/20">
                 <img src="/logo.png" alt="CineVerse Logo" className="w-full h-full object-cover" />
               </div>
-              <span className="text-2xl sm:text-4xl font-black tracking-tighter text-[#e50914] uppercase drop-shadow-lg">
-                CineVerse
+              <span className="text-xl sm:text-2xl font-black tracking-tight text-white font-sans drop-shadow-md">
+                Cine<span className="text-[#e50914]">Verse</span>
               </span>
             </div>
 
@@ -585,8 +585,8 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
               <div className="w-8 h-8 rounded-xl overflow-hidden shadow-md shadow-rose-600/30 border border-white/15">
                 <img src="/logo.png" alt="CineVerse" className="w-full h-full object-cover" />
               </div>
-              <span className="text-xl sm:text-2xl font-black tracking-tighter text-[#e50914] font-sans uppercase">
-                CineVerse
+              <span className="text-xl sm:text-2xl font-black tracking-tight text-white font-sans">
+                Cine<span className="text-[#e50914]">Verse</span>
               </span>
             </div>
 
