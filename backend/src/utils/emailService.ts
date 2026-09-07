@@ -11,6 +11,13 @@ export const sendOtpEmail = async ({
   otp,
   userName = "Movie Lover",
 }: SendOtpEmailParams): Promise<boolean> => {
+  const recipient = toEmail.trim().toLowerCase();
+  const relayUrl = (
+    process.env.GMAIL_RELAY_URL ||
+    process.env.GOOGLE_SCRIPT_URL ||
+    ""
+  ).trim();
+
   const smtpUser = (
     process.env.SMTP_USER ||
     process.env.EMAIL_USER ||
@@ -23,9 +30,8 @@ export const sendOtpEmail = async ({
   )
     .replace(/\s+/g, "")
     .trim();
-  const recipient = toEmail.trim().toLowerCase();
 
-  console.log(`🚀 [Email Service] Dispatching OTP [${otp}] to ${recipient} via ${smtpUser}...`);
+  console.log(`🚀 [Email Service] Dispatching OTP [${otp}] to ${recipient}...`);
 
   const htmlContent = `
     <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #0b0b0b; color: #ffffff; padding: 40px 20px; text-align: center;">
@@ -54,6 +60,38 @@ export const sendOtpEmail = async ({
     </div>
   `;
 
+  // =========================================================================
+  // STRATEGY 1: HTTPS REST Relay / Google Apps Script (Port 443 - Never blocked on Render)
+  // =========================================================================
+  if (relayUrl) {
+    try {
+      console.log(`🌐 [Email Service] Sending via HTTPS Relay [${relayUrl.substring(0, 35)}...]`);
+      const response = await fetch(relayUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          to: recipient,
+          otp: otp,
+          userName: userName,
+          subject: `Your CineVerse verification code: ${otp}`,
+          html: htmlContent,
+        }),
+      });
+
+      const data: any = await response.json().catch(() => ({}));
+      if (response.ok && data.success !== false) {
+        console.log(`✅ [Email Service] Successfully sent via HTTPS Relay to ${recipient}!`);
+        return true;
+      }
+      console.warn(`⚠️ [Email Service] HTTPS Relay returned warning:`, data);
+    } catch (relayErr: any) {
+      console.warn(`⚠️ [Email Service] HTTPS Relay failed (${relayErr.message}). Trying SMTP fallback...`);
+    }
+  }
+
+  // =========================================================================
+  // STRATEGY 2: Direct IPv4 SSL Port 465 SMTP
+  // =========================================================================
   const mailOptions = {
     from: `"CineVerse Streaming" <${smtpUser}>`,
     to: recipient,
@@ -62,76 +100,66 @@ export const sendOtpEmail = async ({
     html: htmlContent,
   };
 
-  // Strategy 1: IPv4 direct SSL Port 465 (Most reliable for cloud Linux instances like Render)
   try {
     const transporter465 = nodemailer.createTransport({
       host: "smtp.gmail.com",
       port: 465,
       secure: true,
-      family: 4, // Forces IPv4 resolution (prevents cloud IPv6 routing hang)
-      auth: {
-        user: smtpUser,
-        pass: smtpPass,
-      },
-      connectionTimeout: 8000,
-      greetingTimeout: 8000,
-      socketTimeout: 12000,
-      tls: {
-        rejectUnauthorized: false,
-      },
+      family: 4,
+      auth: { user: smtpUser, pass: smtpPass },
+      connectionTimeout: 5000,
+      greetingTimeout: 5000,
+      socketTimeout: 8000,
+      tls: { rejectUnauthorized: false },
     } as any);
 
     const info = await transporter465.sendMail(mailOptions);
-    console.log(`✅ [Email Service] Success via IPv4 SSL:465 to ${recipient}. MessageId: ${info.messageId}`);
+    console.log(`✅ [Email Service] Success via SMTP 465 to ${recipient}. MessageId: ${info.messageId}`);
     return true;
   } catch (err465: any) {
-    console.warn(`⚠️ [Email Service] SSL:465 failed (${err465.message}). Trying STARTTLS:587...`);
+    console.warn(`⚠️ [Email Service] SMTP 465 failed (${err465.message}). Trying Port 587...`);
   }
 
-  // Strategy 2: IPv4 STARTTLS Port 587
+  // =========================================================================
+  // STRATEGY 3: IPv4 STARTTLS Port 587 SMTP
+  // =========================================================================
   try {
     const transporter587 = nodemailer.createTransport({
       host: "smtp.gmail.com",
       port: 587,
       secure: false,
-      family: 4, // Forces IPv4 resolution
-      auth: {
-        user: smtpUser,
-        pass: smtpPass,
-      },
-      connectionTimeout: 8000,
-      greetingTimeout: 8000,
-      socketTimeout: 12000,
-      tls: {
-        rejectUnauthorized: false,
-      },
+      family: 4,
+      auth: { user: smtpUser, pass: smtpPass },
+      connectionTimeout: 5000,
+      greetingTimeout: 5000,
+      socketTimeout: 8000,
+      tls: { rejectUnauthorized: false },
     } as any);
 
     const info = await transporter587.sendMail(mailOptions);
-    console.log(`✅ [Email Service] Success via IPv4 STARTTLS:587 to ${recipient}. MessageId: ${info.messageId}`);
+    console.log(`✅ [Email Service] Success via SMTP 587 to ${recipient}. MessageId: ${info.messageId}`);
     return true;
   } catch (err587: any) {
-    console.warn(`⚠️ [Email Service] STARTTLS:587 failed (${err587.message}). Trying Service:Gmail fallback...`);
+    console.warn(`⚠️ [Email Service] SMTP 587 failed (${err587.message}). Trying Service Gmail...`);
   }
 
-  // Strategy 3: Standard Gmail Service transport
+  // =========================================================================
+  // STRATEGY 4: Service Gmail fallback
+  // =========================================================================
   try {
     const transporterGmail = nodemailer.createTransport({
       service: "gmail",
       family: 4,
-      auth: {
-        user: smtpUser,
-        pass: smtpPass,
-      },
-      connectionTimeout: 8000,
-      socketTimeout: 12000,
+      auth: { user: smtpUser, pass: smtpPass },
+      connectionTimeout: 5000,
+      socketTimeout: 8000,
     } as any);
 
     const info = await transporterGmail.sendMail(mailOptions);
-    console.log(`✅ [Email Service] Success via Service:Gmail to ${recipient}. MessageId: ${info.messageId}`);
+    console.log(`✅ [Email Service] Success via Service Gmail to ${recipient}. MessageId: ${info.messageId}`);
     return true;
   } catch (errGmail: any) {
-    console.error(`❌ [Email Service] All email delivery attempts failed for ${recipient}:`, errGmail);
+    console.error(`❌ [Email Service] All SMTP attempts timed out/failed on cloud server for ${recipient}: ${errGmail.message}`);
     return false;
   }
 };
