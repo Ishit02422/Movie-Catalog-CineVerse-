@@ -27,7 +27,11 @@ const CLIENT_URL = process.env.CLIENT_URL || "http://localhost:3000";
 // Middleware
 app.use(
   cors({
-    origin: CLIENT_URL,
+    origin: (origin, callback) => {
+      // Allow requests with no origin (like mobile apps, curl, server-to-server)
+      if (!origin) return callback(null, true);
+      return callback(null, true);
+    },
     credentials: true,
   })
 );
