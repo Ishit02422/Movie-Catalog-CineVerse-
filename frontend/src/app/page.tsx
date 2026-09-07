@@ -108,17 +108,14 @@ export default function Home() {
     }
   }, [debouncedSearch, selectedGenre, selectedYear, selectedSort, isAuthenticated]);
 
-  // Derive unique years from dataset for year filter dropdown
+  // Comprehensive list of all release years from 2026 down to 1960 (Always complete and stable)
   const availableYears = useMemo(() => {
-    const years = new Set<number>();
-    [2024, 2023, 2022, 2021, 2020, 2019, 2018, 2014, 2010, 2008, 1999, 1994, 1972].forEach(
-      (y) => years.add(y)
-    );
-    movies.forEach((m) => {
-      if (m.release_year) years.add(m.release_year);
-    });
-    return Array.from(years).sort((a, b) => b - a);
-  }, [movies]);
+    const years: number[] = [];
+    for (let y = 2026; y >= 1960; y--) {
+      years.push(y);
+    }
+    return years;
+  }, []);
 
   // Calculate Personalized Recommendations based on favorite genres
   const recommendedMovies = useMemo(() => {
