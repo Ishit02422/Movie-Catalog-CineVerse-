@@ -107,12 +107,12 @@ export const FilterBar: React.FC<FilterBarProps> = ({
               onChange={(e) => onSortChange(e.target.value)}
               className="w-full appearance-none px-3.5 py-3 pr-8 rounded-xl bg-slate-950/80 border border-slate-800 text-slate-200 text-xs sm:text-sm font-medium focus:outline-none focus:border-rose-500 transition-all cursor-pointer"
             >
-              <option value="year_desc">Latest Year</option>
-              <option value="year_asc">Oldest Year</option>
-              <option value="rating_desc">Top Rated ★</option>
-              <option value="title_asc">Title (A - Z)</option>
-              <option value="title_desc">Title (Z - A)</option>
-              <option value="views_desc">Most Popular</option>
+              <option value="year_desc">Newest First (2024 → 1970)</option>
+              <option value="year_asc">Oldest First (1970 → 2024)</option>
+              <option value="rating_desc">Top Rated (★ High to Low)</option>
+              <option value="title_asc">Title (A → Z)</option>
+              <option value="title_desc">Title (Z → A)</option>
+              <option value="views_desc">Most Popular (High Views)</option>
             </select>
             <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-slate-400">
               <ArrowUpDown className="w-3.5 h-3.5" />
