@@ -75,21 +75,24 @@ export default function MovieDetailsPage() {
 
   const isSaved = movie ? isInWatchlist(movie.id || (movie as any)._id) : false;
 
-  // Track recently viewed in localStorage
+  // Track recently viewed in localStorage (keyed by active user)
   const trackRecentlyViewed = useCallback((m: Movie) => {
     if (typeof window === "undefined") return;
     try {
-      const stored = localStorage.getItem("cineverse_recently_viewed");
+      const userKey = user?.id
+        ? `cineverse_recently_viewed_${user.id}`
+        : "cineverse_recently_viewed_guest";
+      const stored = localStorage.getItem(userKey);
       let list: Movie[] = stored ? JSON.parse(stored) : [];
       const currentId = m.id || (m as any)._id;
       list = list.filter((item) => (item.id || (item as any)._id) !== currentId);
       list.unshift(m);
       if (list.length > 12) list = list.slice(0, 12);
-      localStorage.setItem("cineverse_recently_viewed", JSON.stringify(list));
+      localStorage.setItem(userKey, JSON.stringify(list));
     } catch (e) {
       console.warn("Failed to store recently viewed:", e);
     }
-  }, []);
+  }, [user?.id]);
 
   // Fetch reviews
   const loadReviews = useCallback(async (movieId: string) => {

@@ -37,7 +37,7 @@ export default function Home() {
   // Debounce search input by 350ms
   const debouncedSearch = useDebounce(search, 350);
 
-  // Load initial movies, featured carousel, distinct genres, and recently viewed
+  // Load initial movies, featured carousel, and distinct genres
   useEffect(() => {
     async function loadInitialMeta() {
       try {
@@ -49,14 +49,6 @@ export default function Home() {
         setFeaturedMovies(featuredData);
         setAvailableGenres(genresData);
         setMovies(allMovies);
-
-        // Load recently viewed from localStorage
-        if (typeof window !== "undefined") {
-          const stored = localStorage.getItem("cineverse_recently_viewed");
-          if (stored) {
-            setRecentlyViewed(JSON.parse(stored));
-          }
-        }
       } catch (err) {
         console.error("Failed to load initial metadata:", err);
       } finally {
@@ -65,6 +57,26 @@ export default function Home() {
     }
     loadInitialMeta();
   }, []);
+
+  // Load recently viewed from localStorage specifically for the active user
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const userKey = user?.id
+          ? `cineverse_recently_viewed_${user.id}`
+          : "cineverse_recently_viewed_guest";
+        const stored = localStorage.getItem(userKey);
+        if (stored) {
+          setRecentlyViewed(JSON.parse(stored));
+        } else {
+          setRecentlyViewed([]);
+        }
+      } catch (e) {
+        console.warn("Could not load recently viewed:", e);
+        setRecentlyViewed([]);
+      }
+    }
+  }, [user?.id]);
 
   // Fetch filtered movies whenever search, genre, year, or sort changes (when authenticated)
   const loadFilteredMovies = async () => {
@@ -375,6 +387,10 @@ export default function Home() {
                   <button
                     type="button"
                     onClick={() => {
+                      const userKey = user?.id
+                        ? `cineverse_recently_viewed_${user.id}`
+                        : "cineverse_recently_viewed_guest";
+                      localStorage.removeItem(userKey);
                       localStorage.removeItem("cineverse_recently_viewed");
                       setRecentlyViewed([]);
                     }}
