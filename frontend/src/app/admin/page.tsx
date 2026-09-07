@@ -1576,70 +1576,79 @@ export default function AdminPage() {
                     />
                   </div>
 
-                  {/* Poster Image Section with Upload & Quick Presets */}
+                  {/* Poster Image Section with Pure File Upload & Quick Presets */}
                   <div className="space-y-3 p-3.5 rounded-2xl bg-white/[0.03] border border-white/10">
                     <div className="flex items-center justify-between">
                       <label className="text-xs font-bold text-slate-200 flex items-center gap-1.5">
                         <ImageIcon className="w-4 h-4 text-[#e50914]" />
                         <span>Poster Image *</span>
                       </label>
-                      {/* Local File Upload Button */}
-                      <label className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition-all cursor-pointer border border-white/10 shadow-sm active:scale-95">
-                        <Upload className="w-3.5 h-3.5 text-rose-400" />
-                        <span>{isUploadingImage ? "Processing..." : "📁 Upload from Device"}</span>
-                        <input
-                          type="file"
-                          accept="image/png, image/jpeg, image/webp, image/gif"
-                          onChange={handleImageFileUpload}
-                          className="hidden"
-                          disabled={isUploadingImage}
-                        />
-                      </label>
-                    </div>
-
-                    {/* Image URL Input */}
-                    <div className="relative">
-                      <input
-                        type="text"
-                        required
-                        value={formData.image_url}
-                        onChange={(e) => handleImageUrlChange(e.target.value)}
-                        placeholder="Paste direct link (https://...jpg, png, webp) or use Upload button"
-                        className="w-full bg-slate-950 border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-[#e50914] transition-all font-mono pr-20"
-                      />
                       {formData.image_url && (
-                        <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
-                          {!formData.image_url.startsWith("data:") && (
-                            <a
-                              href={formData.image_url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="p-1 rounded-lg bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white transition-colors"
-                              title="Open & Test Link in New Tab"
-                            >
-                              <ExternalLink className="w-3.5 h-3.5" />
-                            </a>
-                          )}
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setFormData((prev) => ({ ...prev, image_url: "" }));
-                              setImagePreviewStatus("idle");
-                            }}
-                            className="p-1 rounded-lg bg-white/10 hover:bg-rose-500/20 text-slate-400 hover:text-rose-400 transition-colors"
-                            title="Clear Image"
-                          >
-                            <X className="w-3.5 h-3.5" />
-                          </button>
-                        </div>
+                        <span className="text-[11px] font-bold text-emerald-400 flex items-center gap-1 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20">
+                          <CheckCircle className="w-3 h-3" /> Image Selected
+                        </span>
                       )}
                     </div>
+
+                    {/* Dedicated Clickable File Upload Area */}
+                    <label
+                      className={`group relative flex flex-col items-center justify-center p-4 rounded-xl border-2 border-dashed transition-all cursor-pointer ${
+                        formData.image_url
+                          ? "border-emerald-500/40 bg-emerald-950/10 hover:border-emerald-500/60"
+                          : "border-white/20 bg-slate-950/60 hover:border-[#e50914] hover:bg-rose-950/10"
+                      }`}
+                    >
+                      <input
+                        type="file"
+                        accept="image/png, image/jpeg, image/webp, image/gif"
+                        onChange={handleImageFileUpload}
+                        className="hidden"
+                        disabled={isUploadingImage}
+                      />
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-white/10 group-hover:bg-[#e50914]/20 flex items-center justify-center text-white group-hover:text-[#e50914] transition-all">
+                          {isUploadingImage ? (
+                            <Loader2 className="w-5 h-5 animate-spin text-[#e50914]" />
+                          ) : (
+                            <Upload className="w-5 h-5" />
+                          )}
+                        </div>
+                        <div>
+                          <p className="text-xs font-bold text-white group-hover:text-rose-400 transition-colors">
+                            {isUploadingImage
+                              ? "Optimizing & Processing Image..."
+                              : formData.image_url
+                              ? "📁 Click to Choose / Change Poster from Device"
+                              : "📁 Click to Upload Poster from Device"}
+                          </p>
+                          <p className="text-[11px] text-slate-400">
+                            Supports PNG, JPG, JPEG, WEBP (Auto-optimized)
+                          </p>
+                        </div>
+                      </div>
+                    </label>
+
+                    {/* Remove button if image is selected */}
+                    {formData.image_url && (
+                      <div className="flex justify-end">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setFormData((prev) => ({ ...prev, image_url: "" }));
+                            setImagePreviewStatus("idle");
+                          }}
+                          className="text-[11px] font-semibold text-rose-400 hover:text-rose-300 flex items-center gap-1 hover:underline"
+                        >
+                          <X className="w-3 h-3" /> Remove poster
+                        </button>
+                      </div>
+                    )}
 
                     {/* Quick Working Sample Presets */}
                     <div>
                       <div className="flex items-center gap-1 text-[11px] font-bold text-slate-400 mb-1.5">
                         <Sparkles className="w-3 h-3 text-amber-400" />
-                        <span>⚡ 1-Click Working Sample Blockbusters:</span>
+                        <span>⚡ Or 1-Click Auto-Fill Sample Blockbuster:</span>
                       </div>
                       <div className="flex items-center gap-1.5 overflow-x-auto pb-1.5 no-scrollbar scroll-smooth">
                         {SAMPLE_POSTER_PRESETS.map((p) => (
@@ -1884,70 +1893,79 @@ export default function AdminPage() {
                     />
                   </div>
 
-                  {/* Poster Image Section with Upload & Quick Presets */}
+                  {/* Poster Image Section with Pure File Upload & Quick Presets */}
                   <div className="space-y-3 p-3.5 rounded-2xl bg-white/[0.03] border border-white/10">
                     <div className="flex items-center justify-between">
                       <label className="text-xs font-bold text-slate-200 flex items-center gap-1.5">
                         <ImageIcon className="w-4 h-4 text-[#e50914]" />
                         <span>Poster Image *</span>
                       </label>
-                      {/* Local File Upload Button */}
-                      <label className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition-all cursor-pointer border border-white/10 shadow-sm active:scale-95">
-                        <Upload className="w-3.5 h-3.5 text-rose-400" />
-                        <span>{isUploadingImage ? "Processing..." : "📁 Upload from Device"}</span>
-                        <input
-                          type="file"
-                          accept="image/png, image/jpeg, image/webp, image/gif"
-                          onChange={handleImageFileUpload}
-                          className="hidden"
-                          disabled={isUploadingImage}
-                        />
-                      </label>
-                    </div>
-
-                    {/* Image URL Input */}
-                    <div className="relative">
-                      <input
-                        type="text"
-                        required
-                        value={formData.image_url}
-                        onChange={(e) => handleImageUrlChange(e.target.value)}
-                        placeholder="Paste direct link (https://...jpg, png, webp) or use Upload button"
-                        className="w-full bg-slate-950 border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-[#e50914] transition-all font-mono pr-20"
-                      />
                       {formData.image_url && (
-                        <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
-                          {!formData.image_url.startsWith("data:") && (
-                            <a
-                              href={formData.image_url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="p-1 rounded-lg bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white transition-colors"
-                              title="Open & Test Link in New Tab"
-                            >
-                              <ExternalLink className="w-3.5 h-3.5" />
-                            </a>
-                          )}
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setFormData((prev) => ({ ...prev, image_url: "" }));
-                              setImagePreviewStatus("idle");
-                            }}
-                            className="p-1 rounded-lg bg-white/10 hover:bg-rose-500/20 text-slate-400 hover:text-rose-400 transition-colors"
-                            title="Clear Image"
-                          >
-                            <X className="w-3.5 h-3.5" />
-                          </button>
-                        </div>
+                        <span className="text-[11px] font-bold text-emerald-400 flex items-center gap-1 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20">
+                          <CheckCircle className="w-3 h-3" /> Image Loaded
+                        </span>
                       )}
                     </div>
+
+                    {/* Dedicated Clickable File Upload Area */}
+                    <label
+                      className={`group relative flex flex-col items-center justify-center p-4 rounded-xl border-2 border-dashed transition-all cursor-pointer ${
+                        formData.image_url
+                          ? "border-emerald-500/40 bg-emerald-950/10 hover:border-emerald-500/60"
+                          : "border-white/20 bg-slate-950/60 hover:border-[#e50914] hover:bg-rose-950/10"
+                      }`}
+                    >
+                      <input
+                        type="file"
+                        accept="image/png, image/jpeg, image/webp, image/gif"
+                        onChange={handleImageFileUpload}
+                        className="hidden"
+                        disabled={isUploadingImage}
+                      />
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-white/10 group-hover:bg-[#e50914]/20 flex items-center justify-center text-white group-hover:text-[#e50914] transition-all">
+                          {isUploadingImage ? (
+                            <Loader2 className="w-5 h-5 animate-spin text-[#e50914]" />
+                          ) : (
+                            <Upload className="w-5 h-5" />
+                          )}
+                        </div>
+                        <div>
+                          <p className="text-xs font-bold text-white group-hover:text-rose-400 transition-colors">
+                            {isUploadingImage
+                              ? "Optimizing & Processing Image..."
+                              : formData.image_url
+                              ? "📁 Click to Choose / Change Poster from Device"
+                              : "📁 Click to Upload Poster from Device"}
+                          </p>
+                          <p className="text-[11px] text-slate-400">
+                            Supports PNG, JPG, JPEG, WEBP (Auto-optimized)
+                          </p>
+                        </div>
+                      </div>
+                    </label>
+
+                    {/* Remove button if image is selected */}
+                    {formData.image_url && (
+                      <div className="flex justify-end">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setFormData((prev) => ({ ...prev, image_url: "" }));
+                            setImagePreviewStatus("idle");
+                          }}
+                          className="text-[11px] font-semibold text-rose-400 hover:text-rose-300 flex items-center gap-1 hover:underline"
+                        >
+                          <X className="w-3 h-3" /> Remove poster
+                        </button>
+                      </div>
+                    )}
 
                     {/* Quick Working Sample Presets */}
                     <div>
                       <div className="flex items-center gap-1 text-[11px] font-bold text-slate-400 mb-1.5">
                         <Sparkles className="w-3 h-3 text-amber-400" />
-                        <span>⚡ 1-Click Working Sample Blockbusters:</span>
+                        <span>⚡ Or 1-Click Auto-Fill Sample Blockbuster:</span>
                       </div>
                       <div className="flex items-center gap-1.5 overflow-x-auto pb-1.5 no-scrollbar scroll-smooth">
                         {SAMPLE_POSTER_PRESETS.map((p) => (
