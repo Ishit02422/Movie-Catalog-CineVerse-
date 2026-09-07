@@ -29,7 +29,7 @@ import {
   X,
   ExternalLink,
 } from "lucide-react";
-import { getMovieTrailerVideoId, getYouTubeSearchUrl } from "../../../utils/trailerMap";
+import { getYouTubeTrailerUrl } from "../../../utils/trailerMap";
 
 interface ReviewItem {
   id: string;
@@ -657,8 +657,7 @@ export default function MovieDetailsPage() {
 
       {/* Enhanced Cinema Trailer Video Player Modal */}
       {isTrailerOpen && movie && (() => {
-        const trailerId = getMovieTrailerVideoId(movie.title);
-        const youtubeSearchUrl = getYouTubeSearchUrl(movie.title);
+        const youtubeTrailerUrl = getYouTubeTrailerUrl(movie.title);
         return (
           <div className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 animate-in fade-in">
             <div className="relative w-full max-w-4xl bg-slate-950 rounded-3xl overflow-hidden border border-white/15 shadow-2xl shadow-rose-950/60 flex flex-col">
@@ -678,7 +677,7 @@ export default function MovieDetailsPage() {
 
                 <div className="flex items-center gap-2">
                   <a
-                    href={youtubeSearchUrl}
+                    href={youtubeTrailerUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 hover:bg-[#e50914] text-slate-300 hover:text-white text-xs font-bold transition-all border border-white/10 cursor-pointer"
@@ -716,7 +715,7 @@ export default function MovieDetailsPage() {
                 <div className="relative z-10 flex flex-col items-center justify-center p-6 sm:p-10 text-center max-w-xl mx-auto space-y-4">
                   {/* Glowing Animated Play Trigger */}
                   <a
-                    href={trailerId ? `https://www.youtube.com/watch?v=${trailerId}` : youtubeSearchUrl}
+                    href={youtubeTrailerUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-20 h-20 rounded-full bg-gradient-to-tr from-[#e50914] to-rose-600 border-2 border-white/30 flex items-center justify-center text-white shadow-2xl shadow-rose-600/60 hover:scale-110 active:scale-95 transition-all duration-300 cursor-pointer group/btn"
@@ -739,7 +738,7 @@ export default function MovieDetailsPage() {
 
                   {/* Big Primary Action Launch Button */}
                   <a
-                    href={trailerId ? `https://www.youtube.com/watch?v=${trailerId}` : youtubeSearchUrl}
+                    href={youtubeTrailerUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-2xl bg-gradient-to-r from-[#e50914] via-rose-600 to-rose-700 hover:from-rose-600 hover:to-rose-800 text-white font-extrabold text-sm sm:text-base shadow-xl shadow-rose-600/50 hover:shadow-rose-600/80 transition-all hover:scale-105 active:scale-95 cursor-pointer border border-rose-400/30"
@@ -762,7 +761,7 @@ export default function MovieDetailsPage() {
                   <span className="text-amber-400 font-bold">{movie.rating?.toFixed(1) || "8.0"} ★</span>
                 </span>
                 <a
-                  href={trailerId ? `https://www.youtube.com/watch?v=${trailerId}` : youtubeSearchUrl}
+                  href={youtubeTrailerUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-rose-400 hover:text-rose-300 font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
