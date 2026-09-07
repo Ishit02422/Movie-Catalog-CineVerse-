@@ -23,13 +23,16 @@ export const sendOtpEmail = async ({
     if (smtpUser && smtpPass) {
       transporter = nodemailer.createTransport({
         service: "gmail",
+        host: "smtp.gmail.com",
+        port: 465,
+        secure: true,
         auth: {
-          user: smtpUser,
-          pass: smtpPass.replace(/\s+/g, ""), // Strip any spaces from the 16-char app password
+          user: smtpUser.trim(),
+          pass: smtpPass.replace(/\s+/g, "").trim(),
         },
-        connectionTimeout: 4000,
-        greetingTimeout: 4000,
-        socketTimeout: 4000,
+        connectionTimeout: 10000,
+        greetingTimeout: 10000,
+        socketTimeout: 10000,
       });
     } else {
       // Local / Cloud Mock Transporter that never hangs
