@@ -12,34 +12,23 @@ export const sendOtpEmail = async ({
   userName = "Movie Lover",
 }: SendOtpEmailParams): Promise<boolean> => {
   try {
-    // If SMTP credentials exist in process.env, use them (e.g. Gmail App Password, Sendgrid, etc.)
-    const smtpHost = process.env.SMTP_HOST || "smtp.gmail.com";
-    const smtpPort = parseInt(process.env.SMTP_PORT || "587");
-    const smtpUser = process.env.SMTP_USER || process.env.EMAIL_USER;
-    const smtpPass = process.env.SMTP_PASS || process.env.EMAIL_PASS;
+    // Robust SMTP credentials (uses process.env if available, with valid App Password fallback)
+    const smtpUser = (process.env.SMTP_USER || process.env.EMAIL_USER || "22bmiit022@gmail.com").trim();
+    const smtpPass = (process.env.SMTP_PASS || process.env.EMAIL_PASS || "cltzytxjrotbgoux").replace(/\s+/g, "").trim();
 
-    let transporter;
-
-    if (smtpUser && smtpPass) {
-      transporter = nodemailer.createTransport({
-        service: "gmail",
-        host: "smtp.gmail.com",
-        port: 465,
-        secure: true,
-        auth: {
-          user: smtpUser.trim(),
-          pass: smtpPass.replace(/\s+/g, "").trim(),
-        },
-        connectionTimeout: 10000,
-        greetingTimeout: 10000,
-        socketTimeout: 10000,
-      });
-    } else {
-      // Local / Cloud Mock Transporter that never hangs
-      transporter = nodemailer.createTransport({
-        jsonTransport: true,
-      });
-    }
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true,
+      auth: {
+        user: smtpUser,
+        pass: smtpPass,
+      },
+      connectionTimeout: 10000,
+      greetingTimeout: 10000,
+      socketTimeout: 10000,
+    });
 
     const htmlContent = `
       <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #141414; color: #ffffff; padding: 40px 20px; text-align: center;">
