@@ -63,11 +63,10 @@ export const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
               type="button"
               onClick={handleWatchlistClick}
               title={isSaved ? "Saved in My List (Click to remove)" : "Add to My List"}
-              className={`w-8 h-8 rounded-full flex items-center justify-center transition-all cursor-pointer shadow-lg active:scale-90 ${
-                isSaved
+              className={`w-8 h-8 rounded-full flex items-center justify-center transition-all cursor-pointer shadow-lg active:scale-90 ${isSaved
                   ? "bg-[#e50914] text-white border-2 border-white shadow-red-950/80 scale-105"
                   : "bg-black/85 hover:bg-[#e50914] text-white border border-white/30 hover:border-white"
-              }`}
+                }`}
             >
               {isSaved ? (
                 <Check className="w-4 h-4 stroke-[3]" />
