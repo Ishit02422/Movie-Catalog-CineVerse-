@@ -743,14 +743,14 @@ export default function AdminPage() {
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[#e50914]/15 rounded-full blur-[120px] pointer-events-none" />
 
         <header className="px-6 py-5 flex items-center justify-between z-10 border-b border-white/5 bg-slate-950/60 backdrop-blur-xl">
-          <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-9 h-9 rounded-xl overflow-hidden shadow-lg shadow-rose-600/40 border border-white/15 group-hover:scale-105 transition-all">
+          <Link href="/" className="flex items-center gap-3.5 group">
+            <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl overflow-hidden shadow-2xl shadow-rose-600/60 border-2 border-white/25 group-hover:scale-110 transition-all duration-300">
               <img src="/logo.png" alt="CineVerse" className="w-full h-full object-cover" />
             </div>
-            <span className="text-xl font-black tracking-tight text-white">
+            <span className="text-2xl sm:text-3xl font-black tracking-tight text-white">
               Cine<span className="text-[#e50914]">Verse</span>
             </span>
-            <span className="text-[10px] uppercase tracking-widest font-extrabold px-2 py-0.5 rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/20 ml-1">
+            <span className="text-xs uppercase tracking-widest font-extrabold px-2.5 py-0.5 rounded-full bg-rose-500/15 text-rose-400 border border-rose-500/30 ml-1.5">
               Studio
             </span>
           </Link>
@@ -868,17 +868,17 @@ export default function AdminPage() {
   return (
     <div className="h-screen bg-[#070b12] text-white flex flex-col font-sans overflow-hidden">
       {/* Top Studio Bar */}
-      <header className="h-16 shrink-0 border-b border-white/10 bg-[#090e17] px-4 sm:px-6 flex items-center justify-between z-30 sticky top-0">
-        <div className="flex items-center gap-3">
-          <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-8 h-8 rounded-xl overflow-hidden shadow-md shadow-rose-600/30 border border-white/15 group-hover:scale-105 transition-all">
+      <header className="h-18 sm:h-20 shrink-0 border-b border-white/10 bg-[#090e17] px-4 sm:px-6 flex items-center justify-between z-30 sticky top-0">
+        <div className="flex items-center gap-3.5">
+          <Link href="/" className="flex items-center gap-3 group">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl overflow-hidden shadow-xl shadow-rose-600/50 border-2 border-white/20 group-hover:scale-105 transition-all">
               <img src="/logo.png" alt="CineVerse" className="w-full h-full object-cover" />
             </div>
-            <span className="text-lg font-black tracking-tight text-white">
+            <span className="text-xl sm:text-2xl font-black tracking-tight text-white">
               Cine<span className="text-[#e50914]">Verse</span>
             </span>
           </Link>
-          <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/20">
+          <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-rose-500/15 text-rose-400 border border-rose-500/30">
             Admin Studio
           </span>
         </div>

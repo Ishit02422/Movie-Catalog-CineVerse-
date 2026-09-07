@@ -283,11 +283,11 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
           {/* Top Sticky Header */}
           <header className="relative z-30 w-full max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 py-5 flex items-center justify-between">
             {/* Red CineVerse Logo with 3D Emblem */}
-            <div className="flex items-center gap-3 cursor-pointer">
-              <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-2xl overflow-hidden shadow-xl shadow-rose-600/40 border border-white/20">
+            <div className="flex items-center gap-3.5 sm:gap-4 cursor-pointer">
+              <div className="w-12 h-12 sm:w-16 sm:h-16 md:w-18 md:h-18 rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl shadow-rose-600/60 border-2 border-white/25 hover:scale-105 transition-all duration-300">
                 <img src="/logo.png" alt="CineVerse Logo" className="w-full h-full object-cover" />
               </div>
-              <span className="text-2xl sm:text-4xl font-black tracking-tighter text-[#e50914] uppercase drop-shadow-lg">
+              <span className="text-3xl sm:text-5xl md:text-6xl font-black tracking-tight text-[#e50914] uppercase drop-shadow-2xl">
                 CineVerse
               </span>
             </div>
@@ -582,10 +582,10 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
               >
                 <ArrowLeft className="w-6 h-6" />
               </button>
-              <div className="w-8 h-8 rounded-xl overflow-hidden shadow-md shadow-rose-600/30 border border-white/15">
+              <div className="w-11 h-11 sm:w-13 sm:h-13 rounded-2xl overflow-hidden shadow-xl shadow-rose-600/50 border-2 border-white/20">
                 <img src="/logo.png" alt="CineVerse" className="w-full h-full object-cover" />
               </div>
-              <span className="text-xl sm:text-2xl font-black tracking-tighter text-[#e50914] font-sans uppercase">
+              <span className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-[#e50914] font-sans uppercase drop-shadow-md">
                 CineVerse
               </span>
             </div>

@@ -35,22 +35,22 @@ export const Navbar: React.FC<NavbarProps> = ({
   return (
     <>
       <header className="sticky top-0 z-40 w-full border-b border-slate-800/80 bg-slate-950/85 backdrop-blur-xl transition-all">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 sm:h-22 flex items-center justify-between">
           {/* Brand Logo & Navigation Links */}
           <div className="flex items-center gap-6 sm:gap-8">
             <Link
               href="/"
               onClick={() => onSelectTab && onSelectTab("all")}
-              className="flex items-center gap-2.5 group transition-transform duration-200 active:scale-95"
+              className="flex items-center gap-3.5 group transition-transform duration-200 active:scale-95 cursor-pointer"
             >
-              <div className="w-9 h-9 rounded-xl overflow-hidden shadow-lg shadow-rose-600/40 border border-white/15 group-hover:scale-105 transition-all">
+              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl overflow-hidden shadow-2xl shadow-rose-600/60 border-2 border-white/25 group-hover:scale-110 group-hover:border-[#e50914] group-hover:shadow-rose-600/80 transition-all duration-300">
                 <img
                   src="/logo.png"
                   alt="CineVerse"
                   className="w-full h-full object-cover"
                 />
               </div>
-              <span className="text-xl font-black tracking-tight text-white font-sans">
+              <span className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-white font-sans drop-shadow-md">
                 Cine<span className="text-[#e50914]">Verse</span>
               </span>
             </Link>
