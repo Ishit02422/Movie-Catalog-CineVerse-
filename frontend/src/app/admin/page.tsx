@@ -56,17 +56,41 @@ interface GenreCategory {
   icon: string;
 }
 
-const GENRE_CATEGORIES: GenreCategory[] = [
-  { id: "Action", name: "Action", icon: "⚡" },
-  { id: "Sci-Fi", name: "Sci-Fi", icon: "🚀" },
-  { id: "Drama", name: "Drama", icon: "🎭" },
-  { id: "Romance", name: "Romance", icon: "❤️" },
-  { id: "Comedy", name: "Comedy", icon: "😂" },
-  { id: "Thriller", name: "Thriller", icon: "🔪" },
-  { id: "Crime", name: "Crime", icon: "🔍" },
-  { id: "Horror", name: "Horror", icon: "👻" },
-  { id: "Animation", name: "Animation", icon: "🎨" },
-  { id: "Adventure", name: "Adventure", icon: "🗺️" },
+const GENRE_ICONS: Record<string, string> = {
+  Action: "⚡",
+  "Sci-Fi": "🚀",
+  Drama: "🎭",
+  Romance: "❤️",
+  Comedy: "😂",
+  Thriller: "🔪",
+  Crime: "🔍",
+  Horror: "👻",
+  Animation: "🎨",
+  Adventure: "🗺️",
+  Fantasy: "🧙‍♂️",
+  Mystery: "🔮",
+  Family: "👨‍👩‍👧‍👦",
+  Biography: "📜",
+  History: "🏛️",
+  Music: "🎵",
+  Documentary: "📹",
+  Sport: "🏆",
+  War: "⚔️",
+  Western: "🤠",
+};
+
+const DEFAULT_GENRE_NAMES = [
+  "Action",
+  "Sci-Fi",
+  "Drama",
+  "Romance",
+  "Comedy",
+  "Fantasy",
+  "Adventure",
+  "Thriller",
+  "Crime",
+  "Horror",
+  "Animation",
 ];
 
 export interface PosterPreset {
@@ -302,16 +326,46 @@ export default function AdminPage() {
     }
   }, [isAdmin]);
 
+  // Compute dynamic genre categories list (defaults + any custom genres found in database)
+  const genreCategories = useMemo<GenreCategory[]>(() => {
+    const dynamicGenreNames = new Set<string>();
+    
+    // Add default popular genres
+    DEFAULT_GENRE_NAMES.forEach((g) => dynamicGenreNames.add(g));
+
+    // Add any genre present in current movies
+    movies.forEach((m) => {
+      if (m.genre) {
+        m.genre.split(/[,/]/).forEach((part) => {
+          const clean = part.trim();
+          if (clean) {
+            // Capitalize first letter properly (e.g., "fantasy" -> "Fantasy")
+            const capitalized = clean.charAt(0).toUpperCase() + clean.slice(1);
+            dynamicGenreNames.add(capitalized);
+          }
+        });
+      }
+    });
+
+    return Array.from(dynamicGenreNames).map((name) => {
+      const matchingKey = Object.keys(GENRE_ICONS).find(
+        (k) => k.toLowerCase() === name.toLowerCase()
+      );
+      const icon = matchingKey ? GENRE_ICONS[matchingKey] : "📁";
+      return { id: name, name, icon };
+    });
+  }, [movies]);
+
   // Compute genre movie counts for sidebar
   const genreCounts = useMemo(() => {
     const counts: Record<string, number> = {};
-    GENRE_CATEGORIES.forEach((g) => {
+    genreCategories.forEach((g) => {
       counts[g.id] = movies.filter((m) =>
         m.genre?.toLowerCase().includes(g.id.toLowerCase())
       ).length;
     });
     return counts;
-  }, [movies]);
+  }, [movies, genreCategories]);
 
   const featuredCount = useMemo(() => {
     return movies.filter((m) => m.is_featured).length;
@@ -1008,9 +1062,9 @@ export default function AdminPage() {
               <Folder className="w-4.5 h-4.5 text-slate-400" />
             </p>
             <div className="space-y-2">
-              {GENRE_CATEGORIES.map((cat) => {
+              {genreCategories.map((cat) => {
                 const count = genreCounts[cat.id] || 0;
-                const isSelected = selectedNav === cat.id;
+                const isSelected = selectedNav.toLowerCase() === cat.id.toLowerCase();
                 return (
                   <button
                     key={cat.id}
@@ -1025,11 +1079,13 @@ export default function AdminPage() {
                       <span className="text-lg">{cat.icon}</span>
                       <span>{cat.name}</span>
                     </div>
-                    {count > 0 && (
-                      <span className="text-xs sm:text-sm font-black text-slate-200 bg-slate-800/90 px-3 py-0.5 rounded-xl border border-white/10">
-                        {count}
-                      </span>
-                    )}
+                    <span className={`text-xs sm:text-sm font-black px-3 py-0.5 rounded-xl border ${
+                      count > 0 
+                        ? "text-slate-200 bg-slate-800/90 border-white/10" 
+                        : "text-slate-500 bg-slate-900/50 border-white/5"
+                    }`}>
+                      {count}
+                    </span>
                   </button>
                 );
               })}

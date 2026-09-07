@@ -358,11 +358,10 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                     type="button"
                     onClick={() => setActiveSlide(i)}
                     aria-label={`Go to slide ${i + 1}`}
-                    className={`transition-all duration-300 cursor-pointer ${
-                      activeSlide === i
+                    className={`transition-all duration-300 cursor-pointer ${activeSlide === i
                         ? "w-7 h-2 rounded-full bg-[#e50914] scale-105"
                         : "w-2 h-2 rounded-full bg-white/40 hover:bg-white/70"
-                    }`}
+                      }`}
                   />
                 ))}
               </div>
