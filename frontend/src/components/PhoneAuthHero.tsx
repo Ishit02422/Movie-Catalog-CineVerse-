@@ -142,7 +142,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
     setError(null);
     setSuccessMessage(null);
 
-    const val = identifier.trim();
+    let val = identifier.trim();
     if (!val) {
       if (screen === "landing") {
         setScreen("signin");
@@ -161,10 +161,10 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
       return;
     }
 
+    // Auto-complete @gmail.com if user types just username (e.g. ishupatel0024)
     if (!isNum && !val.includes("@")) {
-      setError("Please enter a valid email address or 10-digit mobile number.");
-      if (screen === "landing") setScreen("signin");
-      return;
+      val = `${val}@gmail.com`;
+      setIdentifier(val);
     }
 
     // Instant Optimistic Transition to OTP screen

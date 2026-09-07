@@ -189,14 +189,16 @@ export const sendPhoneOtp = async (
     }
 
     const inputStr = String(rawInput).trim();
-    const isEmail = inputStr.includes("@");
-    const isPhone = /^[0-9+ -]+$/.test(inputStr) && inputStr.replace(/\D/g, "").length >= 10;
+    const isNum = /^[0-9+ -]+$/.test(inputStr) && inputStr.replace(/\D/g, "").length >= 10;
+    const isEmail = inputStr.includes("@") || (!isNum && inputStr.length >= 3);
 
-    if (!isEmail && !isPhone) {
+    if (!isEmail && !isNum) {
       throw new ApiError("Please enter a valid email address or 10-digit phone number.", 400);
     }
 
-    const cleanIdentifier = isEmail ? inputStr.toLowerCase() : inputStr.replace(/\D/g, "");
+    const cleanIdentifier = isEmail
+      ? (inputStr.includes("@") ? inputStr.toLowerCase() : `${inputStr.toLowerCase()}@gmail.com`)
+      : inputStr.replace(/\D/g, "");
 
     // Check if an unexpired OTP was already generated for this user
     const existingOtpDoc = await Otp.findOne({
