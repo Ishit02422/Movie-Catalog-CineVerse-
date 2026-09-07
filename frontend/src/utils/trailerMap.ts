@@ -29,7 +29,6 @@ export const TRAILER_MAP: Record<string, string> = {
   "3 idiots": "K0eDlFX9GMc",
   "dangal": "x_7YlGv9u1g",
   "dilwale dulhania le jayenge": "c25GKl5VNeY",
-  "pk": "82ZEDyxQ59k",
   "rrr": "f_vbAtFSEc0",
   "baahubali 2: the conclusion": "qD-6d8Wo3do",
   "baahubali 2": "qD-6d8Wo3do",
