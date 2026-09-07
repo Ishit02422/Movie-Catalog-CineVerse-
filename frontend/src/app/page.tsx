@@ -363,6 +363,53 @@ export default function Home() {
               totalResults={movies.length}
             />
 
+            {/* Active Filter Tags with 1-Click Clear */}
+            {(search.trim() !== "" || selectedGenre !== "All" || selectedYear !== "") && (
+              <div className="flex flex-wrap items-center gap-2 -mt-4 bg-slate-900/50 p-3 rounded-xl border border-slate-800/80 animate-in fade-in">
+                <span className="text-xs font-bold text-slate-400">Active Filters:</span>
+                {selectedYear && (
+                  <button
+                    type="button"
+                    onClick={() => setSelectedYear("")}
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-500/20 border border-rose-500/40 text-rose-300 text-xs font-bold hover:bg-rose-500/30 transition-all cursor-pointer"
+                    title="Click to remove Year filter"
+                  >
+                    <span>📅 Year: {selectedYear}</span>
+                    <span className="text-rose-400 font-extrabold ml-0.5">✕</span>
+                  </button>
+                )}
+                {selectedGenre !== "All" && (
+                  <button
+                    type="button"
+                    onClick={() => setSelectedGenre("All")}
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-500/20 border border-rose-500/40 text-rose-300 text-xs font-bold hover:bg-rose-500/30 transition-all cursor-pointer"
+                    title="Click to remove Genre filter"
+                  >
+                    <span>⚡ Genre: {selectedGenre}</span>
+                    <span className="text-rose-400 font-extrabold ml-0.5">✕</span>
+                  </button>
+                )}
+                {search.trim() !== "" && (
+                  <button
+                    type="button"
+                    onClick={() => setSearch("")}
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-500/20 border border-rose-500/40 text-rose-300 text-xs font-bold hover:bg-rose-500/30 transition-all cursor-pointer"
+                    title="Click to clear search text"
+                  >
+                    <span>🔍 Search: &ldquo;{search.trim()}&rdquo;</span>
+                    <span className="text-rose-400 font-extrabold ml-0.5">✕</span>
+                  </button>
+                )}
+                <button
+                  type="button"
+                  onClick={handleClearFilters}
+                  className="text-xs font-semibold text-slate-400 hover:text-white underline ml-2 transition-colors cursor-pointer"
+                >
+                  Reset All to Show All Movies
+                </button>
+              </div>
+            )}
+
             {/* Dynamic Movie Catalog Grid */}
             <MovieGrid
               movies={movies}
