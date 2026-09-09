@@ -771,35 +771,35 @@ export default function AdminPage() {
   return (
     <div className="h-screen bg-[#06080e] text-white flex flex-col font-sans overflow-hidden">
       {/* Top Studio Bar */}
-      <header className="h-22 sm:h-24 shrink-0 border-b border-white/[0.12] bg-[#090d18]/95 backdrop-blur-2xl px-6 sm:px-10 flex items-center justify-between z-30 sticky top-0 shadow-xl shadow-black/50">
-        <div className="flex items-center gap-4 sm:gap-5">
-          <Link href="/" className="flex items-center gap-3.5 group">
-            <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl overflow-hidden shadow-2xl shadow-rose-600/40 border-2 border-white/20 group-hover:scale-105 transition-all">
+      <header className="h-28 sm:h-32 shrink-0 border-b-2 border-white/[0.15] bg-[#090d18] px-8 sm:px-12 flex items-center justify-between z-30 sticky top-0 shadow-2xl shadow-black/80">
+        <div className="flex items-center gap-5 sm:gap-7">
+          <Link href="/" className="flex items-center gap-4 group">
+            <div className="w-16 h-16 sm:w-18 sm:h-18 rounded-3xl overflow-hidden shadow-2xl shadow-rose-600/50 border-2 border-white/25 group-hover:scale-105 transition-all">
               <img src="/logo.png" alt="CineVerse" className="w-full h-full object-cover" />
             </div>
-            <span className="text-3xl sm:text-4xl font-black tracking-tight text-white font-sans">
+            <span className="text-4xl sm:text-5xl font-black tracking-tight text-white font-sans">
               Cine<span className="text-[#e50914]">Verse</span>
             </span>
           </Link>
-          <span className="text-sm sm:text-base font-black px-4 py-1.5 rounded-2xl bg-rose-500/15 text-rose-300 border border-rose-500/35 tracking-wide shadow-sm">
+          <span className="text-base sm:text-lg font-black px-5 py-2 rounded-2xl bg-rose-500/20 text-rose-300 border-2 border-rose-500/40 tracking-wider shadow-md">
             Admin Studio
           </span>
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-5">
           <Link
             href="/"
             target="_blank"
-            className="flex items-center gap-2.5 text-base font-extrabold text-slate-100 hover:text-white px-5 py-3 rounded-2xl border border-white/20 bg-white/10 hover:bg-white/20 shadow-md transition-all cursor-pointer"
+            className="flex items-center gap-3 text-lg font-black text-white hover:text-white px-7 py-3.5 rounded-2xl border-2 border-white/20 bg-white/10 hover:bg-white/20 shadow-lg hover:shadow-rose-950/40 transition-all cursor-pointer"
           >
-            <Eye className="w-5 h-5 text-rose-400 stroke-[2.5]" />
+            <Eye className="w-6 h-6 text-rose-400 stroke-[2.5]" />
             <span className="hidden sm:inline">View App</span>
-            <ExternalLink className="w-4 h-4 text-slate-400" />
+            <ExternalLink className="w-5 h-5 text-slate-300" />
           </Link>
 
           <button
             onClick={logout}
-            className="text-base font-extrabold text-slate-200 hover:text-rose-400 px-5 py-3 rounded-2xl border border-white/20 bg-white/10 hover:bg-rose-500/20 shadow-md transition-all cursor-pointer"
+            className="text-lg font-black text-slate-200 hover:text-rose-400 px-7 py-3.5 rounded-2xl border-2 border-white/20 bg-white/10 hover:bg-rose-500/20 shadow-lg transition-all cursor-pointer"
           >
             Sign Out
           </button>
