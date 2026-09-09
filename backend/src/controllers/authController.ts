@@ -235,15 +235,9 @@ export const sendPhoneOtp = async (
       cleanIdentifier = emailCandidate;
     }
 
-    // Check if an unexpired OTP was already generated for this user
-    const existingOtpDoc = await Otp.findOne({
-      $or: [{ identifier: cleanIdentifier }, { phone: cleanIdentifier }, { email: cleanIdentifier }],
-      expires_at: { $gt: new Date() },
-    });
-
-    // Use existing active OTP if still valid, or generate a fresh 6-digit OTP
-    const generatedOtp = existingOtpDoc?.otp || Math.floor(100000 + Math.random() * 900000).toString();
-    const expiresAt = existingOtpDoc?.expires_at || new Date(Date.now() + 5 * 60 * 1000);
+    // Always generate a fresh, new random 6-digit OTP on every single request
+    const generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
+    const expiresAt = new Date(Date.now() + 5 * 60 * 1000);
 
     const mode = req.body.mode; // "signin" | "register" | "signup" | undefined
 
