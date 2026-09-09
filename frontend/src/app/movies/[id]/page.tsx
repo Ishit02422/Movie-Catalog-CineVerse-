@@ -562,14 +562,14 @@ export default function MovieDetailsPage() {
                   <div className="space-y-1.5">
                     <div className="relative">
                       <textarea
-                        rows={4}
-                        maxLength={500}
+                        rows={3}
+                        maxLength={250}
                         value={reviewComment}
                         onChange={(e) => {
                           let val = e.target.value;
                           if (val.startsWith(" ")) val = val.trimStart();
                           val = val.replace(/\s{2,}/g, " ");
-                          if (val.length <= 500) {
+                          if (val.length <= 250) {
                             setReviewComment(val);
                             if (reviewMessage) setReviewMessage(null);
                           }
@@ -580,11 +580,11 @@ export default function MovieDetailsPage() {
                             : "Please log in from the top right to write a review."
                         }
                         disabled={!isAuthenticated}
-                        className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-white text-sm focus:border-rose-500 focus:outline-none placeholder:text-slate-500 disabled:opacity-50 transition-all resize-y"
+                        className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-white text-sm focus:border-rose-500 focus:outline-none placeholder:text-slate-500 disabled:opacity-50 transition-all resize-none"
                       />
                       {isAuthenticated && (
-                        <div className="absolute right-3 bottom-3 pointer-events-none text-[11px] font-mono text-slate-500">
-                          {reviewComment.trim().length} / 500
+                        <div className="absolute right-3 bottom-2.5 pointer-events-none text-[11px] font-mono text-slate-500">
+                          {reviewComment.trim().length} / 250
                         </div>
                       )}
                     </div>

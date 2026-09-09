@@ -80,6 +80,9 @@ export const addOrUpdateReview = async (
     if (!cleanedComment || cleanedComment.length < 10) {
       throw new ApiError("Review comment must be at least 10 characters long.", 400);
     }
+    if (cleanedComment.length > 250) {
+      throw new ApiError("Review comment cannot exceed 250 characters.", 400);
+    }
 
     const movie = await Movie.findById(movieId);
     if (!movie || movie.status === "removed") {

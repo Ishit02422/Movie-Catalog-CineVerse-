@@ -44,7 +44,8 @@ const ReviewSchema = new Schema<IReviewDoc>(
       type: String,
       required: [true, "Review comment is required"],
       trim: true,
-      maxlength: [1000, "Review cannot exceed 1000 characters"],
+      minlength: [10, "Review must be at least 10 characters"],
+      maxlength: [250, "Review cannot exceed 250 characters"],
     },
   },
   {
