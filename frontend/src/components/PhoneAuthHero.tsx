@@ -1197,7 +1197,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                 <button
                   type="submit"
                   disabled={isLoading || otpCode.length < 6}
-                  className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#e50914] to-[#b80710] hover:from-[#f40612] hover:to-[#c70812] disabled:opacity-50 text-white font-bold text-base tracking-wide transition-all duration-200 active:scale-[0.98] shadow-xl shadow-red-950/50 flex items-center justify-center gap-2 cursor-pointer mt-1"
+                  className="w-full py-3.5 rounded-xl bg-[#e50914] hover:bg-[#b80710] disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold text-base tracking-wide transition-all duration-200 active:scale-[0.98] shadow-xl shadow-red-950/50 flex items-center justify-center gap-2 cursor-pointer mt-1"
                 >
                   {isLoading ? (
                     <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
