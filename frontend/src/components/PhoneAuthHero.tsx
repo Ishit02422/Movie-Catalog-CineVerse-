@@ -724,8 +724,8 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
           </header>
 
           {/* Centered Glassmorphic Auth Card */}
-          <main className="relative z-10 flex-1 w-full max-w-sm sm:max-w-md mx-auto px-4 py-8 sm:py-12 flex flex-col justify-center">
-            <div className="relative w-full p-6 sm:p-8 rounded-3xl bg-slate-950/85 backdrop-blur-2xl border border-white/10 shadow-[0_20px_70px_rgba(0,0,0,0.85)] space-y-5 animate-in zoom-in-95 duration-200 overflow-hidden">
+          <main className="relative z-10 flex-1 w-full max-w-[460px] mx-auto px-4 py-8 sm:py-12 flex flex-col justify-center">
+            <div className="relative w-full p-7 sm:p-9 rounded-3xl bg-slate-950/90 backdrop-blur-2xl border border-white/10 shadow-[0_20px_70px_rgba(0,0,0,0.85)] space-y-5 animate-in zoom-in-95 duration-200 overflow-hidden">
               {/* Top Accent Line */}
               <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-rose-500 to-transparent" />
 
@@ -1045,26 +1045,26 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
           </header>
 
           {/* Centered Glassmorphic OTP Card */}
-          <main className="relative z-10 flex-1 w-full max-w-sm sm:max-w-md mx-auto px-4 py-8 sm:py-12 flex flex-col justify-center">
-            <div className="relative w-full p-6 sm:p-8 rounded-3xl bg-slate-950/85 backdrop-blur-2xl border border-white/10 shadow-[0_20px_70px_rgba(0,0,0,0.85)] space-y-5 animate-in zoom-in-95 duration-200 overflow-hidden">
+          <main className="relative z-10 flex-1 w-full max-w-[460px] mx-auto px-4 py-8 sm:py-12 flex flex-col justify-center">
+            <div className="relative w-full p-7 sm:p-9 rounded-3xl bg-slate-950/90 backdrop-blur-2xl border border-white/10 shadow-[0_20px_70px_rgba(0,0,0,0.85)] space-y-5 animate-in zoom-in-95 duration-200 overflow-hidden">
               {/* Top Accent Line */}
               <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-rose-500 to-transparent" />
 
               {/* Glowing Icon Badge */}
-              <div className="w-13 h-13 rounded-2xl bg-gradient-to-tr from-rose-600 via-red-600 to-rose-500 p-0.5 shadow-xl shadow-red-600/30 mx-auto flex items-center justify-center">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-rose-600 via-red-600 to-rose-500 p-0.5 shadow-xl shadow-red-600/25 mx-auto flex items-center justify-center">
                 <div className="w-full h-full rounded-[14px] bg-slate-950 flex items-center justify-center text-rose-400">
-                  <Lock className="w-6 h-6" />
+                  <Lock className="w-5 h-5" />
                 </div>
               </div>
 
               {/* Title & Target Details Badge */}
               <div className="space-y-2 text-center">
-                <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+                <h2 className="text-2xl sm:text-[26px] font-extrabold text-white tracking-tight">
                   {authMode === "signin"
                     ? `Welcome back${existingUser?.first_name ? `, ${existingUser.first_name}` : ""}!`
                     : "Verify your Account"}
                 </h2>
-                <div className="flex items-center justify-center">
+                <div className="flex items-center justify-center pt-0.5">
                   <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900 border border-slate-800 text-xs text-slate-300">
                     {identifier.includes("@") ? <Mail className="w-3.5 h-3.5 text-rose-400" /> : <Phone className="w-3.5 h-3.5 text-rose-400" />}
                     <span className="font-semibold text-white">
@@ -1116,11 +1116,11 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
               {/* OTP Form */}
               <form onSubmit={handleVerifyOtp} className="space-y-4">
                 {/* 6-Digit OTP Interactive Boxes */}
-                <div className="space-y-2">
-                  <label className="block text-center text-xs font-semibold text-slate-400">
+                <div className="space-y-2.5">
+                  <label className="block text-center text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
                     Enter 6-Digit Passcode
                   </label>
-                  <div className="relative flex items-center justify-center gap-2 sm:gap-2.5 my-2">
+                  <div className="relative flex items-center justify-center gap-2 sm:gap-2.5 my-1">
                     {/* Synchronized hidden input */}
                     <input
                       type="text"
@@ -1142,18 +1142,18 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                       return (
                         <div
                           key={index}
-                          className={`w-11 sm:w-12 h-13 sm:h-14 rounded-xl border flex items-center justify-center text-xl sm:text-2xl font-bold font-mono transition-all duration-200 ${
+                          className={`w-11 sm:w-12 h-13 sm:h-14 rounded-2xl border flex items-center justify-center text-xl sm:text-2xl font-black font-mono transition-all duration-200 ${
                             isFilled
-                              ? "bg-slate-900 border-rose-500 text-white shadow-md shadow-rose-950/50 scale-[1.03]"
+                              ? "bg-slate-900 border-rose-500/80 text-white shadow-md shadow-rose-950/30 scale-[1.02]"
                               : isCurrent
-                              ? "bg-slate-900/90 border-white text-white ring-2 ring-rose-500/40"
-                              : "bg-slate-950/80 border-slate-800 text-slate-500"
+                              ? "bg-slate-900/90 border-white text-white ring-2 ring-rose-500/30"
+                              : "bg-slate-950/70 border-slate-800 text-slate-600"
                           }`}
                         >
                           {digit ? (
                             <span className="animate-in zoom-in-75 duration-150">{digit}</span>
                           ) : isCurrent ? (
-                            <span className="w-1.5 h-5 bg-rose-500 rounded-full animate-pulse" />
+                            <span className="w-1 h-5 bg-rose-500 rounded-full animate-pulse" />
                           ) : (
                             <span className="w-1.5 h-1.5 rounded-full bg-slate-700/60" />
                           )}
@@ -1164,7 +1164,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
 
                   {/* Quick Dev / Demo OTP Helper */}
                   {receivedDevOtp && (
-                    <div className="p-3 rounded-xl bg-gradient-to-r from-red-950/40 via-rose-950/30 to-red-950/40 border border-red-500/30 flex items-center justify-between text-xs animate-in fade-in shadow-inner">
+                    <div className="p-3 rounded-xl bg-gradient-to-r from-red-950/40 via-rose-950/30 to-red-950/40 border border-red-500/30 flex items-center justify-between text-xs animate-in fade-in shadow-inner mt-2">
                       <div className="flex items-center gap-2 text-rose-200">
                         <Sparkles className="w-4 h-4 text-amber-400 animate-pulse shrink-0" />
                         <span>Demo OTP: <strong className="font-mono text-white text-sm tracking-widest ml-1 font-bold">{receivedDevOtp}</strong></span>
@@ -1197,7 +1197,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                 <button
                   type="submit"
                   disabled={isLoading || otpCode.length < 6}
-                  className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#e50914] to-[#b80710] hover:from-[#f40612] hover:to-[#c70812] disabled:opacity-50 text-white font-bold text-base tracking-wide transition-all duration-200 active:scale-[0.98] shadow-xl shadow-red-950/50 flex items-center justify-center gap-2 cursor-pointer"
+                  className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#e50914] to-[#b80710] hover:from-[#f40612] hover:to-[#c70812] disabled:opacity-50 text-white font-bold text-base tracking-wide transition-all duration-200 active:scale-[0.98] shadow-xl shadow-red-950/50 flex items-center justify-center gap-2 cursor-pointer mt-1"
                 >
                   {isLoading ? (
                     <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
