@@ -304,6 +304,16 @@ export default function AdminPage() {
   const [imagePreviewStatus, setImagePreviewStatus] = useState<"idle" | "loading" | "valid" | "error">("idle");
   const [isUploadingImage, setIsUploadingImage] = useState(false);
 
+  // Dynamic release years list: from current year down to 1950
+  const releaseYearsList = useMemo(() => {
+    const currentYear = new Date().getFullYear();
+    const years: number[] = [];
+    for (let y = currentYear; y >= 1950; y--) {
+      years.push(y);
+    }
+    return years;
+  }, []);
+
   const isAdmin = isAuthenticated && user && user.role === "admin";
 
   // Fetch movies from backend (with status=all so admin sees Active, Hidden, Under Review, Removed)
@@ -1606,32 +1616,18 @@ export default function AdminPage() {
                       <label className="block text-xs font-bold text-slate-300 mb-1.5">
                         Release Year *
                       </label>
-                      <input
-                        type="number"
+                      <select
                         required
-                        min={1950}
-                        max={new Date().getFullYear()}
                         value={formData.release_year}
-                        onChange={(e) => {
-                          const val = Number(e.target.value);
-                          const currentYear = new Date().getFullYear();
-                          if (val > currentYear) {
-                            setFormData({ ...formData, release_year: currentYear });
-                          } else {
-                            setFormData({ ...formData, release_year: val });
-                          }
-                        }}
-                        onBlur={(e) => {
-                          const val = Number(e.target.value);
-                          const currentYear = new Date().getFullYear();
-                          if (val && val < 1950) {
-                            setFormData({ ...formData, release_year: 1950 });
-                          } else if (val > currentYear) {
-                            setFormData({ ...formData, release_year: currentYear });
-                          }
-                        }}
-                        className="w-full bg-slate-950 border border-white/10 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-[#e50914] transition-all font-mono"
-                      />
+                        onChange={(e) => setFormData({ ...formData, release_year: Number(e.target.value) })}
+                        className="w-full bg-slate-950 border border-white/10 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-[#e50914] transition-all font-semibold cursor-pointer"
+                      >
+                        {releaseYearsList.map((yr) => (
+                          <option key={yr} value={yr} className="bg-slate-900 text-white font-medium">
+                            {yr}
+                          </option>
+                        ))}
+                      </select>
                     </div>
                     <div>
                       <label className="block text-xs font-bold text-slate-300 mb-1.5">
@@ -1940,32 +1936,18 @@ export default function AdminPage() {
                       <label className="block text-xs font-bold text-slate-300 mb-1.5">
                         Release Year *
                       </label>
-                      <input
-                        type="number"
+                      <select
                         required
-                        min={1950}
-                        max={new Date().getFullYear()}
                         value={formData.release_year}
-                        onChange={(e) => {
-                          const val = Number(e.target.value);
-                          const currentYear = new Date().getFullYear();
-                          if (val > currentYear) {
-                            setFormData({ ...formData, release_year: currentYear });
-                          } else {
-                            setFormData({ ...formData, release_year: val });
-                          }
-                        }}
-                        onBlur={(e) => {
-                          const val = Number(e.target.value);
-                          const currentYear = new Date().getFullYear();
-                          if (val && val < 1950) {
-                            setFormData({ ...formData, release_year: 1950 });
-                          } else if (val > currentYear) {
-                            setFormData({ ...formData, release_year: currentYear });
-                          }
-                        }}
-                        className="w-full bg-slate-950 border border-white/10 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-[#e50914] transition-all font-mono"
-                      />
+                        onChange={(e) => setFormData({ ...formData, release_year: Number(e.target.value) })}
+                        className="w-full bg-slate-950 border border-white/10 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-[#e50914] transition-all font-semibold cursor-pointer"
+                      >
+                        {releaseYearsList.map((yr) => (
+                          <option key={yr} value={yr} className="bg-slate-900 text-white font-medium">
+                            {yr}
+                          </option>
+                        ))}
+                      </select>
                     </div>
                     <div>
                       <label className="block text-xs font-bold text-slate-300 mb-1.5">
