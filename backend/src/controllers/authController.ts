@@ -15,6 +15,28 @@ const generateToken = (id: string): string => {
   });
 };
 
+// Strict Realistic Human Name Validator (Anti-spam & Anti-gibberish)
+export const validateHumanName = (raw: string, fieldLabel: "First Name" | "Last Name"): void => {
+  const name = String(raw || "").trim();
+  if (!name || name.length < 2) {
+    throw new ApiError(`${fieldLabel} must be at least 2 characters long.`, 400);
+  }
+  if (name.length > 20) {
+    throw new ApiError(`${fieldLabel} must be 20 characters or less.`, 400);
+  }
+  if (!/^[A-Za-z]+$/.test(name)) {
+    throw new ApiError(`${fieldLabel} can only contain English letters (A-Z, a-z). Numbers and symbols are not allowed.`, 400);
+  }
+  // Anti-spam: No 3+ consecutive identical characters (e.g. "aaaa" or "llllll")
+  if (/(.)\1{2,}/i.test(name)) {
+    throw new ApiError(`${fieldLabel} contains repeated letters. Please provide a valid name.`, 400);
+  }
+  // Realistic human name: Must contain at least one vowel
+  if (!/[aeiouyAEIOUY]/.test(name)) {
+    throw new ApiError(`Please provide a realistic ${fieldLabel} containing vowels.`, 400);
+  }
+};
+
 /**
  * @desc    Register a new user with Email
  * @route   POST /api/auth/register
@@ -392,14 +414,8 @@ export const verifyPhoneOtp = async (
           400
         );
       }
-      const cleanFirst = String(first_name || "").trim();
-      const cleanLast = String(surname || "").trim();
-      if (!cleanFirst || cleanFirst.length < 2 || !/^[A-Za-z]+$/.test(cleanFirst)) {
-        throw new ApiError("First Name must contain only English letters (A-Z, a-z) with minimum 2 characters.", 400);
-      }
-      if (!cleanLast || cleanLast.length < 2 || !/^[A-Za-z]+$/.test(cleanLast)) {
-        throw new ApiError("Last Name must contain only English letters (A-Z, a-z) with minimum 2 characters.", 400);
-      }
+      validateHumanName(first_name, "First Name");
+      validateHumanName(surname, "Last Name");
     }
 
     const computedName = (first_name && surname)
@@ -568,8 +584,22 @@ export const updateProfile = async (
       throw new ApiError("User not found", 404);
     }
 
-    if (first_name !== undefined) user.first_name = first_name.trim();
-    if (surname !== undefined) user.surname = surname.trim();
+    if (first_name !== undefined && first_name !== null) {
+      if (first_name.trim()) {
+        validateHumanName(first_name, "First Name");
+        user.first_name = first_name.trim();
+      } else {
+        throw new ApiError("First Name cannot be empty.", 400);
+      }
+    }
+    if (surname !== undefined && surname !== null) {
+      if (surname.trim()) {
+        validateHumanName(surname, "Last Name");
+        user.surname = surname.trim();
+      } else {
+        user.surname = "";
+      }
+    }
     if (gender !== undefined) user.gender = gender;
 
     // Recalculate full name if first_name/surname provided, or use name if passed

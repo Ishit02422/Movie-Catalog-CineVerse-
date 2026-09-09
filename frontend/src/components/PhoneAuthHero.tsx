@@ -136,6 +136,26 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
     ? sampleMovies.map((m) => m.image_url).filter(Boolean)
     : FALLBACK_POSTERS;
 
+  // Strict Realistic Human Name Validator (Anti-spam & Anti-gibberish)
+  const validateName = (raw: string, fieldLabel: "First Name" | "Last Name"): string | null => {
+    const name = raw.trim();
+    if (!name) return `Please enter your ${fieldLabel}.`;
+    if (name.length < 2) return `${fieldLabel} must be at least 2 characters long.`;
+    if (name.length > 20) return `${fieldLabel} must be 20 characters or less.`;
+    if (!/^[A-Za-z]+$/.test(name)) {
+      return `${fieldLabel} can only contain English letters (A-Z, a-z). Numbers and symbols are not allowed.`;
+    }
+    // Anti-spam: No 3+ consecutive identical characters (e.g. "aaaa" or "llllll")
+    if (/(.)\1{2,}/i.test(name)) {
+      return `${fieldLabel} contains repeated letters (e.g. "${name.slice(0, 8)}..."). Please enter a valid name.`;
+    }
+    // Realistic human name: Must contain at least one vowel (a, e, i, o, u, y)
+    if (!/[aeiouyAEIOUY]/.test(name)) {
+      return `Please enter a realistic ${fieldLabel} (must contain vowels).`;
+    }
+    return null;
+  };
+
   // Handle Continue from Screen 2 or Landing input
   const handleContinue = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
@@ -152,32 +172,15 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
     let val = identifier.trim();
 
     if (authMode === "register") {
-      const cleanFirst = firstName.trim();
-      const cleanLast = surname.trim();
-
-      if (!cleanFirst) {
-        setError("Please enter your First Name.");
-        return;
-      }
-      if (cleanFirst.length < 2) {
-        setError("First Name must be at least 2 characters long.");
-        return;
-      }
-      if (!/^[A-Za-z]+$/.test(cleanFirst)) {
-        setError("First Name can only contain letters (A-Z, a-z). Numbers and symbols are not allowed.");
+      const firstError = validateName(firstName, "First Name");
+      if (firstError) {
+        setError(firstError);
         return;
       }
 
-      if (!cleanLast) {
-        setError("Please enter your Last Name.");
-        return;
-      }
-      if (cleanLast.length < 2) {
-        setError("Last Name must be at least 2 characters long.");
-        return;
-      }
-      if (!/^[A-Za-z]+$/.test(cleanLast)) {
-        setError("Last Name can only contain letters (A-Z, a-z). Numbers and symbols are not allowed.");
+      const lastError = validateName(surname, "Last Name");
+      if (lastError) {
+        setError(lastError);
         return;
       }
     }
@@ -252,15 +255,14 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
     }
 
     if (authMode === "register") {
-      const cleanFirst = firstName.trim();
-      const cleanLast = surname.trim();
-
-      if (!cleanFirst || cleanFirst.length < 2 || !/^[A-Za-z]+$/.test(cleanFirst)) {
-        setError("Please enter a valid First Name (only letters A-Z, a-z).");
+      const firstError = validateName(firstName, "First Name");
+      if (firstError) {
+        setError(firstError);
         return;
       }
-      if (!cleanLast || cleanLast.length < 2 || !/^[A-Za-z]+$/.test(cleanLast)) {
-        setError("Please enter a valid Last Name (only letters A-Z, a-z).");
+      const lastError = validateName(surname, "Last Name");
+      if (lastError) {
+        setError(lastError);
         return;
       }
     }
@@ -765,7 +767,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                           }
                         }}
                         placeholder="e.g. Rahul"
-                        maxLength={30}
+                        maxLength={20}
                         autoComplete="given-name"
                         className="w-full px-3.5 py-2.5 rounded-md bg-slate-900/90 border border-slate-700 focus:border-white focus:ring-1 focus:ring-white text-white text-sm placeholder:text-slate-500 outline-none transition-all"
                         required
@@ -790,7 +792,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                           }
                         }}
                         placeholder="e.g. Sharma"
-                        maxLength={30}
+                        maxLength={20}
                         autoComplete="family-name"
                         className="w-full px-3.5 py-2.5 rounded-md bg-slate-900/90 border border-slate-700 focus:border-white focus:ring-1 focus:ring-white text-white text-sm placeholder:text-slate-500 outline-none transition-all"
                         required
@@ -1045,44 +1047,25 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
 
             {/* OTP Form */}
             <form onSubmit={handleVerifyOtp} className="space-y-4">
-              {/* Registration Extra Fields if in register mode */}
-              {authMode === "register" && (
-                <div className="space-y-3 pt-1 border-t border-slate-800 animate-in fade-in">
-                  <div className="grid grid-cols-2 gap-3">
-                    <input
-                      type="text"
-                      placeholder="First Name *"
-                      value={firstName}
-                      onChange={(e) => {
-                        setFirstName(e.target.value);
-                        if (error) setError(null);
-                      }}
-                      className="w-full px-3.5 py-2.5 rounded-md bg-slate-900 border border-slate-700 text-white text-sm focus:border-white focus:outline-none"
-                      required
-                    />
-                    <input
-                      type="text"
-                      placeholder="Last Name *"
-                      value={surname}
-                      onChange={(e) => {
-                        setSurname(e.target.value);
-                        if (error) setError(null);
-                      }}
-                      className="w-full px-3.5 py-2.5 rounded-md bg-slate-900 border border-slate-700 text-white text-sm focus:border-white focus:outline-none"
-                      required
-                    />
+              {/* Registration User Summary Badge */}
+              {authMode === "register" && firstName && surname && (
+                <div className="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 flex items-center justify-between text-xs animate-in fade-in">
+                  <div className="space-y-0.5">
+                    <span className="text-slate-400 text-[11px] block">Registering Account For</span>
+                    <strong className="text-white text-sm font-bold flex items-center gap-2">
+                      <span>{firstName} {surname}</span>
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-slate-800 text-slate-300 border border-slate-700">
+                        {gender}
+                      </span>
+                    </strong>
                   </div>
-                  <div>
-                    <select
-                      value={gender}
-                      onChange={(e) => setGender(e.target.value as any)}
-                      className="w-full px-3.5 py-2.5 rounded-md bg-slate-900 border border-slate-700 text-white text-sm focus:border-white focus:outline-none"
-                    >
-                      <option value="Male">Male</option>
-                      <option value="Female">Female</option>
-                      <option value="Other">Other</option>
-                    </select>
-                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setScreen("signin")}
+                    className="text-[#e50914] hover:underline text-xs font-semibold cursor-pointer"
+                  >
+                    Edit
+                  </button>
                 </div>
               )}
 

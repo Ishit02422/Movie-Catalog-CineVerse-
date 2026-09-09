@@ -56,6 +56,26 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
     }
   }, [user, isOpen]);
 
+  // Strict Realistic Human Name Validator (Anti-spam & Anti-gibberish)
+  const validateName = (raw: string, fieldLabel: "First Name" | "Last Name"): string | null => {
+    const name = raw.trim();
+    if (!name) return `Please enter your ${fieldLabel}.`;
+    if (name.length < 2) return `${fieldLabel} must be at least 2 characters long.`;
+    if (name.length > 20) return `${fieldLabel} must be 20 characters or less.`;
+    if (!/^[A-Za-z]+$/.test(name)) {
+      return `${fieldLabel} can only contain English letters (A-Z, a-z). Numbers and symbols are not allowed.`;
+    }
+    // Anti-spam: No 3+ consecutive identical characters (e.g. "aaaa" or "llllll")
+    if (/(.)\1{2,}/i.test(name)) {
+      return `${fieldLabel} contains repeated letters. Please enter a valid name.`;
+    }
+    // Realistic human name: Must contain at least one vowel (a, e, i, o, u, y)
+    if (!/[aeiouyAEIOUY]/.test(name)) {
+      return `Please enter a realistic ${fieldLabel} containing vowels.`;
+    }
+    return null;
+  };
+
   if (!isOpen || !user) return null;
 
   const handleUpdate = async (e?: React.FormEvent | React.MouseEvent) => {
@@ -65,9 +85,18 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
     setErrorMessage(null);
     setSuccessMessage(null);
 
-    if (!firstName.trim()) {
-      setErrorMessage("First Name is required.");
+    const firstErr = validateName(firstName, "First Name");
+    if (firstErr) {
+      setErrorMessage(firstErr);
       return;
+    }
+
+    if (surname.trim()) {
+      const lastErr = validateName(surname, "Last Name");
+      if (lastErr) {
+        setErrorMessage(lastErr);
+        return;
+      }
     }
 
     if (phone && phone.trim().replace(/\D/g, "").length !== 10) {
@@ -205,13 +234,26 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
                     type="text"
                     name="cineverse_firstname"
                     id="profile-firstname"
-                    autoComplete="off"
+                    autoComplete="given-name"
                     autoCorrect="off"
                     spellCheck={false}
                     data-lpignore="true"
                     value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
+                    onChange={(e) => {
+                      const sanitized = e.target.value.replace(/[^A-Za-z]/g, "");
+                      setFirstName(sanitized);
+                      if (errorMessage) setErrorMessage(null);
+                    }}
+                    onKeyDown={(e) => {
+                      if (
+                        !/^[A-Za-z]$/.test(e.key) &&
+                        !["Backspace", "Tab", "ArrowLeft", "ArrowRight", "Delete"].includes(e.key)
+                      ) {
+                        e.preventDefault();
+                      }
+                    }}
                     placeholder="Enter first name"
+                    maxLength={20}
                     required
                     className="w-full pl-9 pr-3.5 py-2.5 bg-slate-950/70 border border-slate-800 rounded-xl text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 transition-all"
                   />
@@ -230,13 +272,26 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
                     type="text"
                     name="cineverse_surname"
                     id="profile-surname"
-                    autoComplete="off"
+                    autoComplete="family-name"
                     autoCorrect="off"
                     spellCheck={false}
                     data-lpignore="true"
                     value={surname}
-                    onChange={(e) => setSurname(e.target.value)}
+                    onChange={(e) => {
+                      const sanitized = e.target.value.replace(/[^A-Za-z]/g, "");
+                      setSurname(sanitized);
+                      if (errorMessage) setErrorMessage(null);
+                    }}
+                    onKeyDown={(e) => {
+                      if (
+                        !/^[A-Za-z]$/.test(e.key) &&
+                        !["Backspace", "Tab", "ArrowLeft", "ArrowRight", "Delete"].includes(e.key)
+                      ) {
+                        e.preventDefault();
+                      }
+                    }}
                     placeholder="Enter last name"
+                    maxLength={20}
                     className="w-full pl-9 pr-3.5 py-2.5 bg-slate-950/70 border border-slate-800 rounded-xl text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 transition-all"
                   />
                 </div>
