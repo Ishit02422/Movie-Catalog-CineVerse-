@@ -957,11 +957,12 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
 
               {/* Google Button */}
               <div className="pt-1">
-                <div className="relative flex items-center justify-center my-2">
-                  <div className="w-full border-t border-slate-800" />
-                  <span className="bg-slate-950 px-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">
-                    Or
+                <div className="flex items-center gap-3 my-2">
+                  <div className="flex-1 border-t border-slate-800" />
+                  <span className="text-[11px] font-bold text-slate-500 uppercase tracking-widest shrink-0">
+                    OR
                   </span>
+                  <div className="flex-1 border-t border-slate-800" />
                 </div>
 
                 <button
