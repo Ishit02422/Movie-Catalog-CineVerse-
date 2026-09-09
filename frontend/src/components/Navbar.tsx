@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Film, LogOut, User as UserIcon, Settings, Bookmark, ShieldCheck } from "lucide-react";
+import { Film, LogOut, User as UserIcon, Settings, Bookmark } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { useWatchlist } from "../context/WatchlistContext";
 import { ProfileModal } from "./ProfileModal";
@@ -84,19 +84,6 @@ export const Navbar: React.FC<NavbarProps> = ({
                     {watchlist.length}
                   </span>
                 )}
-              </Link>
-
-              {/* Admin Panel Link */}
-              <Link
-                href="/admin"
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors ${
-                  user?.role === "admin"
-                    ? "text-rose-400 hover:text-rose-300 bg-rose-500/10 border border-rose-500/30 font-bold"
-                    : "text-slate-400 hover:text-white"
-                }`}
-              >
-                <ShieldCheck className="w-3.5 h-3.5 text-rose-400" />
-                <span>Admin</span>
               </Link>
             </nav>
           </div>
