@@ -730,35 +730,35 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                   </p>
                 </div>
               </div>
-
-              {/* Navigation Arrows */}
-              <div className="flex items-center gap-2.5 self-end sm:self-center">
-                <div className="flex items-center gap-1.5 bg-slate-950/90 border border-slate-800/90 p-1 rounded-2xl backdrop-blur-md shadow-md">
-                  <button
-                    type="button"
-                    onClick={() => setTrendingOffset((prev) => (prev - 1 + posters.length) % posters.length)}
-                    className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-all cursor-pointer active:scale-90"
-                    title="Previous"
-                  >
-                    <ChevronLeft className="w-4 h-4" />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setTrendingOffset((prev) => (prev + 1) % posters.length)}
-                    className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-[#e50914] transition-all cursor-pointer active:scale-90 shadow-sm"
-                    title="Next"
-                  >
-                    <ChevronRight className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
             </div>
 
-            {/* Smooth Carousel Container */}
-            <div className="relative overflow-hidden rounded-3xl p-1">
+            {/* Smooth Carousel Container with Left & Right Side Navigation Buttons */}
+            <div className="relative group/carousel overflow-hidden rounded-3xl p-1">
+              {/* Left Side Arrow Button */}
+              <button
+                type="button"
+                onClick={() => setTrendingOffset((prev) => (prev - 1 + posters.length) % posters.length)}
+                aria-label="Previous Trending Movies"
+                className="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-black/80 hover:bg-[#e50914] text-white border border-white/20 hover:border-red-500 flex items-center justify-center backdrop-blur-xl shadow-2xl shadow-black transition-all duration-300 hover:scale-110 active:scale-90 cursor-pointer"
+                title="Previous"
+              >
+                <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
+              </button>
+
+              {/* Right Side Arrow Button */}
+              <button
+                type="button"
+                onClick={() => setTrendingOffset((prev) => (prev + 1) % posters.length)}
+                aria-label="Next Trending Movies"
+                className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-black/80 hover:bg-[#e50914] text-white border border-white/20 hover:border-red-500 flex items-center justify-center backdrop-blur-xl shadow-2xl shadow-black transition-all duration-300 hover:scale-110 active:scale-90 cursor-pointer"
+                title="Next"
+              >
+                <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
+              </button>
+
               {/* Left & Right Soft Edge Shadow Vignettes */}
-              <div className="absolute left-0 inset-y-0 w-8 sm:w-16 bg-gradient-to-r from-black via-black/60 to-transparent z-10 pointer-events-none" />
-              <div className="absolute right-0 inset-y-0 w-8 sm:w-16 bg-gradient-to-l from-black via-black/60 to-transparent z-10 pointer-events-none" />
+              <div className="absolute left-0 inset-y-0 w-12 sm:w-20 bg-gradient-to-r from-black via-black/60 to-transparent z-10 pointer-events-none" />
+              <div className="absolute right-0 inset-y-0 w-12 sm:w-20 bg-gradient-to-l from-black via-black/60 to-transparent z-10 pointer-events-none" />
 
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4">
                 {visibleTrendingPosters.map((item, idx) => (
