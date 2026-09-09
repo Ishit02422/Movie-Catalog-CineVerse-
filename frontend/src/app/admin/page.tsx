@@ -84,38 +84,23 @@ const GENRE_ICONS: Record<string, string> = {
 
 export const ALL_GENRES = [
   "Action",
-  "Adventure",
   "Animation",
-  "Biography",
   "Comedy",
   "Crime",
-  "Documentary",
   "Drama",
-  "Family",
-  "Fantasy",
-  "History",
-  "Horror",
-  "Music",
-  "Mystery",
   "Romance",
   "Sci-Fi",
-  "Sport",
   "Thriller",
-  "War",
-  "Western",
 ];
 
 const DEFAULT_GENRE_NAMES = [
   "Action",
   "Sci-Fi",
   "Drama",
-  "Romance",
   "Comedy",
-  "Fantasy",
-  "Adventure",
+  "Romance",
   "Thriller",
   "Crime",
-  "Horror",
   "Animation",
 ];
 
