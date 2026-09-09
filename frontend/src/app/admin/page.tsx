@@ -771,35 +771,35 @@ export default function AdminPage() {
   return (
     <div className="h-screen bg-[#06080e] text-white flex flex-col font-sans overflow-hidden">
       {/* Top Studio Bar */}
-      <header className="h-16 shrink-0 border-b border-white/[0.08] bg-[#090c14]/90 backdrop-blur-xl px-4 sm:px-6 flex items-center justify-between z-30 sticky top-0">
-        <div className="flex items-center gap-3">
-          <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-8 h-8 rounded-xl overflow-hidden shadow-md shadow-rose-600/30 border border-white/15 group-hover:scale-105 transition-all">
+      <header className="h-20 sm:h-22 shrink-0 border-b border-white/[0.12] bg-[#090d18]/95 backdrop-blur-2xl px-6 sm:px-8 flex items-center justify-between z-30 sticky top-0 shadow-lg shadow-black/40">
+        <div className="flex items-center gap-4">
+          <Link href="/" className="flex items-center gap-3 group">
+            <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl overflow-hidden shadow-xl shadow-rose-600/30 border border-white/20 group-hover:scale-105 transition-all">
               <img src="/logo.png" alt="CineVerse" className="w-full h-full object-cover" />
             </div>
-            <span className="text-lg font-black tracking-tight text-white font-sans">
+            <span className="text-2xl sm:text-3xl font-black tracking-tight text-white font-sans">
               Cine<span className="text-[#e50914]">Verse</span>
             </span>
           </Link>
-          <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/20">
+          <span className="text-xs sm:text-sm font-bold px-3.5 py-1 rounded-xl bg-rose-500/15 text-rose-300 border border-rose-500/30">
             Admin Studio
           </span>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3.5">
           <Link
             href="/"
             target="_blank"
-            className="flex items-center gap-1.5 text-xs font-bold text-slate-300 hover:text-white px-3 py-1.5 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all cursor-pointer"
+            className="flex items-center gap-2 text-sm font-bold text-slate-200 hover:text-white px-4 py-2.5 rounded-xl border border-white/15 bg-white/[0.08] hover:bg-white/[0.16] shadow-sm transition-all cursor-pointer"
           >
-            <Eye className="w-3.5 h-3.5 text-rose-400" />
+            <Eye className="w-4 h-4 text-rose-400" />
             <span className="hidden sm:inline">View App</span>
-            <ExternalLink className="w-3 h-3 text-slate-500" />
+            <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
           </Link>
 
           <button
             onClick={logout}
-            className="text-xs font-semibold text-slate-400 hover:text-rose-400 px-3 py-1.5 rounded-xl border border-white/10 bg-white/5 transition-all cursor-pointer"
+            className="text-sm font-bold text-slate-300 hover:text-rose-400 px-4 py-2.5 rounded-xl border border-white/15 bg-white/[0.08] hover:bg-rose-500/15 transition-all cursor-pointer"
           >
             Sign Out
           </button>
@@ -807,7 +807,7 @@ export default function AdminPage() {
       </header>
 
       {/* Main Container: Left Sidebar + Center Details Pane */}
-      <div className="flex-1 flex flex-col md:flex-row h-[calc(100vh-64px)] overflow-hidden">
+      <div className="flex-1 flex flex-col md:flex-row min-h-0 overflow-hidden">
         {/* ========================================================================= */}
         {/* LEFT SIDEBAR: CATEGORIES / GENRES / FILE NAVIGATION */}
         {/* ========================================================================= */}
