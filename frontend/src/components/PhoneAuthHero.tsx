@@ -142,6 +142,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
   // Screen state: "landing" (Photo 1) | "signin" (Photo 2) | "otp"
   const [screen, setScreen] = useState<"landing" | "signin" | "otp">("landing");
   const [activeSlide, setActiveSlide] = useState<number>(0);
+  const [previewMovie, setPreviewMovie] = useState<Movie | null>(null);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [isPrivacyOpen, setIsPrivacyOpen] = useState<boolean>(false);
   const [isHelpOpen, setIsHelpOpen] = useState<boolean>(false);
@@ -218,6 +219,33 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
       index: posterIndex,
     };
   });
+
+  // Smart Movie Resolver for Preview Modal on Poster Click
+  const getMovieForPoster = (posterUrl: string, idx: number): Movie => {
+    const found = sampleMovies.find((m) => m.image_url === posterUrl);
+    if (found) return found;
+
+    const titles = [
+      "Yeh Jawaani Hai Deewani", "Jab We Met", "Kal Ho Naa Ho", "3 Idiots", "Dangal",
+      "Inception", "The Dark Knight", "Interstellar", "Aashiqui 2", "Barfi!",
+      "RRR", "Dune: Part Two", "Baahubali 2: The Conclusion", "Dilwale Dulhania Le Jayenge", "Shershaah",
+      "Oppenheimer", "Parasite", "Spider-Man: Into the Spider-Verse", "Rockstar", "PK"
+    ];
+    const genres = ["Romance • Drama", "Romance • Comedy", "Drama • Romance", "Comedy • Drama", "Action • Biography", "Sci-Fi • Thriller", "Action • Crime", "Sci-Fi • Adventure", "Musical • Romance", "Comedy • Drama", "Action • Drama", "Sci-Fi • Adventure", "Action • Fantasy", "Romance • Drama", "Action • Biography", "Biography • Drama", "Thriller • Drama", "Action • Sci-Fi", "Musical • Drama", "Comedy • Drama"];
+    const ratings = [8.5, 8.2, 8.4, 8.9, 8.8, 8.8, 9.0, 8.7, 7.8, 8.1, 8.0, 8.6, 8.2, 8.5, 8.4, 8.9, 8.6, 8.4, 8.1, 8.2];
+    const years = [2013, 2007, 2003, 2009, 2016, 2010, 2008, 2014, 2013, 2012, 2022, 2024, 2017, 1995, 2021, 2023, 2019, 2023, 2011, 2014];
+
+    const safeIdx = idx % titles.length;
+    return {
+      id: `preview-${safeIdx}`,
+      title: titles[safeIdx],
+      genre: genres[safeIdx],
+      release_year: years[safeIdx],
+      rating: ratings[safeIdx],
+      image_url: posterUrl,
+      description: "Experience the magic of cinema in ultra-crisp 4K HDR quality with immersive Dolby Atmos audio on CineVerse. Stream anytime, anywhere.",
+    };
+  };
 
   // Smart Phone & Form validation
   // Only pure digits without any letters or @ are treated as numeric phone
@@ -473,7 +501,10 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
   };
 
   return (
-    <div className="relative min-h-screen w-full bg-black text-white flex flex-col justify-between overflow-x-hidden select-none font-sans">
+    <div className="relative min-h-screen w-full bg-gradient-to-b from-[#060913] via-[#04060b] to-[#020204] text-white flex flex-col justify-between overflow-x-hidden select-none font-sans">
+      {/* Background Ambient Color Light Accents */}
+      <div className="fixed top-0 left-1/4 w-[500px] h-[500px] bg-rose-600/10 blur-[150px] pointer-events-none rounded-full" />
+      <div className="fixed bottom-1/3 right-10 w-[600px] h-[400px] bg-indigo-900/15 blur-[160px] pointer-events-none rounded-full" />
       {/* ========================================================================= */}
       {/* SCREEN 1: LANDING / WELCOME VIEW (Full-Bodied Netflix Experience)         */}
       {/* ========================================================================= */}
@@ -737,7 +768,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                 {visibleTrendingPosters.map((item, idx) => (
                   <div
                     key={`${item.url}-${idx}`}
-                    onClick={() => setScreen("signin")}
+                    onClick={() => setPreviewMovie(getMovieForPoster(item.url, item.index))}
                     className="group relative aspect-[2/3] w-full rounded-2xl overflow-hidden bg-slate-950 border border-slate-800/80 hover:border-rose-500/80 transition-all duration-500 hover:scale-[1.04] hover:-translate-y-2 cursor-pointer shadow-xl hover:shadow-2xl hover:shadow-rose-950/50 select-none"
                   >
                     <img
@@ -753,7 +784,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-3.5 sm:p-4">
                       <div className="flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-rose-600 to-red-600 text-white text-xs font-bold w-full shadow-xl shadow-rose-950/80 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
                         <Play className="w-3.5 h-3.5 fill-white" />
-                        <span>Watch Now</span>
+                        <span>Preview &amp; Watch</span>
                       </div>
                     </div>
                   </div>
@@ -1616,6 +1647,117 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                   No country found matching &ldquo;{countrySearchQuery}&rdquo;
                 </div>
               )}
+            </div>
+          </div>
+        </div>
+      )}
+      {/* ========================================================================= */}
+      {/* CINEVERSE MOVIE PREVIEW MODAL (Stunning Glassmorphism Design)             */}
+      {/* ========================================================================= */}
+      {previewMovie && (
+        <div
+          onClick={() => setPreviewMovie(null)}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/85 backdrop-blur-2xl animate-in fade-in duration-300"
+        >
+          <div
+            className="relative w-full max-w-2xl overflow-hidden rounded-3xl bg-[#090e1a] border border-white/15 shadow-2xl shadow-rose-950/60 flex flex-col animate-in zoom-in-95 duration-300"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Top Backdrop Header */}
+            <div className="relative h-60 sm:h-72 w-full overflow-hidden bg-slate-950">
+              <img
+                src={previewMovie.image_url}
+                alt={previewMovie.title}
+                className="w-full h-full object-cover object-center filter blur-[3px] scale-110 opacity-70"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#090e1a] via-[#090e1a]/60 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-r from-[#090e1a] via-transparent to-[#090e1a]/80" />
+
+              {/* Close Button */}
+              <button
+                type="button"
+                onClick={() => setPreviewMovie(null)}
+                className="absolute top-4 right-4 p-2 rounded-full bg-black/70 hover:bg-[#e50914] text-white border border-white/20 transition-all cursor-pointer active:scale-90 z-20 shadow-lg"
+                title="Close"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              {/* Floating Poster + Quick Title inside Hero */}
+              <div className="absolute bottom-4 left-6 right-6 flex items-end gap-4 sm:gap-5">
+                <div className="w-20 sm:w-28 aspect-[2/3] rounded-2xl overflow-hidden shadow-2xl border-2 border-white/30 shrink-0 bg-slate-900">
+                  <img
+                    src={previewMovie.image_url}
+                    alt={previewMovie.title}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="space-y-2 pb-1">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-black uppercase tracking-wider bg-[#e50914] text-white shadow-md">
+                      Trending Blockbuster
+                    </span>
+                    <span className="px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-bold bg-white/10 text-slate-200 border border-white/20">
+                      4K Ultra HD
+                    </span>
+                    <span className="px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-bold bg-white/10 text-slate-200 border border-white/20">
+                      Dolby 5.1
+                    </span>
+                  </div>
+                  <h2 className="text-xl sm:text-2xl lg:text-3xl font-black text-white tracking-tight drop-shadow-lg">
+                    {previewMovie.title}
+                  </h2>
+                </div>
+              </div>
+            </div>
+
+            {/* Modal Body */}
+            <div className="p-6 sm:p-8 space-y-5">
+              {/* Meta pills: Genre, Year, Rating */}
+              <div className="flex flex-wrap items-center gap-3 text-xs sm:text-sm font-semibold text-slate-300">
+                <span className="text-rose-400 font-bold">{previewMovie.genre}</span>
+                <span>•</span>
+                <span>{previewMovie.release_year}</span>
+                {previewMovie.rating && previewMovie.rating >= 5 && (
+                  <>
+                    <span>•</span>
+                    <span className="inline-flex items-center gap-1 text-amber-300 font-bold bg-amber-400/10 px-2.5 py-0.5 rounded-full border border-amber-400/20">
+                      <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                      {previewMovie.rating.toFixed(1)} / 10 IMDb
+                    </span>
+                  </>
+                )}
+              </div>
+
+              {/* Description */}
+              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
+                {previewMovie.description}
+              </p>
+
+              {/* Action Buttons */}
+              <div className="flex flex-col sm:flex-row items-center gap-3 pt-3">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setPreviewMovie(null);
+                    setScreen("signin");
+                  }}
+                  className="w-full sm:flex-1 py-3.5 px-6 rounded-xl bg-gradient-to-r from-rose-600 to-[#e50914] hover:from-rose-500 hover:to-rose-600 text-white font-black text-sm sm:text-base flex items-center justify-center gap-2 shadow-xl shadow-rose-950/60 transition-all cursor-pointer active:scale-95"
+                >
+                  <Play className="w-4 h-4 fill-white" />
+                  <span>Start Watching Now</span>
+                </button>
+
+                <a
+                  href={`https://www.youtube.com/results?search_query=${encodeURIComponent(`${previewMovie.title} Official Trailer`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full sm:w-auto py-3.5 px-6 rounded-xl bg-slate-900/90 hover:bg-slate-800 text-slate-200 hover:text-white font-bold text-sm border border-slate-700/80 flex items-center justify-center gap-2 transition-all cursor-pointer active:scale-95 shadow-md"
+                >
+                  <Film className="w-4 h-4 text-rose-400" />
+                  <span>Watch Trailer</span>
+                </a>
+              </div>
             </div>
           </div>
         </div>
