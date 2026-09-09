@@ -233,13 +233,14 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
     setIsLoading(true);
     try {
       if (authMode === "signin") {
-        await verifyPhoneOtp(cleanVal, otpCode.trim());
+        await verifyPhoneOtp(cleanVal, otpCode.trim(), { mode: "signin" });
       } else {
         await verifyPhoneOtp(cleanVal, otpCode.trim(), {
           first_name: firstName.trim(),
           surname: surname.trim(),
           gender: gender,
           name: `${firstName.trim()} ${surname.trim()}`.trim(),
+          mode: "register",
         });
       }
     } catch (err: any) {

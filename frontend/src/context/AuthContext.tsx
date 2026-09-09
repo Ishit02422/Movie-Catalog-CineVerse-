@@ -32,6 +32,7 @@ interface AuthContextType {
       first_name?: string;
       surname?: string;
       gender?: "Male" | "Female" | "Other";
+      mode?: "signin" | "register";
     }
   ) => Promise<void>;
   updateProfile: (data: {
@@ -195,6 +196,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       first_name?: string;
       surname?: string;
       gender?: "Male" | "Female" | "Other";
+      mode?: "signin" | "register";
     }
   ): Promise<void> => {
     const res = await fetch(`${API_BASE_URL}/auth/phone/verify-otp`, {
@@ -203,6 +205,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       body: JSON.stringify({
         identifier,
         otp,
+        mode: userDetails?.mode,
         name: userDetails?.name,
         first_name: userDetails?.first_name,
         surname: userDetails?.surname,

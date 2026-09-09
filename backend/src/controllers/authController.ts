@@ -321,7 +321,7 @@ export const verifyPhoneOtp = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const { identifier, phone, email, otp, name, first_name, surname, gender } = req.body;
+    const { identifier, phone, email, otp, name, first_name, surname, gender, mode } = req.body;
     const rawInput = identifier || phone || email;
 
     if (!rawInput || !otp) {
@@ -364,6 +364,21 @@ export const verifyPhoneOtp = async (
     let user = isEmail
       ? await User.findOne({ email: cleanIdentifier })
       : await User.findOne({ phone: cleanIdentifier });
+
+    // Strict Mode Enforcement on Verification
+    if (mode === "signin" && !user) {
+      throw new ApiError(
+        "No account found. Sign In is strictly for existing users. Please switch to Sign Up.",
+        404
+      );
+    }
+
+    if ((mode === "register" || mode === "signup") && user) {
+      throw new ApiError(
+        "An account already exists with this email/mobile. Sign Up is strictly for new accounts. Please switch to Sign In.",
+        400
+      );
+    }
 
     const computedName = (first_name && surname)
       ? `${first_name.trim()} ${surname.trim()}`
