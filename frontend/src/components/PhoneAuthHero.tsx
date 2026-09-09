@@ -151,34 +151,63 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
 
     let val = identifier.trim();
 
-    if (!val) {
-      setError("Please enter your email or mobile number.");
-      return;
-    }
-
     if (authMode === "register") {
-      if (!firstName.trim()) {
+      const cleanFirst = firstName.trim();
+      const cleanLast = surname.trim();
+
+      if (!cleanFirst) {
         setError("Please enter your First Name.");
         return;
       }
-      if (!surname.trim()) {
+      if (cleanFirst.length < 2) {
+        setError("First Name must be at least 2 characters long.");
+        return;
+      }
+      if (!/^[A-Za-z\s'-]+$/.test(cleanFirst)) {
+        setError("First Name can only contain letters (no numbers or special characters).");
+        return;
+      }
+
+      if (!cleanLast) {
         setError("Please enter your Last Name.");
         return;
       }
+      if (cleanLast.length < 2) {
+        setError("Last Name must be at least 2 characters long.");
+        return;
+      }
+      if (!/^[A-Za-z\s'-]+$/.test(cleanLast)) {
+        setError("Last Name can only contain letters (no numbers or special characters).");
+        return;
+      }
+    }
+
+    if (!val) {
+      setError("Please enter your email address or 10-digit mobile number.");
+      return;
     }
 
     const isNum = /^[0-9+ -]+$/.test(val);
     const cleanPhone = val.replace(/\D/g, "");
 
-    if (isNum && cleanPhone.length < 10) {
-      setError("Please enter a valid 10-digit mobile number.");
-      return;
-    }
-
-    // Auto-complete @gmail.com if user types just username (e.g. ishupatel0024)
-    if (!isNum && !val.includes("@")) {
-      val = `${val}@gmail.com`;
-      setIdentifier(val);
+    if (isNum) {
+      if (cleanPhone.length !== 10) {
+        setError("Mobile number must be exactly 10 digits.");
+        return;
+      }
+      if (!/^[6-9]\d{9}$/.test(cleanPhone)) {
+        setError("Please enter a valid Indian mobile number starting with 6, 7, 8, or 9.");
+        return;
+      }
+    } else {
+      let emailCandidate = val.includes("@") ? val.toLowerCase() : `${val.toLowerCase()}@gmail.com`;
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      if (!emailRegex.test(emailCandidate)) {
+        setError("Please enter a valid email address (e.g. name@gmail.com).");
+        return;
+      }
+      val = emailCandidate;
+      setIdentifier(emailCandidate);
     }
 
     setIsLoading(true);
@@ -223,12 +252,15 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
     }
 
     if (authMode === "register") {
-      if (!firstName.trim()) {
-        setError("Please enter your First Name.");
+      const cleanFirst = firstName.trim();
+      const cleanLast = surname.trim();
+
+      if (!cleanFirst || cleanFirst.length < 2 || !/^[A-Za-z\s'-]+$/.test(cleanFirst)) {
+        setError("Please enter a valid First Name (at least 2 letters).");
         return;
       }
-      if (!surname.trim()) {
-        setError("Please enter your Last Name.");
+      if (!cleanLast || cleanLast.length < 2 || !/^[A-Za-z\s'-]+$/.test(cleanLast)) {
+        setError("Please enter a valid Last Name (at least 2 letters).");
         return;
       }
     }
@@ -720,10 +752,13 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                         type="text"
                         value={firstName}
                         onChange={(e) => {
-                          setFirstName(e.target.value);
+                          const sanitized = e.target.value.replace(/[^A-Za-z\s'-]/g, "");
+                          setFirstName(sanitized);
                           if (error) setError(null);
                         }}
                         placeholder="e.g. Rahul"
+                        maxLength={30}
+                        autoComplete="given-name"
                         className="w-full px-3.5 py-2.5 rounded-md bg-slate-900/90 border border-slate-700 focus:border-white focus:ring-1 focus:ring-white text-white text-sm placeholder:text-slate-500 outline-none transition-all"
                         required
                       />
@@ -734,10 +769,13 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                         type="text"
                         value={surname}
                         onChange={(e) => {
-                          setSurname(e.target.value);
+                          const sanitized = e.target.value.replace(/[^A-Za-z\s'-]/g, "");
+                          setSurname(sanitized);
                           if (error) setError(null);
                         }}
                         placeholder="e.g. Sharma"
+                        maxLength={30}
+                        autoComplete="family-name"
                         className="w-full px-3.5 py-2.5 rounded-md bg-slate-900/90 border border-slate-700 focus:border-white focus:ring-1 focus:ring-white text-white text-sm placeholder:text-slate-500 outline-none transition-all"
                         required
                       />

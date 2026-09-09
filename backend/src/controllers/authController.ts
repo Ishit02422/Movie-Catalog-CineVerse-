@@ -189,16 +189,29 @@ export const sendPhoneOtp = async (
     }
 
     const inputStr = String(rawInput).trim();
-    const isNum = /^[0-9+ -]+$/.test(inputStr) && inputStr.replace(/\D/g, "").length >= 10;
-    const isEmail = inputStr.includes("@") || (!isNum && inputStr.length >= 3);
+    const isNum = /^[0-9+ -]+$/.test(inputStr);
+    const cleanPhone = inputStr.replace(/\D/g, "");
 
-    if (!isEmail && !isNum) {
-      throw new ApiError("Please enter a valid email address or 10-digit phone number.", 400);
+    let isEmail = false;
+    let cleanIdentifier = "";
+
+    if (isNum) {
+      if (cleanPhone.length !== 10) {
+        throw new ApiError("Mobile number must be exactly 10 digits.", 400);
+      }
+      if (!/^[6-9]\d{9}$/.test(cleanPhone)) {
+        throw new ApiError("Please enter a valid 10-digit Indian mobile number starting with 6, 7, 8, or 9.", 400);
+      }
+      cleanIdentifier = cleanPhone;
+    } else {
+      isEmail = true;
+      const emailCandidate = inputStr.includes("@") ? inputStr.toLowerCase() : `${inputStr.toLowerCase()}@gmail.com`;
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      if (!emailRegex.test(emailCandidate)) {
+        throw new ApiError("Please enter a valid email address (e.g. name@gmail.com).", 400);
+      }
+      cleanIdentifier = emailCandidate;
     }
-
-    const cleanIdentifier = isEmail
-      ? (inputStr.includes("@") ? inputStr.toLowerCase() : `${inputStr.toLowerCase()}@gmail.com`)
-      : inputStr.replace(/\D/g, "");
 
     // Check if an unexpired OTP was already generated for this user
     const existingOtpDoc = await Otp.findOne({
@@ -263,7 +276,6 @@ export const sendPhoneOtp = async (
     }
 
     // Is Phone
-    const cleanPhone = cleanIdentifier;
     const existingUser = await User.findOne({ phone: cleanPhone });
 
     // Strict Mode Validation for Phone
@@ -373,15 +385,25 @@ export const verifyPhoneOtp = async (
       );
     }
 
-    if ((mode === "register" || mode === "signup") && user) {
-      throw new ApiError(
-        "An account already exists with this email/mobile. Sign Up is strictly for new accounts. Please switch to Sign In.",
-        400
-      );
+    if (mode === "register" || mode === "signup") {
+      if (user) {
+        throw new ApiError(
+          "An account already exists with this email/mobile. Sign Up is strictly for new accounts. Please switch to Sign In.",
+          400
+        );
+      }
+      const cleanFirst = String(first_name || "").trim();
+      const cleanLast = String(surname || "").trim();
+      if (!cleanFirst || cleanFirst.length < 2 || !/^[A-Za-z\s'-]+$/.test(cleanFirst)) {
+        throw new ApiError("First Name must be at least 2 characters and contain only letters.", 400);
+      }
+      if (!cleanLast || cleanLast.length < 2 || !/^[A-Za-z\s'-]+$/.test(cleanLast)) {
+        throw new ApiError("Last Name must be at least 2 characters and contain only letters.", 400);
+      }
     }
 
     const computedName = (first_name && surname)
-      ? `${first_name.trim()} ${surname.trim()}`
+      ? `${String(first_name).trim()} ${String(surname).trim()}`
       : (first_name || name || (isEmail ? cleanIdentifier.split("@")[0] : `Member ${cleanIdentifier.slice(-4)}`));
 
     if (!user) {
