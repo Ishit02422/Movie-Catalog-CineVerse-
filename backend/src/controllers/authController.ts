@@ -210,9 +210,25 @@ export const sendPhoneOtp = async (
     const generatedOtp = existingOtpDoc?.otp || Math.floor(100000 + Math.random() * 900000).toString();
     const expiresAt = existingOtpDoc?.expires_at || new Date(Date.now() + 5 * 60 * 1000);
 
+    const mode = req.body.mode; // "signin" | "register" | "signup" | undefined
+
     if (isEmail) {
       const cleanEmail = cleanIdentifier;
       const existingUser = await User.findOne({ email: cleanEmail });
+
+      // Strict Mode Validation: Sign In requires existing user, Sign Up requires new user
+      if (mode === "signin" && !existingUser) {
+        throw new ApiError(
+          "No account found with this email. Please switch to Sign Up to create a new account.",
+          404
+        );
+      }
+      if ((mode === "register" || mode === "signup") && existingUser) {
+        throw new ApiError(
+          "An account already exists with this email. Please switch to Sign In.",
+          400
+        );
+      }
 
       // Save/Refresh OTP in database
       await Otp.deleteMany({ $or: [{ identifier: cleanEmail }, { email: cleanEmail }] });
@@ -249,6 +265,20 @@ export const sendPhoneOtp = async (
     // Is Phone
     const cleanPhone = cleanIdentifier;
     const existingUser = await User.findOne({ phone: cleanPhone });
+
+    // Strict Mode Validation for Phone
+    if (mode === "signin" && !existingUser) {
+      throw new ApiError(
+        "No account found with this mobile number. Please switch to Sign Up to create a new account.",
+        404
+      );
+    }
+    if ((mode === "register" || mode === "signup") && existingUser) {
+      throw new ApiError(
+        "An account already exists with this mobile number. Please switch to Sign In.",
+        400
+      );
+    }
 
     // Save/Refresh OTP in database
     await Otp.deleteMany({ $or: [{ identifier: cleanPhone }, { phone: cleanPhone }] });

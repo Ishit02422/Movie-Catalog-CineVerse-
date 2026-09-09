@@ -12,7 +12,8 @@ interface AuthContextType {
   register: (credentials: RegisterCredentials) => Promise<void>;
   checkUser: (identifier: string) => Promise<{ exists: boolean; data?: any }>;
   sendPhoneOtp: (
-    identifier: string
+    identifier: string,
+    mode?: "signin" | "register"
   ) => Promise<{
     success: boolean;
     type?: "phone" | "email";
@@ -159,7 +160,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const sendPhoneOtp = async (
-    identifier: string
+    identifier: string,
+    mode?: "signin" | "register"
   ): Promise<{
     success: boolean;
     type?: "phone" | "email";
@@ -167,12 +169,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     isNewUser?: boolean;
     user_name?: string;
     otp_preview?: string;
+    dev_otp?: string;
     message: string;
   }> => {
     const res = await fetch(`${API_BASE_URL}/auth/phone/send-otp`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ identifier }),
+      body: JSON.stringify({ identifier, mode }),
     });
 
     const data = await res.json();
