@@ -357,10 +357,10 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
               </div>
             </div>
 
-            {/* Email Field (Optional) */}
+            {/* Email Field */}
             <div>
               <label className="block text-xs font-semibold text-slate-300 mb-1.5">
-                Email Address <span className="text-slate-500 font-normal">(Optional)</span>
+                Email Address
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
