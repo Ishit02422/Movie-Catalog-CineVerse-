@@ -720,12 +720,12 @@ export default function MovieDetailsPage() {
                             ))}
                           </div>
 
-                          {/* Delete button if owner or admin */}
-                          {user && (user.id === rev.user || user.role === "admin") && (
+                          {/* Delete button only if admin */}
+                          {user && user.role === "admin" && (
                             <button
                               type="button"
                               onClick={() => handleDeleteReview(rev.id)}
-                              title="Delete review"
+                              title="Delete review (Admin only)"
                               className="p-1 text-slate-500 hover:text-rose-400 transition-colors cursor-pointer"
                             >
                               <Trash2 className="w-3.5 h-3.5" />

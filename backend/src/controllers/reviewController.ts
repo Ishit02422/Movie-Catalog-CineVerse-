@@ -156,9 +156,9 @@ export const deleteReview = async (
       throw new ApiError("Review not found.", 404);
     }
 
-    // Ensure only review author or admin can delete
-    if (review.user.toString() !== req.user._id.toString() && req.user.role !== "admin") {
-      throw new ApiError("You are not authorized to delete this review.", 403);
+    // Ensure only admin can delete reviews (Users cannot delete their own rating/review)
+    if (req.user.role !== "admin") {
+      throw new ApiError("Only administrators are authorized to delete reviews.", 403);
     }
 
     const movieId = review.movie.toString();
