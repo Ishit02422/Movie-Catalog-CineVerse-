@@ -46,7 +46,20 @@ export const FilterBar: React.FC<FilterBarProps> = ({
           <input
             type="text"
             value={search}
-            onChange={(e) => onSearchChange(e.target.value)}
+            onChange={(e) => {
+              const sanitized = e.target.value.replace(/^\s+/, "").replace(/\s{2,}/g, " ");
+              onSearchChange(sanitized);
+            }}
+            onKeyDown={(e) => {
+              if (
+                e.key === " " &&
+                (!e.currentTarget.value ||
+                  e.currentTarget.selectionStart === 0 ||
+                  e.currentTarget.value.endsWith(" "))
+              ) {
+                e.preventDefault();
+              }
+            }}
             placeholder="Search movies by title (e.g. Inception, Dark Knight, Interstellar)..."
             className="w-full pl-10 pr-10 py-3 rounded-xl bg-slate-950/80 border border-slate-800 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 transition-all"
           />

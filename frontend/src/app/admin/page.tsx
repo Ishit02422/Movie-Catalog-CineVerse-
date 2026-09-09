@@ -1197,7 +1197,20 @@ export default function AdminPage() {
             <input
               type="text"
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={(e) => {
+                const sanitized = e.target.value.replace(/^\s+/, "").replace(/\s{2,}/g, " ");
+                setSearchQuery(sanitized);
+              }}
+              onKeyDown={(e) => {
+                if (
+                  e.key === " " &&
+                  (!searchQuery ||
+                    searchQuery.length === 0 ||
+                    searchQuery.endsWith(" "))
+                ) {
+                  e.preventDefault();
+                }
+              }}
               placeholder={`Search ${activeTitle.toLowerCase()} by title, year or category...`}
               className="w-full bg-slate-900/90 border border-white/10 rounded-2xl pl-10 pr-4 py-3 text-sm text-white focus:outline-none focus:border-[#e50914] transition-all placeholder:text-slate-500 shadow-inner"
             />

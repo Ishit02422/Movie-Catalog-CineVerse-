@@ -1472,7 +1472,20 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
               <input
                 type="text"
                 value={countrySearchQuery}
-                onChange={(e) => setCountrySearchQuery(e.target.value)}
+                onChange={(e) => {
+                  const sanitized = e.target.value.replace(/^\s+/, "").replace(/\s{2,}/g, " ");
+                  setCountrySearchQuery(sanitized);
+                }}
+                onKeyDown={(e) => {
+                  if (
+                    e.key === " " &&
+                    (!countrySearchQuery ||
+                      countrySearchQuery.length === 0 ||
+                      countrySearchQuery.endsWith(" "))
+                  ) {
+                    e.preventDefault();
+                  }
+                }}
                 placeholder="Search country or code (e.g. India, +1, +44)..."
                 className="w-full pl-10 pr-9 py-3 rounded-xl bg-slate-900 border border-slate-700 focus:border-red-500 focus:ring-1 focus:ring-red-500 text-white text-sm placeholder:text-slate-500 outline-none transition-all"
                 autoFocus
