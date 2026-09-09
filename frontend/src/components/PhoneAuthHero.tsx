@@ -710,46 +710,64 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
           </div>
 
           {/* ========================================================================= */}
-          {/* SECTION 2: TRENDING NOW POSTER ROW (Direct Continuous Flow)               */}
+          {/* SECTION 2: TRENDING NOW POSTER ROW (Premium Glass Showcase Stage)         */}
           {/* ========================================================================= */}
-          <section className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-2 pb-10">
-            {/* Ambient Background Glow */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[200px] bg-rose-950/20 blur-[100px] pointer-events-none rounded-full" />
+          <section className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-b from-slate-900/75 via-slate-950/85 to-slate-950/95 border border-white/10 p-5 sm:p-7 backdrop-blur-2xl shadow-2xl shadow-rose-950/30">
+              {/* Vibrant Ambient Glow behind showcase */}
+              <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-[500px] h-[180px] bg-red-600/15 blur-[90px] pointer-events-none rounded-full" />
 
-            <div className="flex items-center gap-3 mb-5 relative z-10">
-              <div className="p-2 sm:p-2.5 rounded-2xl bg-gradient-to-br from-red-600/25 to-rose-900/10 border border-red-500/30 text-[#e50914] shadow-md shadow-red-950/40 backdrop-blur-md">
-                <Flame className="w-4 h-4 sm:w-5 sm:h-5 text-[#e50914] animate-pulse" />
+              {/* Showcase Header */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 relative z-10">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 sm:p-2.5 rounded-2xl bg-gradient-to-br from-red-600 to-rose-700 text-white shadow-lg shadow-red-600/30">
+                    <Flame className="w-5 h-5 animate-pulse" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <h2 className="text-lg sm:text-2xl font-black text-white tracking-tight">
+                        Trending Now on CineVerse
+                      </h2>
+                      <span className="hidden sm:inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-red-600/20 text-rose-400 border border-red-500/30">
+                        Live 4K
+                      </span>
+                    </div>
+                    <p className="text-xs sm:text-sm text-slate-400 font-medium mt-0.5">
+                      India&apos;s most watched blockbusters • Streaming in Ultra HD
+                    </p>
+                  </div>
+                </div>
+
+                {/* Left & Right Navigation Arrow Buttons */}
+                <div className="flex items-center gap-2 self-end sm:self-center">
+                  <button
+                    type="button"
+                    onClick={() => setTrendingOffset((prev) => (prev - 1 + posters.length) % posters.length)}
+                    aria-label="Previous Trending Movies"
+                    className="p-2 sm:p-2.5 rounded-xl bg-slate-900/90 hover:bg-[#e50914] text-slate-300 hover:text-white border border-slate-700/80 hover:border-red-500/80 flex items-center justify-center backdrop-blur-md shadow-md transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer"
+                    title="Previous"
+                  >
+                    <ChevronLeft className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setTrendingOffset((prev) => (prev + 1) % posters.length)}
+                    aria-label="Next Trending Movies"
+                    className="p-2 sm:p-2.5 rounded-xl bg-slate-900/90 hover:bg-[#e50914] text-slate-300 hover:text-white border border-slate-700/80 hover:border-red-500/80 flex items-center justify-center backdrop-blur-md shadow-md transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer"
+                    title="Next"
+                  >
+                    <ChevronRight className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
+                  </button>
+                </div>
               </div>
-              <div>
-                <h2 className="text-lg sm:text-2xl font-black text-white tracking-tight flex items-center gap-2">
-                  Trending Now on CineVerse
-                </h2>
-                <p className="text-xs sm:text-sm text-slate-400 font-medium">
-                  India&apos;s most watched blockbusters • Streaming in 4K Ultra HD
-                </p>
-              </div>
-            </div>
 
-            {/* Carousel Container with Left & Right Buttons OUTSIDE of movie posters */}
-            <div className="relative flex items-center gap-2 sm:gap-3.5">
-              {/* Left Side Arrow Button (Cleanly Outside) */}
-              <button
-                type="button"
-                onClick={() => setTrendingOffset((prev) => (prev - 1 + posters.length) % posters.length)}
-                aria-label="Previous Trending Movies"
-                className="shrink-0 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-slate-900/95 hover:bg-[#e50914] text-slate-300 hover:text-white border border-slate-800 hover:border-red-500/80 flex items-center justify-center backdrop-blur-xl shadow-xl transition-all duration-300 hover:scale-110 active:scale-90 cursor-pointer z-10"
-                title="Previous"
-              >
-                <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
-              </button>
-
-              {/* 6 Trending Movie Cards (Clean & Unobstructed) */}
-              <div className="flex-1 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2.5 sm:gap-3.5">
+              {/* 6 High-Gloss Movie Cards */}
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4 relative z-10">
                 {visibleTrendingPosters.map((item, idx) => (
                   <div
                     key={`${item.url}-${idx}`}
                     onClick={() => setPreviewMovie(getMovieForPoster(item.url, item.index))}
-                    className="group relative aspect-[2/3] w-full rounded-2xl overflow-hidden bg-slate-950 border border-slate-800/80 hover:border-rose-500/80 transition-all duration-500 hover:scale-[1.04] hover:-translate-y-1.5 cursor-pointer shadow-xl hover:shadow-2xl hover:shadow-rose-950/50 select-none"
+                    className="group relative aspect-[2/3] w-full rounded-2xl overflow-hidden bg-slate-950 border border-white/10 hover:border-rose-500/80 transition-all duration-500 hover:scale-[1.05] hover:-translate-y-2 cursor-pointer shadow-xl hover:shadow-2xl hover:shadow-rose-600/40 select-none"
                   >
                     <img
                       src={item.url}
@@ -757,21 +775,10 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                       className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-110"
                       loading="lazy"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-30 group-hover:opacity-0 transition-opacity duration-300" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-40 group-hover:opacity-10 transition-opacity duration-300" />
                   </div>
                 ))}
               </div>
-
-              {/* Right Side Arrow Button (Cleanly Outside) */}
-              <button
-                type="button"
-                onClick={() => setTrendingOffset((prev) => (prev + 1) % posters.length)}
-                aria-label="Next Trending Movies"
-                className="shrink-0 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-slate-900/95 hover:bg-[#e50914] text-slate-300 hover:text-white border border-slate-800 hover:border-red-500/80 flex items-center justify-center backdrop-blur-xl shadow-xl transition-all duration-300 hover:scale-110 active:scale-90 cursor-pointer z-10"
-                title="Next"
-              >
-                <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
-              </button>
             </div>
           </section>
 
