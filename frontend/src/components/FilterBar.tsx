@@ -120,8 +120,8 @@ export const FilterBar: React.FC<FilterBarProps> = ({
               onChange={(e) => onSortChange(e.target.value)}
               className="w-full appearance-none px-3.5 py-3 pr-8 rounded-xl bg-slate-950/80 border border-slate-800 text-slate-200 text-xs sm:text-sm font-medium focus:outline-none focus:border-rose-500 transition-all cursor-pointer"
             >
-              <option value="year_desc">Newest First (2024 → 1970)</option>
-              <option value="year_asc">Oldest First (1970 → 2024)</option>
+              <option value="year_desc">Newest First ({new Date().getFullYear()} → 1950)</option>
+              <option value="year_asc">Oldest First (1950 → {new Date().getFullYear()})</option>
               <option value="rating_desc">Top Rated (★ High to Low)</option>
               <option value="title_asc">Title (A → Z)</option>
               <option value="title_desc">Title (Z → A)</option>
