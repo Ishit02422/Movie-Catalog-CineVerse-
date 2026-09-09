@@ -1212,23 +1212,6 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                     })}
                   </div>
 
-                  {/* Quick Dev / Demo OTP Helper */}
-                  {receivedDevOtp && (
-                    <div className="p-3.5 sm:p-4 rounded-xl bg-gradient-to-r from-red-950/50 via-rose-950/40 to-red-950/50 border border-red-500/40 flex items-center justify-between text-xs sm:text-sm animate-in fade-in shadow-inner mt-2">
-                      <div className="flex items-center gap-2.5 text-rose-200">
-                        <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-amber-400 animate-pulse shrink-0" />
-                        <span>Demo OTP: <strong className="font-mono text-white text-base sm:text-lg tracking-widest ml-1 font-black">{receivedDevOtp}</strong></span>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => setOtpCode(receivedDevOtp)}
-                        className="px-3.5 py-1.5 rounded-lg bg-[#e50914] hover:bg-[#b80710] text-white font-bold text-xs sm:text-sm cursor-pointer transition-all active:scale-95 shadow-lg shadow-red-950/50"
-                      >
-                        Auto Fill
-                      </button>
-                    </div>
-                  )}
-
                   {/* Resend Code */}
                   <div className="flex items-center justify-between text-xs sm:text-sm px-1 text-slate-400 pt-1">
                     <span>Didn&apos;t receive code?</span>
