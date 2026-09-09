@@ -1610,10 +1610,27 @@ export default function AdminPage() {
                         type="number"
                         required
                         min={1950}
-                        max={new Date().getFullYear() + 2}
+                        max={new Date().getFullYear()}
                         value={formData.release_year}
-                        onChange={(e) => setFormData({ ...formData, release_year: Number(e.target.value) })}
-                        className="w-full bg-slate-950 border border-white/10 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-[#e50914] transition-all"
+                        onChange={(e) => {
+                          const val = Number(e.target.value);
+                          const currentYear = new Date().getFullYear();
+                          if (val > currentYear) {
+                            setFormData({ ...formData, release_year: currentYear });
+                          } else {
+                            setFormData({ ...formData, release_year: val });
+                          }
+                        }}
+                        onBlur={(e) => {
+                          const val = Number(e.target.value);
+                          const currentYear = new Date().getFullYear();
+                          if (val && val < 1950) {
+                            setFormData({ ...formData, release_year: 1950 });
+                          } else if (val > currentYear) {
+                            setFormData({ ...formData, release_year: currentYear });
+                          }
+                        }}
+                        className="w-full bg-slate-950 border border-white/10 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-[#e50914] transition-all font-mono"
                       />
                     </div>
                     <div>
@@ -1927,10 +1944,27 @@ export default function AdminPage() {
                         type="number"
                         required
                         min={1950}
-                        max={new Date().getFullYear() + 2}
+                        max={new Date().getFullYear()}
                         value={formData.release_year}
-                        onChange={(e) => setFormData({ ...formData, release_year: Number(e.target.value) })}
-                        className="w-full bg-slate-950 border border-white/10 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-[#e50914] transition-all"
+                        onChange={(e) => {
+                          const val = Number(e.target.value);
+                          const currentYear = new Date().getFullYear();
+                          if (val > currentYear) {
+                            setFormData({ ...formData, release_year: currentYear });
+                          } else {
+                            setFormData({ ...formData, release_year: val });
+                          }
+                        }}
+                        onBlur={(e) => {
+                          const val = Number(e.target.value);
+                          const currentYear = new Date().getFullYear();
+                          if (val && val < 1950) {
+                            setFormData({ ...formData, release_year: 1950 });
+                          } else if (val > currentYear) {
+                            setFormData({ ...formData, release_year: currentYear });
+                          }
+                        }}
+                        className="w-full bg-slate-950 border border-white/10 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-[#e50914] transition-all font-mono"
                       />
                     </div>
                     <div>
