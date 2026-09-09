@@ -91,12 +91,10 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
       return;
     }
 
-    if (surname.trim()) {
-      const lastErr = validateName(surname, "Last Name");
-      if (lastErr) {
-        setErrorMessage(lastErr);
-        return;
-      }
+    const lastErr = validateName(surname, "Last Name");
+    if (lastErr) {
+      setErrorMessage(lastErr);
+      return;
     }
 
     if (phone && phone.trim().replace(/\D/g, "").length !== 10) {
@@ -262,7 +260,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
 
               <div>
                 <label className="block text-xs font-semibold text-slate-300 mb-1.5">
-                  Last Name
+                  Last Name *
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
@@ -292,6 +290,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
                     }}
                     placeholder="Enter last name"
                     maxLength={20}
+                    required
                     className="w-full pl-9 pr-3.5 py-2.5 bg-slate-950/70 border border-slate-800 rounded-xl text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 transition-all"
                   />
                 </div>
@@ -469,11 +468,13 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
           <button
             type="button"
             onClick={handleUpdate}
-            disabled={isUpdating}
+            disabled={isUpdating || !firstName.trim() || !surname.trim()}
             className={`px-5 py-2 rounded-xl text-white text-xs font-semibold shadow-lg transition-all flex items-center gap-2 active:scale-95 cursor-pointer ${
               isSaved
                 ? "bg-emerald-600 shadow-emerald-600/25"
-                : "bg-rose-600 hover:bg-rose-500 active:bg-rose-700 shadow-rose-600/25 disabled:opacity-50"
+                : !firstName.trim() || !surname.trim() || isUpdating
+                ? "bg-rose-950/40 text-white/40 border border-white/5 cursor-not-allowed shadow-none"
+                : "bg-rose-600 hover:bg-rose-500 active:bg-rose-700 shadow-rose-600/25"
             }`}
           >
             {isUpdating ? (
