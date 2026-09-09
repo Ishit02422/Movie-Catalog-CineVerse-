@@ -82,6 +82,29 @@ const GENRE_ICONS: Record<string, string> = {
   Western: "🤠",
 };
 
+export const ALL_GENRES = [
+  "Action",
+  "Adventure",
+  "Animation",
+  "Biography",
+  "Comedy",
+  "Crime",
+  "Documentary",
+  "Drama",
+  "Family",
+  "Fantasy",
+  "History",
+  "Horror",
+  "Music",
+  "Mystery",
+  "Romance",
+  "Sci-Fi",
+  "Sport",
+  "Thriller",
+  "War",
+  "Western",
+];
+
 const DEFAULT_GENRE_NAMES = [
   "Action",
   "Sci-Fi",
@@ -291,7 +314,7 @@ export default function AdminPage() {
   // Form State
   const [formData, setFormData] = useState({
     title: "",
-    genre: "Action, Sci-Fi",
+    genre: "Action",
     release_year: new Date().getFullYear(),
     rating: 8.5,
     description: "",
@@ -461,7 +484,7 @@ export default function AdminPage() {
   const handleOpenAddModal = () => {
     setFormData({
       title: "",
-      genre: selectedNav !== "all" && selectedNav !== "featured" ? selectedNav : "Action, Sci-Fi",
+      genre: selectedNav !== "all" && selectedNav !== "featured" && ALL_GENRES.includes(selectedNav) ? selectedNav : "Action",
       release_year: new Date().getFullYear(),
       rating: 8.5,
       description: "",
@@ -479,7 +502,7 @@ export default function AdminPage() {
     setActiveMovie(movie);
     setFormData({
       title: movie.title,
-      genre: movie.genre,
+      genre: movie.genre || "Action",
       release_year: movie.release_year,
       rating: movie.rating ?? 8.0,
       description: movie.description,
@@ -528,7 +551,7 @@ export default function AdminPage() {
     setFormData((prev) => ({
       ...prev,
       title: prev.title.trim() === "" ? preset.title : prev.title,
-      genre: prev.genre.trim() === "" || prev.genre === "Action, Sci-Fi" ? preset.genre : prev.genre,
+      genre: prev.genre.trim() === "" || prev.genre === "Action" ? preset.genre : prev.genre,
       release_year: preset.year,
       rating: preset.rating,
       image_url: preset.poster,
@@ -1603,14 +1626,23 @@ export default function AdminPage() {
                       <label className="block text-xs font-bold text-slate-300 mb-1.5">
                         Genre *
                       </label>
-                      <input
-                        type="text"
+                      <select
                         required
                         value={formData.genre}
                         onChange={(e) => setFormData({ ...formData, genre: e.target.value })}
-                        placeholder="Action, Sci-Fi"
-                        className="w-full bg-slate-950 border border-white/10 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-[#e50914] transition-all"
-                      />
+                        className="w-full bg-slate-950 border border-white/10 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-[#e50914] transition-all font-semibold cursor-pointer"
+                      >
+                        {formData.genre && !ALL_GENRES.includes(formData.genre) && (
+                          <option value={formData.genre} className="bg-slate-900 text-white font-medium">
+                            📁 {formData.genre}
+                          </option>
+                        )}
+                        {ALL_GENRES.map((g) => (
+                          <option key={g} value={g} className="bg-slate-900 text-white font-medium">
+                            {GENRE_ICONS[g] ? `${GENRE_ICONS[g]} ${g}` : g}
+                          </option>
+                        ))}
+                      </select>
                     </div>
                     <div>
                       <label className="block text-xs font-bold text-slate-300 mb-1.5">
@@ -1924,13 +1956,23 @@ export default function AdminPage() {
                       <label className="block text-xs font-bold text-slate-300 mb-1.5">
                         Genre *
                       </label>
-                      <input
-                        type="text"
+                      <select
                         required
                         value={formData.genre}
                         onChange={(e) => setFormData({ ...formData, genre: e.target.value })}
-                        className="w-full bg-slate-950 border border-white/10 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-[#e50914] transition-all"
-                      />
+                        className="w-full bg-slate-950 border border-white/10 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-[#e50914] transition-all font-semibold cursor-pointer"
+                      >
+                        {formData.genre && !ALL_GENRES.includes(formData.genre) && (
+                          <option value={formData.genre} className="bg-slate-900 text-white font-medium">
+                            📁 {formData.genre}
+                          </option>
+                        )}
+                        {ALL_GENRES.map((g) => (
+                          <option key={g} value={g} className="bg-slate-900 text-white font-medium">
+                            {GENRE_ICONS[g] ? `${GENRE_ICONS[g]} ${g}` : g}
+                          </option>
+                        ))}
+                      </select>
                     </div>
                     <div>
                       <label className="block text-xs font-bold text-slate-300 mb-1.5">
