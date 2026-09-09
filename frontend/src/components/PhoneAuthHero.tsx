@@ -545,7 +545,9 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                       }}
                       maxLength={isNumericPhone ? 10 : 50}
                       placeholder={isNumericPhone ? "Enter 10-digit mobile" : "Email or mobile number"}
-                      className={`w-full py-3.5 sm:py-4 rounded-md bg-black/80 border border-slate-600 focus:border-white focus:ring-1 focus:ring-white text-white text-base placeholder:text-slate-400 outline-none backdrop-blur-md transition-all font-medium ${
+                      className={`w-full py-3.5 sm:py-4 rounded-md bg-black/80 border ${
+                        error ? "border-red-500/80 focus:border-red-400 focus:ring-1 focus:ring-red-400" : "border-slate-600 focus:border-white focus:ring-1 focus:ring-white"
+                      } text-white text-base placeholder:text-slate-400 outline-none backdrop-blur-md transition-all font-medium ${
                         isNumericPhone ? "pl-23 sm:pl-25 pr-4 tracking-wider font-mono text-base sm:text-lg" : "px-4"
                       }`}
                     />
@@ -563,6 +565,14 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                     <ChevronRight className={`w-5 h-5 transition-transform ${isLandingInputFilled ? "translate-x-0 group-hover:translate-x-1" : "opacity-40"}`} />
                   </button>
                 </form>
+
+                {/* Landing Screen Error Banner */}
+                {error && (
+                  <div className="mt-3.5 p-3.5 rounded-xl bg-red-950/80 border border-red-500/50 text-red-200 text-xs sm:text-sm flex items-center justify-center gap-2 animate-in fade-in slide-in-from-top-2 duration-200 shadow-xl shadow-red-950/40">
+                    <AlertCircle className="w-4 h-4 text-red-400 shrink-0" />
+                    <span className="font-semibold text-center">{error}</span>
+                  </div>
+                )}
               </div>
             </div>
           </div>
