@@ -64,7 +64,7 @@ export default function MovieDetailsPage() {
   const [copied, setCopied] = useState<boolean>(false);
 
   // Review Form state
-  const [userRating, setUserRating] = useState<number>(5);
+  const [userRating, setUserRating] = useState<number>(0);
   const [hoverRating, setHoverRating] = useState<number>(0);
   const [reviewComment, setReviewComment] = useState<string>("");
   const [isSubmittingReview, setIsSubmittingReview] = useState<boolean>(false);
@@ -170,6 +170,11 @@ export default function MovieDetailsPage() {
       return;
     }
 
+    if (!userRating || userRating < 1 || userRating > 5) {
+      setReviewMessage("⚠️ Please select your rating by clicking 1 to 5 stars.");
+      return;
+    }
+
     const trimmedComment = reviewComment.trim();
     if (trimmedComment.length < 10) {
       setReviewMessage("⚠️ Review comment must be at least 10 characters long.");
@@ -198,6 +203,7 @@ export default function MovieDetailsPage() {
       }
 
       setReviewComment("");
+      setUserRating(0);
       setReviewMessage("🎉 Your review has been posted successfully!");
       // Reload reviews and movie to update average score
       await loadReviews(id);
@@ -531,30 +537,80 @@ export default function MovieDetailsPage() {
 
                 <form onSubmit={handleSubmitReview} className="space-y-4">
                   {/* Interactive Star Picker */}
-                  <div className="space-y-1.5">
-                    <label className="text-xs text-slate-400">Your Rating (1 to 5 Stars):</label>
-                    <div className="flex items-center gap-2">
-                      {[1, 2, 3, 4, 5].map((star) => (
-                        <button
-                          key={star}
-                          type="button"
-                          onClick={() => setUserRating(star)}
-                          onMouseEnter={() => setHoverRating(star)}
-                          onMouseLeave={() => setHoverRating(0)}
-                          className="p-1 text-slate-600 hover:scale-125 transition-transform cursor-pointer"
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <label className="text-xs font-bold text-slate-300">
+                        Select Your Rating *
+                      </label>
+                      {/* Dynamic Live Emotion Badge */}
+                      {(hoverRating || userRating) > 0 ? (
+                        <div
+                          className={`px-2.5 py-0.5 rounded-full text-xs font-bold border flex items-center gap-1.5 transition-all ${
+                            (hoverRating || userRating) === 1
+                              ? "text-rose-400 bg-rose-500/10 border-rose-500/30"
+                              : (hoverRating || userRating) === 2
+                              ? "text-orange-400 bg-orange-500/10 border-orange-500/30"
+                              : (hoverRating || userRating) === 3
+                              ? "text-yellow-300 bg-yellow-500/10 border-yellow-500/30"
+                              : (hoverRating || userRating) === 4
+                              ? "text-emerald-400 bg-emerald-500/10 border-emerald-500/30"
+                              : "text-amber-300 bg-amber-500/15 border-amber-500/30"
+                          }`}
                         >
-                          <Star
-                            className={`w-6 h-6 ${
-                              (hoverRating || userRating) >= star
-                                ? "fill-amber-400 text-amber-400"
-                                : "text-slate-700"
-                            }`}
-                          />
-                        </button>
-                      ))}
-                      <span className="text-sm font-bold text-amber-300 ml-2">
-                        {userRating} / 5 Stars
-                      </span>
+                          <span>
+                            {(hoverRating || userRating) === 1
+                              ? "😡"
+                              : (hoverRating || userRating) === 2
+                              ? "😕"
+                              : (hoverRating || userRating) === 3
+                              ? "😐"
+                              : (hoverRating || userRating) === 4
+                              ? "😊"
+                              : "🤩"}
+                          </span>
+                          <span>
+                            {hoverRating || userRating} / 5 •{" "}
+                            {(hoverRating || userRating) === 1
+                              ? "Poor"
+                              : (hoverRating || userRating) === 2
+                              ? "Fair"
+                              : (hoverRating || userRating) === 3
+                              ? "Good"
+                              : (hoverRating || userRating) === 4
+                              ? "Very Good"
+                              : "Masterpiece"}
+                          </span>
+                        </div>
+                      ) : (
+                        <span className="text-[11px] text-slate-500 italic">
+                          Click a star to rate
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="flex items-center gap-1.5 p-2 rounded-2xl bg-slate-950/70 border border-slate-800/80 w-fit">
+                      {[1, 2, 3, 4, 5].map((star) => {
+                        const activeStar = (hoverRating || userRating) >= star;
+                        return (
+                          <button
+                            key={star}
+                            type="button"
+                            onClick={() => setUserRating(star)}
+                            onMouseEnter={() => setHoverRating(star)}
+                            onMouseLeave={() => setHoverRating(0)}
+                            className="p-1 text-slate-600 hover:scale-125 active:scale-95 transition-all cursor-pointer rounded-lg hover:bg-white/5"
+                            title={`${star} Star`}
+                          >
+                            <Star
+                              className={`w-7 h-7 transition-all ${
+                                activeStar
+                                  ? "fill-amber-400 text-amber-400 drop-shadow-[0_0_8px_rgba(251,191,36,0.5)]"
+                                  : "text-slate-700 hover:text-slate-500"
+                              }`}
+                            />
+                          </button>
+                        );
+                      })}
                     </div>
                   </div>
 
@@ -604,7 +660,7 @@ export default function MovieDetailsPage() {
                     </span>
                     <button
                       type="submit"
-                      disabled={!isAuthenticated || isSubmittingReview || reviewComment.trim().length < 10}
+                      disabled={!isAuthenticated || isSubmittingReview || userRating === 0 || reviewComment.trim().length < 10}
                       className="px-5 py-2.5 rounded-xl bg-[#e50914] hover:bg-[#b80710] disabled:opacity-50 text-white font-bold text-xs sm:text-sm flex items-center gap-2 transition-all cursor-pointer shadow-lg shadow-red-950/50"
                     >
                       {isSubmittingReview ? (
