@@ -751,41 +751,11 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
           {/* Centered Glassmorphic Auth Card (Spacious & Premium) */}
           <main className="relative z-10 flex-1 w-full max-w-[540px] mx-auto px-4 py-8 sm:py-12 flex flex-col justify-center">
             <div className="relative w-full p-8 sm:p-11 rounded-3xl bg-slate-950/92 backdrop-blur-2xl border border-white/10 shadow-[0_25px_80px_rgba(0,0,0,0.9)] space-y-6 animate-in zoom-in-95 duration-200 overflow-hidden">
-              {/* Top Accent Line */}
-              <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-rose-500 to-transparent" />
-
-              {/* Segmented Switcher Tabs: Sign In vs Sign Up */}
-              <div className="grid grid-cols-2 p-1 rounded-xl bg-slate-900/90 border border-slate-800 shadow-inner">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setAuthMode("signin");
-                    setError(null);
-                  }}
-                  className={`py-3 text-xs sm:text-sm font-bold rounded-lg transition-all cursor-pointer flex items-center justify-center gap-2 ${
-                    authMode === "signin"
-                      ? "bg-gradient-to-r from-[#e50914] to-[#b80710] text-white shadow-md shadow-red-950/50"
-                      : "text-slate-400 hover:text-white"
-                  }`}
-                >
-                  <Lock className="w-4 h-4" />
-                  <span>Sign In</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setAuthMode("register");
-                    setError(null);
-                  }}
-                  className={`py-3 text-xs sm:text-sm font-bold rounded-lg transition-all cursor-pointer flex items-center justify-center gap-2 ${
-                    authMode === "register"
-                      ? "bg-gradient-to-r from-[#e50914] to-[#b80710] text-white shadow-md shadow-red-950/50"
-                      : "text-slate-400 hover:text-white"
-                  }`}
-                >
-                  <Users className="w-4 h-4" />
-                  <span>Sign Up</span>
-                </button>
+              {/* Glowing Icon Badge */}
+              <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-tr from-rose-600 via-red-600 to-rose-500 p-0.5 shadow-[0_0_30px_rgba(229,9,20,0.45)] mx-auto flex items-center justify-center">
+                <div className="w-full h-full rounded-[14px] bg-slate-950 flex items-center justify-center text-rose-400">
+                  {authMode === "signin" ? <Lock className="w-6 h-6 sm:w-7 sm:h-7" /> : <Users className="w-6 h-6 sm:w-7 sm:h-7" />}
+                </div>
               </div>
 
               {/* Title & Subtitle */}
