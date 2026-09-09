@@ -142,12 +142,16 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
     setError(null);
     setSuccessMessage(null);
 
+    // If user is on landing page, clicking Continue / Sign Up Free should open the form screen directly
+    if (screen === "landing") {
+      setAuthMode("register");
+      setScreen("signin");
+      return;
+    }
+
     let val = identifier.trim();
+
     if (!val) {
-      if (screen === "landing") {
-        setScreen("signin");
-        return;
-      }
       setError("Please enter your email or mobile number.");
       return;
     }
@@ -168,7 +172,6 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
 
     if (isNum && cleanPhone.length < 10) {
       setError("Please enter a valid 10-digit mobile number.");
-      if (screen === "landing") setScreen("signin");
       return;
     }
 
