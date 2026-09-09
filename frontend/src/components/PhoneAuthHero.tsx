@@ -162,7 +162,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
         return;
       }
       if (!surname.trim()) {
-        setError("Please enter your Surname.");
+        setError("Please enter your Last Name.");
         return;
       }
     }
@@ -228,7 +228,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
         return;
       }
       if (!surname.trim()) {
-        setError("Please enter your Surname.");
+        setError("Please enter your Last Name.");
         return;
       }
     }
@@ -729,7 +729,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                       />
                     </div>
                     <div className="space-y-1">
-                      <label className="text-[11px] font-semibold text-slate-300">Surname *</label>
+                      <label className="text-[11px] font-semibold text-slate-300">Last Name *</label>
                       <input
                         type="text"
                         value={surname}
@@ -1008,7 +1008,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                     />
                     <input
                       type="text"
-                      placeholder="Surname *"
+                      placeholder="Last Name *"
                       value={surname}
                       onChange={(e) => {
                         setSurname(e.target.value);

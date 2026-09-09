@@ -220,7 +220,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
 
               <div>
                 <label className="block text-xs font-semibold text-slate-300 mb-1.5">
-                  Surname / Last Name
+                  Last Name
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
@@ -236,7 +236,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
                     data-lpignore="true"
                     value={surname}
                     onChange={(e) => setSurname(e.target.value)}
-                    placeholder="Enter surname"
+                    placeholder="Enter last name"
                     className="w-full pl-9 pr-3.5 py-2.5 bg-slate-950/70 border border-slate-800 rounded-xl text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 transition-all"
                   />
                 </div>
