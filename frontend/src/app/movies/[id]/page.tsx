@@ -370,7 +370,7 @@ export default function MovieDetailsPage() {
                     <Calendar className="w-3.5 h-3.5 text-rose-400" />
                     Released {movie.release_year}
                   </span>
-                  {movie.rating && (
+                  {movie.rating !== undefined && movie.rating >= 5 && movie.rating <= 10 && (
                     <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold bg-amber-500/10 text-amber-300 border border-amber-500/20">
                       <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
                       {movie.rating.toFixed(1)} / 10 IMDb
@@ -384,7 +384,7 @@ export default function MovieDetailsPage() {
                 </h1>
 
                 {/* Star Rating Bar */}
-                {movie.rating && (
+                {movie.rating !== undefined && movie.rating >= 5 && movie.rating <= 10 && (
                   <div className="flex items-center gap-3 bg-slate-900/60 border border-slate-800/80 p-3.5 rounded-2xl w-fit">
                     <div className="flex items-center gap-1">
                       {[1, 2, 3, 4, 5].map((star) => {
@@ -836,8 +836,12 @@ export default function MovieDetailsPage() {
                   <span className="font-semibold text-slate-300">{movie.genre}</span>
                   <span>•</span>
                   <span>{movie.release_year}</span>
-                  <span>•</span>
-                  <span className="text-amber-400 font-bold">{movie.rating?.toFixed(1) || "8.0"} ★</span>
+                  {movie.rating !== undefined && movie.rating >= 5 && movie.rating <= 10 && (
+                    <>
+                      <span>•</span>
+                      <span className="text-amber-400 font-bold">{movie.rating.toFixed(1)} ★</span>
+                    </>
+                  )}
                 </span>
                 <a
                   href={youtubeTrailerUrl}

@@ -50,7 +50,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
             {movie.genre}
           </span>
           <div className="flex items-center gap-1.5">
-            {movie.rating && (
+            {movie.rating !== undefined && movie.rating >= 5 && movie.rating <= 10 && (
               <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-slate-950/90 text-amber-300 border border-amber-500/20 backdrop-blur-md shadow-md">
                 <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
                 {movie.rating.toFixed(1)}

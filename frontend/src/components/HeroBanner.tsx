@@ -66,7 +66,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ movies }) => {
               <Calendar className="w-3.5 h-3.5 text-rose-400" />
               {currentMovie.release_year}
             </span>
-            {currentMovie.rating && (
+            {currentMovie.rating !== undefined && currentMovie.rating >= 5 && currentMovie.rating <= 10 && (
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold text-amber-300 bg-amber-500/15 border border-amber-500/30 shadow-sm">
                 <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
                 {currentMovie.rating.toFixed(1)}
