@@ -777,16 +777,8 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                       className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-110"
                       loading="lazy"
                     />
-                    {/* Dark gradient for cinema depth */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent opacity-60 group-hover:opacity-20 transition-opacity duration-300" />
-
-                    {/* Interactive Watch Button on Hover */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-3.5 sm:p-4">
-                      <div className="flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-rose-600 to-red-600 text-white text-xs font-bold w-full shadow-xl shadow-rose-950/80 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                        <Play className="w-3.5 h-3.5 fill-white" />
-                        <span>Preview &amp; Watch</span>
-                      </div>
-                    </div>
+                    {/* Soft gradient overlay for subtle cinematic contrast */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-40 group-hover:opacity-0 transition-opacity duration-300" />
                   </div>
                 ))}
               </div>
