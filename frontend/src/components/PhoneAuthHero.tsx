@@ -30,6 +30,7 @@ import {
   Flame,
   Search,
   Globe,
+  Play,
 } from "lucide-react";
 
 export interface Country {
@@ -678,53 +679,86 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
           </div>
 
           {/* ========================================================================= */}
-          {/* SECTION 2: TRENDING NOW POSTER ROW (Auto-Rotating Posters Every 7 Seconds)  */}
+          {/* SECTION 2: TRENDING NOW POSTER ROW (Silky Smooth Carousel 7s Auto-Slide)  */}
           {/* ========================================================================= */}
-          <section className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-8 py-12 border-t border-slate-900">
-            <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center gap-2.5">
-                <Flame className="w-5 h-5 text-[#e50914]" />
-                <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
-                  Trending Now on CineVerse
-                </h2>
+          <section className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-8 py-14 border-t border-slate-900/80 overflow-hidden">
+            {/* Ambient Background Glow */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[250px] bg-rose-950/20 blur-[100px] pointer-events-none rounded-full" />
+
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-7 relative z-10">
+              <div className="flex items-center gap-3">
+                <div className="p-2.5 rounded-2xl bg-gradient-to-br from-red-600/25 to-rose-900/10 border border-red-500/30 text-[#e50914] shadow-lg shadow-red-950/40 backdrop-blur-md">
+                  <Flame className="w-5 h-5 text-[#e50914] animate-pulse" />
+                </div>
+                <div>
+                  <h2 className="text-xl sm:text-2xl lg:text-3xl font-black text-white tracking-tight flex items-center gap-2">
+                    Trending Now on CineVerse
+                  </h2>
+                  <p className="text-xs sm:text-sm text-slate-400 font-medium mt-0.5">
+                    India&apos;s most watched blockbusters • Streaming in 4K Ultra HD
+                  </p>
+                </div>
               </div>
-              <div className="flex items-center gap-2">
-                <span className="text-xs text-slate-400 mr-2 hidden sm:inline">Top 10 in India Today</span>
-                <button
-                  type="button"
-                  onClick={() => setTrendingOffset((prev) => (prev - 1 + posters.length) % posters.length)}
-                  className="p-1.5 rounded-full bg-slate-900 hover:bg-[#e50914] text-slate-400 hover:text-white border border-slate-800 transition-all cursor-pointer shadow-sm active:scale-95"
-                  title="Previous Trending"
-                >
-                  <ChevronLeft className="w-3.5 h-3.5" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setTrendingOffset((prev) => (prev + 1) % posters.length)}
-                  className="p-1.5 rounded-full bg-slate-900 hover:bg-[#e50914] text-slate-400 hover:text-white border border-slate-800 transition-all cursor-pointer shadow-sm active:scale-95"
-                  title="Next Trending"
-                >
-                  <ChevronRight className="w-3.5 h-3.5" />
-                </button>
+
+              {/* Navigation Arrows & Live Badge */}
+              <div className="flex items-center gap-2.5 self-end sm:self-center">
+                <span className="text-xs font-bold text-slate-400 bg-slate-900/90 border border-slate-800 px-3 py-1.5 rounded-full hidden md:inline-flex items-center gap-1.5 backdrop-blur-md">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  Top 10 Today
+                </span>
+                <div className="flex items-center gap-1.5 bg-slate-950/90 border border-slate-800/90 p-1 rounded-2xl backdrop-blur-md shadow-md">
+                  <button
+                    type="button"
+                    onClick={() => setTrendingOffset((prev) => (prev - 1 + posters.length) % posters.length)}
+                    className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-all cursor-pointer active:scale-90"
+                    title="Previous"
+                  >
+                    <ChevronLeft className="w-4 h-4" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setTrendingOffset((prev) => (prev + 1) % posters.length)}
+                    className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-[#e50914] transition-all cursor-pointer active:scale-90 shadow-sm"
+                    title="Next"
+                  >
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-              {visibleTrendingPosters.map((item, idx) => (
-                <div
-                  key={`${item.url}-${idx}`}
-                  onClick={() => setScreen("signin")}
-                  className="group relative aspect-[2/3] w-full rounded-2xl overflow-hidden bg-slate-900 border border-slate-800/90 hover:border-[#e50914] transition-all duration-500 hover:scale-105 cursor-pointer shadow-lg hover:shadow-red-950/40"
-                >
-                  <img
-                    src={item.url}
-                    alt="Trending Movie"
-                    className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-110"
-                    loading="lazy"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-50 group-hover:opacity-20 transition-opacity duration-300" />
-                </div>
-              ))}
+            {/* Smooth Carousel Container */}
+            <div className="relative overflow-hidden rounded-3xl p-1">
+              {/* Left & Right Soft Edge Shadow Vignettes */}
+              <div className="absolute left-0 inset-y-0 w-8 sm:w-16 bg-gradient-to-r from-black via-black/60 to-transparent z-10 pointer-events-none" />
+              <div className="absolute right-0 inset-y-0 w-8 sm:w-16 bg-gradient-to-l from-black via-black/60 to-transparent z-10 pointer-events-none" />
+
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4">
+                {visibleTrendingPosters.map((item, idx) => (
+                  <div
+                    key={`${item.url}-${idx}`}
+                    onClick={() => setScreen("signin")}
+                    className="group relative aspect-[2/3] w-full rounded-2xl overflow-hidden bg-slate-950 border border-slate-800/80 hover:border-rose-500/80 transition-all duration-500 hover:scale-[1.04] hover:-translate-y-2 cursor-pointer shadow-xl hover:shadow-2xl hover:shadow-rose-950/50 select-none"
+                  >
+                    <img
+                      src={item.url}
+                      alt="Trending Movie"
+                      className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-110"
+                      loading="lazy"
+                    />
+                    {/* Dark gradient for cinema depth */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent opacity-60 group-hover:opacity-20 transition-opacity duration-300" />
+
+                    {/* Interactive Watch Button on Hover */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-3.5 sm:p-4">
+                      <div className="flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-rose-600 to-red-600 text-white text-xs font-bold w-full shadow-xl shadow-rose-950/80 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                        <Play className="w-3.5 h-3.5 fill-white" />
+                        <span>Watch Now</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </section>
 
