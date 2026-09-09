@@ -170,8 +170,9 @@ export default function MovieDetailsPage() {
       return;
     }
 
-    if (!reviewComment.trim()) {
-      setReviewMessage("Please write a short comment for your review.");
+    const trimmedComment = reviewComment.trim();
+    if (trimmedComment.length < 10) {
+      setReviewMessage("⚠️ Review comment must be at least 10 characters long.");
       return;
     }
 
@@ -187,7 +188,7 @@ export default function MovieDetailsPage() {
         },
         body: JSON.stringify({
           rating: userRating,
-          comment: reviewComment.trim(),
+          comment: trimmedComment,
         }),
       });
 
@@ -512,8 +513,18 @@ export default function MovieDetailsPage() {
                 </h3>
 
                 {reviewMessage && (
-                  <div className="p-3 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs flex items-center gap-2">
-                    <AlertCircle className="w-4 h-4 shrink-0" />
+                  <div
+                    className={`p-3 rounded-xl text-xs flex items-center gap-2.5 transition-all ${
+                      reviewMessage.includes("successfully")
+                        ? "bg-emerald-500/10 border border-emerald-500/30 text-emerald-300"
+                        : "bg-rose-500/10 border border-rose-500/30 text-rose-300"
+                    }`}
+                  >
+                    {reviewMessage.includes("successfully") ? (
+                      <Check className="w-4 h-4 shrink-0 text-emerald-400" />
+                    ) : (
+                      <AlertCircle className="w-4 h-4 shrink-0 text-rose-400" />
+                    )}
                     <span>{reviewMessage}</span>
                   </div>
                 )}
@@ -549,18 +560,42 @@ export default function MovieDetailsPage() {
 
                   {/* Comment Input */}
                   <div className="space-y-1.5">
-                    <textarea
-                      rows={3}
-                      value={reviewComment}
-                      onChange={(e) => setReviewComment(e.target.value)}
-                      placeholder={
-                        isAuthenticated
-                          ? "Share your thoughts on the acting, plot, visuals, or soundtrack..."
-                          : "Please log in from the top right to write a review."
-                      }
-                      disabled={!isAuthenticated}
-                      className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-white text-sm focus:border-rose-500 focus:outline-none placeholder:text-slate-600 disabled:opacity-50"
-                    />
+                    <div className="relative">
+                      <textarea
+                        rows={4}
+                        maxLength={500}
+                        value={reviewComment}
+                        onChange={(e) => {
+                          let val = e.target.value;
+                          if (val.startsWith(" ")) val = val.trimStart();
+                          val = val.replace(/\s{2,}/g, " ");
+                          if (val.length <= 500) {
+                            setReviewComment(val);
+                            if (reviewMessage) setReviewMessage(null);
+                          }
+                        }}
+                        placeholder={
+                          isAuthenticated
+                            ? "Write your movie review here (e.g. story, acting, direction)..."
+                            : "Please log in from the top right to write a review."
+                        }
+                        disabled={!isAuthenticated}
+                        className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-white text-sm focus:border-rose-500 focus:outline-none placeholder:text-slate-500 disabled:opacity-50 transition-all resize-y"
+                      />
+                      {isAuthenticated && (
+                        <div className="absolute right-3 bottom-3 pointer-events-none text-[11px] font-mono text-slate-500">
+                          {reviewComment.trim().length} / 500
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Real-time character guide */}
+                    {isAuthenticated && reviewComment.length > 0 && reviewComment.trim().length < 10 && (
+                      <p className="text-[11px] text-amber-400/90 font-medium flex items-center gap-1">
+                        <span>ℹ️ Minimum 10 characters required</span>
+                        <span>({10 - reviewComment.trim().length} more needed)</span>
+                      </p>
+                    )}
                   </div>
 
                   <div className="flex items-center justify-between">
@@ -569,7 +604,7 @@ export default function MovieDetailsPage() {
                     </span>
                     <button
                       type="submit"
-                      disabled={!isAuthenticated || isSubmittingReview || !reviewComment.trim()}
+                      disabled={!isAuthenticated || isSubmittingReview || reviewComment.trim().length < 10}
                       className="px-5 py-2.5 rounded-xl bg-[#e50914] hover:bg-[#b80710] disabled:opacity-50 text-white font-bold text-xs sm:text-sm flex items-center gap-2 transition-all cursor-pointer shadow-lg shadow-red-950/50"
                     >
                       {isSubmittingReview ? (

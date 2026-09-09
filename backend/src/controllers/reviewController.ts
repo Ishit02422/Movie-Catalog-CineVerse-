@@ -76,8 +76,9 @@ export const addOrUpdateReview = async (
       throw new ApiError("Rating must be a number between 1 and 5 stars.", 400);
     }
 
-    if (!comment || String(comment).trim().length === 0) {
-      throw new ApiError("Please provide your review comment.", 400);
+    const cleanedComment = String(comment || "").trim().replace(/\s{2,}/g, " ");
+    if (!cleanedComment || cleanedComment.length < 10) {
+      throw new ApiError("Review comment must be at least 10 characters long.", 400);
     }
 
     const movie = await Movie.findById(movieId);
