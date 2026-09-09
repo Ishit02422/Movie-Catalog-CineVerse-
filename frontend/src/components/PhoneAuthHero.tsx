@@ -604,7 +604,13 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                         className="absolute left-2.5 top-1/2 -translate-y-1/2 flex items-center gap-1.5 px-2.5 py-1.5 rounded-md bg-slate-800/95 hover:bg-slate-700/95 border border-slate-600 hover:border-slate-400 text-xs sm:text-sm font-bold text-white transition-all cursor-pointer active:scale-95 z-10 shadow-sm group"
                         title="Click to change country"
                       >
-                        <span className="text-base">{selectedCountry.flag}</span>
+                        <span className="w-5 h-3.5 rounded-[2px] overflow-hidden shrink-0 shadow-sm border border-white/20 bg-slate-800 flex items-center justify-center">
+                          <img
+                            src={`https://flagcdn.com/w40/${selectedCountry.code.toLowerCase()}.png`}
+                            alt={selectedCountry.name}
+                            className="w-full h-full object-cover"
+                          />
+                        </span>
                         <span className="text-slate-200 font-mono tracking-wide">{selectedCountry.dialCode}</span>
                         <ChevronDown className="w-3.5 h-3.5 text-slate-400 group-hover:text-white transition-transform" />
                       </button>
@@ -1036,7 +1042,13 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                         className="absolute left-2.5 top-1/2 -translate-y-1/2 flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-800/95 hover:bg-slate-700/95 border border-slate-600 hover:border-slate-400 text-xs sm:text-sm font-bold text-white transition-all cursor-pointer active:scale-95 z-10 shadow-sm group"
                         title="Click to change country"
                       >
-                        <span className="text-base">{selectedCountry.flag}</span>
+                        <span className="w-5 h-3.5 rounded-[2px] overflow-hidden shrink-0 shadow-sm border border-white/20 bg-slate-800 flex items-center justify-center">
+                          <img
+                            src={`https://flagcdn.com/w40/${selectedCountry.code.toLowerCase()}.png`}
+                            alt={selectedCountry.name}
+                            className="w-full h-full object-cover"
+                          />
+                        </span>
                         <span className="text-slate-200 font-mono tracking-wide">{selectedCountry.dialCode}</span>
                         <ChevronDown className="w-3.5 h-3.5 text-slate-400 group-hover:text-white transition-transform" />
                       </button>
@@ -1493,7 +1505,14 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                       }`}
                     >
                       <div className="flex items-center gap-3">
-                        <span className="text-2xl">{c.flag}</span>
+                        <span className="w-7 h-5 rounded-[3px] overflow-hidden shrink-0 shadow-md border border-white/20 bg-slate-800 flex items-center justify-center">
+                          <img
+                            src={`https://flagcdn.com/w40/${c.code.toLowerCase()}.png`}
+                            alt={c.name}
+                            className="w-full h-full object-cover"
+                            loading="lazy"
+                          />
+                        </span>
                         <div>
                           <div className="text-sm font-semibold text-white">{c.name}</div>
                           <div className="text-xs text-slate-400 font-mono">{c.maxLength} digits format</div>
