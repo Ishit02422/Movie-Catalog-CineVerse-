@@ -219,10 +219,10 @@ export const sendPhoneOtp = async (
 
     if (isNum) {
       if (cleanPhone.length !== 10) {
-        throw new ApiError("Mobile number must be exactly 10 digits.", 400);
+        throw new ApiError("Indian mobile number must be exactly 10 digits.", 400);
       }
-      if (!/^[6-9]\d{9}$/.test(cleanPhone)) {
-        throw new ApiError("Please enter a valid 10-digit Indian mobile number starting with 6, 7, 8, or 9.", 400);
+      if (!/^[5-9]\d{9}$/.test(cleanPhone)) {
+        throw new ApiError("Please enter a valid 10-digit Indian mobile number starting with 5, 6, 7, 8, or 9.", 400);
       }
       cleanIdentifier = cleanPhone;
     } else {

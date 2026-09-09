@@ -137,13 +137,30 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
     ? sampleMovies.map((m) => m.image_url).filter(Boolean)
     : FALLBACK_POSTERS;
 
-  // Validation status for interactive button activation (only active when filled)
-  const isLandingInputFilled = identifier.trim().length > 0;
+  // Smart Indian Phone & Form validation
+  const isNumericPhone = /^\d/.test(identifier);
+  const isLandingInputFilled = isNumericPhone
+    ? identifier.length === 10
+    : identifier.trim().length > 0;
   const isScreen2Valid =
     authMode === "signin"
-      ? identifier.trim().length > 0
-      : identifier.trim().length > 0 && firstName.trim().length > 0 && surname.trim().length > 0;
+      ? (isNumericPhone ? identifier.length === 10 : identifier.trim().length > 0)
+      : (isNumericPhone ? identifier.length === 10 : identifier.trim().length > 0) &&
+        firstName.trim().length > 0 &&
+        surname.trim().length > 0;
   const isOtpValid = otpCode.trim().length === 6;
+
+  // Smart Input Sanitizer (Strict 10-Digit Capping for Indian Numbers)
+  const handleIdentifierChange = (raw: string) => {
+    const noSpaces = raw.replace(/\s+/g, "");
+    if (/^\d/.test(noSpaces)) {
+      const digitsOnly = noSpaces.replace(/\D/g, "").slice(0, 10);
+      setIdentifier(digitsOnly);
+    } else {
+      setIdentifier(noSpaces.slice(0, 50));
+    }
+    if (error) setError(null);
+  };
 
   // Strict Realistic Human Name Validator (Anti-spam & Anti-gibberish)
   const validateName = (raw: string, fieldLabel: "First Name" | "Last Name"): string | null => {
@@ -206,11 +223,11 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
 
     if (isNum) {
       if (cleanPhone.length !== 10) {
-        setError("Mobile number must be exactly 10 digits.");
+        setError("Indian mobile number must be exactly 10 digits.");
         return;
       }
-      if (!/^[6-9]\d{9}$/.test(cleanPhone)) {
-        setError("Please enter a valid Indian mobile number starting with 6, 7, 8, or 9.");
+      if (!/^[5-9]\d{9}$/.test(cleanPhone)) {
+        setError("Please enter a valid Indian mobile number starting with 5, 6, 7, 8, or 9.");
         return;
       }
       val = cleanPhone;
@@ -509,21 +526,26 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                   className="flex flex-col sm:flex-row items-center gap-2 sm:gap-2.5 w-full"
                 >
                   <div className="relative w-full sm:flex-1">
+                    {isNumericPhone && (
+                      <div className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-800/95 border border-slate-700 text-xs sm:text-sm font-bold text-white select-none pointer-events-none animate-in fade-in zoom-in-95 duration-150 z-10 shadow-sm">
+                        <span className="text-base">🇮🇳</span>
+                        <span className="text-slate-200 font-mono tracking-wide">+91</span>
+                      </div>
+                    )}
                     <input
                       type="text"
                       value={identifier}
-                      onChange={(e) => {
-                        const sanitized = e.target.value.replace(/\s+/g, "");
-                        setIdentifier(sanitized);
-                        if (error) setError(null);
-                      }}
+                      onChange={(e) => handleIdentifierChange(e.target.value)}
                       onKeyDown={(e) => {
                         if (e.key === " ") {
                           e.preventDefault();
                         }
                       }}
-                      placeholder="Email or mobile number"
-                      className="w-full px-4 py-3.5 sm:py-4 rounded-md bg-black/80 border border-slate-600 focus:border-white focus:ring-1 focus:ring-white text-white text-base placeholder:text-slate-400 outline-none backdrop-blur-md transition-all"
+                      maxLength={isNumericPhone ? 10 : 50}
+                      placeholder={isNumericPhone ? "Enter 10-digit mobile" : "Email or mobile number"}
+                      className={`w-full py-3.5 sm:py-4 rounded-md bg-black/80 border border-slate-600 focus:border-white focus:ring-1 focus:ring-white text-white text-base placeholder:text-slate-400 outline-none backdrop-blur-md transition-all font-medium ${
+                        isNumericPhone ? "pl-23 sm:pl-25 pr-4 tracking-wider font-mono text-base sm:text-lg" : "px-4"
+                      }`}
                     />
                   </div>
                   <button
@@ -666,22 +688,29 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                 Ready to watch? Enter your email or mobile number to create or restart your membership.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-2 max-w-lg mx-auto">
-                <input
-                  type="text"
-                  value={identifier}
-                  onChange={(e) => {
-                    const sanitized = e.target.value.replace(/\s+/g, "");
-                    setIdentifier(sanitized);
-                    if (error) setError(null);
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === " ") {
-                      e.preventDefault();
-                    }
-                  }}
-                  placeholder="Email or mobile number"
-                  className="w-full px-4 py-3.5 rounded-md bg-slate-900 border border-slate-700 text-white text-sm focus:border-white focus:outline-none"
-                />
+                <div className="relative w-full sm:flex-1">
+                  {isNumericPhone && (
+                    <div className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-800/95 border border-slate-700 text-xs sm:text-sm font-bold text-white select-none pointer-events-none animate-in fade-in zoom-in-95 duration-150 z-10 shadow-sm">
+                      <span className="text-base">🇮🇳</span>
+                      <span className="text-slate-200 font-mono tracking-wide">+91</span>
+                    </div>
+                  )}
+                  <input
+                    type="text"
+                    value={identifier}
+                    onChange={(e) => handleIdentifierChange(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === " ") {
+                        e.preventDefault();
+                      }
+                    }}
+                    maxLength={isNumericPhone ? 10 : 50}
+                    placeholder={isNumericPhone ? "Enter 10-digit mobile" : "Email or mobile number"}
+                    className={`w-full py-3.5 rounded-md bg-slate-900 border border-slate-700 text-white text-sm focus:border-white focus:outline-none transition-all font-medium ${
+                      isNumericPhone ? "pl-23 sm:pl-25 pr-4 tracking-wider font-mono text-sm sm:text-base" : "px-4"
+                    }`}
+                  />
+                </div>
                 <button
                   type="button"
                   onClick={handleContinue}
@@ -912,27 +941,36 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                   {authMode === "register" && (
                     <label className="text-xs font-semibold text-slate-300">Email or Mobile Number *</label>
                   )}
-                  <input
-                    type="text"
-                    value={identifier}
-                    onChange={(e) => {
-                      const sanitized = e.target.value.replace(/\s+/g, "");
-                      setIdentifier(sanitized);
-                      if (error) setError(null);
-                    }}
-                    onKeyDown={(e) => {
-                      if (e.key === " ") {
-                        e.preventDefault();
+                  <div className="relative w-full">
+                    {isNumericPhone && (
+                      <div className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-800/95 border border-slate-700 text-xs sm:text-sm font-bold text-white select-none pointer-events-none animate-in fade-in zoom-in-95 duration-150 z-10 shadow-sm">
+                        <span className="text-base">🇮🇳</span>
+                        <span className="text-slate-200 font-mono tracking-wide">+91</span>
+                      </div>
+                    )}
+                    <input
+                      type="text"
+                      value={identifier}
+                      onChange={(e) => handleIdentifierChange(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === " ") {
+                          e.preventDefault();
+                        }
+                      }}
+                      maxLength={isNumericPhone ? 10 : 50}
+                      placeholder={
+                        isNumericPhone
+                          ? "Enter 10-digit mobile number"
+                          : authMode === "signin"
+                          ? "Email or mobile number"
+                          : "Enter your email or 10-digit mobile"
                       }
-                    }}
-                    placeholder={
-                      authMode === "signin"
-                        ? "Email or mobile number"
-                        : "Enter your email or 10-digit mobile"
-                    }
-                    className="w-full px-4 py-3.5 rounded-xl bg-slate-900/90 border border-slate-700 focus:border-rose-500 focus:ring-2 focus:ring-rose-500/30 text-white text-base placeholder:text-slate-400 outline-none transition-all font-medium"
-                    autoFocus={authMode === "signin"}
-                  />
+                      className={`w-full py-3.5 rounded-xl bg-slate-900/90 border border-slate-700 focus:border-rose-500 focus:ring-2 focus:ring-rose-500/30 text-white text-base placeholder:text-slate-400 outline-none transition-all font-medium ${
+                        isNumericPhone ? "pl-23 sm:pl-25 pr-4 tracking-wider font-mono text-base sm:text-lg" : "px-4"
+                      }`}
+                      autoFocus={authMode === "signin"}
+                    />
+                  </div>
                 </div>
 
                 <button
