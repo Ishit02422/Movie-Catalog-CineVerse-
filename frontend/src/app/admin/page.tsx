@@ -1432,112 +1432,128 @@ export default function AdminPage() {
       {/* ========================================================================= */}
       {/* ADD MOVIE MODAL (With Live Cinema Poster Preview) */}
       {/* ========================================================================= */}
+      {/* ========================================================================= */}
+      {/* ADD MOVIE MODAL (With Live Cinema Poster Preview) */}
+      {/* ========================================================================= */}
       {isAddModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-xl animate-fadeIn">
-          <div className="w-full max-w-3xl bg-[#0c101a] border border-white/[0.1] rounded-3xl p-6 sm:p-8 shadow-[0_25px_80px_rgba(0,0,0,0.9)] max-h-[90vh] overflow-y-auto custom-scrollbar">
-            <div className="flex items-center justify-between pb-4 border-b border-white/[0.08] mb-6">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#e50914] to-rose-700 flex items-center justify-center text-white shadow-lg shadow-rose-950/60">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-2xl animate-fadeIn">
+          <div className="w-full max-w-4xl bg-[#090d16]/98 border border-white/[0.1] rounded-3xl p-6 sm:p-8 shadow-[0_30px_90px_rgba(0,0,0,0.95)] max-h-[92vh] overflow-y-auto custom-scrollbar">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between pb-5 border-b border-white/[0.08] mb-6">
+              <div className="flex items-center gap-3.5">
+                <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-[#e50914] to-rose-700 flex items-center justify-center text-white shadow-lg shadow-rose-950/60 ring-1 ring-white/20">
                   <Plus className="w-5 h-5 stroke-[3]" />
                 </div>
                 <div>
-                  <h2 className="text-xl font-black text-white tracking-tight">Add New Movie</h2>
-                  <p className="text-xs text-slate-400">Publish a new blockbuster to CineVerse catalog</p>
+                  <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">Add New Movie</h2>
+                  <p className="text-xs text-slate-400 mt-0.5">Publish a new blockbuster to CineVerse catalog</p>
                 </div>
               </div>
               <button
                 onClick={() => setIsAddModalOpen(false)}
-                className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+                className="w-9 h-9 rounded-xl bg-white/[0.04] hover:bg-white/[0.1] border border-white/[0.08] text-slate-400 hover:text-white transition-all flex items-center justify-center cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             {formError && (
-              <div className="mb-5 p-3.5 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs flex items-center gap-2.5">
-                <AlertTriangle className="w-4 h-4 shrink-0" />
-                <span>{formError}</span>
+              <div className="mb-6 p-4 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs flex items-center gap-3">
+                <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0" />
+                <span className="font-medium">{formError}</span>
               </div>
             )}
 
-            <form onSubmit={handleAddSubmit} className="space-y-5">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="md:col-span-2 space-y-4">
+            <form onSubmit={handleAddSubmit} className="space-y-6">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-7 items-start">
+                {/* Left Column: Form Fields */}
+                <div className="lg:col-span-7 space-y-4">
+                  {/* Title Field */}
                   <div>
-                    <label className="block text-xs font-bold text-slate-300 mb-1.5">
-                      Movie Title *
+                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
+                      Movie Title <span className="text-[#e50914]">*</span>
                     </label>
                     <input
                       type="text"
                       required
                       value={formData.title}
                       onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                      placeholder="e.g. Inception"
-                      className="w-full bg-black/60 border border-white/[0.1] rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-[#e50914] transition-all"
+                      placeholder="e.g. Inception, Interstellar, The Dark Knight"
+                      className="w-full bg-[#050811] border border-white/[0.1] hover:border-white/[0.18] focus:border-[#e50914] focus:ring-2 focus:ring-[#e50914]/20 rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-slate-500 transition-all font-medium"
                     />
                   </div>
 
+                  {/* 3 Columns: Genre, Year, Status */}
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     <div>
-                      <label className="block text-xs font-bold text-slate-300 mb-1.5">
-                        Genre *
+                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
+                        Genre <span className="text-[#e50914]">*</span>
                       </label>
                       <select
                         required
                         value={formData.genre}
                         onChange={(e) => setFormData({ ...formData, genre: e.target.value })}
-                        className="w-full bg-black/60 border border-white/[0.1] rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-[#e50914] transition-all font-semibold cursor-pointer"
+                        className="w-full bg-[#050811] border border-white/[0.1] hover:border-white/[0.18] focus:border-[#e50914] focus:ring-2 focus:ring-[#e50914]/20 rounded-xl px-3 py-2.5 text-xs text-white transition-all font-medium cursor-pointer"
                       >
                         {formData.genre && !genreCategories.some((c) => c.name.toLowerCase() === formData.genre.toLowerCase()) && (
-                          <option value={formData.genre} className="bg-[#0c101a] text-white font-medium">
+                          <option value={formData.genre} className="bg-[#090d16] text-white">
                             📁 {formData.genre}
                           </option>
                         )}
                         {genreCategories.map((cat) => (
-                          <option key={cat.id} value={cat.name} className="bg-[#0c101a] text-white font-medium">
+                          <option key={cat.id} value={cat.name} className="bg-[#090d16] text-white">
                             {cat.icon} {cat.name}
                           </option>
                         ))}
                       </select>
                     </div>
+
                     <div>
-                      <label className="block text-xs font-bold text-slate-300 mb-1.5">
-                        Release Year *
+                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
+                        Release Year <span className="text-[#e50914]">*</span>
                       </label>
                       <select
                         required
                         value={formData.release_year}
                         onChange={(e) => setFormData({ ...formData, release_year: Number(e.target.value) })}
-                        className="w-full bg-black/60 border border-white/[0.1] rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-[#e50914] transition-all font-semibold cursor-pointer"
+                        className="w-full bg-[#050811] border border-white/[0.1] hover:border-white/[0.18] focus:border-[#e50914] focus:ring-2 focus:ring-[#e50914]/20 rounded-xl px-3 py-2.5 text-xs text-white transition-all font-medium cursor-pointer"
                       >
                         {releaseYearsList.map((yr) => (
-                          <option key={yr} value={yr} className="bg-[#0c101a] text-white font-medium">
+                          <option key={yr} value={yr} className="bg-[#090d16] text-white">
                             {yr}
                           </option>
                         ))}
                       </select>
                     </div>
+
                     <div>
-                      <label className="block text-xs font-bold text-slate-300 mb-1.5">
-                        Visibility Status *
+                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
+                        Visibility <span className="text-[#e50914]">*</span>
                       </label>
                       <select
                         value={formData.status}
                         onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                        className="w-full bg-black/60 border border-white/[0.1] rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-[#e50914] transition-all font-semibold cursor-pointer"
+                        className="w-full bg-[#050811] border border-white/[0.1] hover:border-white/[0.18] focus:border-[#e50914] focus:ring-2 focus:ring-[#e50914]/20 rounded-xl px-3 py-2.5 text-xs text-white transition-all font-medium cursor-pointer"
                       >
-                        <option value="active" className="bg-[#0c101a] text-emerald-400 font-bold">🟢 Active (Live)</option>
-                        <option value="hidden" className="bg-[#0c101a] text-purple-300 font-bold">👁️ Hidden (Private)</option>
-                        <option value="under_review" className="bg-[#0c101a] text-amber-400 font-bold">🟡 Under Review</option>
-                        <option value="removed" className="bg-[#0c101a] text-rose-400 font-bold">🔴 Removed</option>
+                        <option value="active" className="bg-[#090d16] text-emerald-400 font-bold">🟢 Active (Live)</option>
+                        <option value="hidden" className="bg-[#090d16] text-purple-300 font-bold">👁️ Hidden</option>
+                        <option value="under_review" className="bg-[#090d16] text-amber-400 font-bold">🟡 Under Review</option>
+                        <option value="removed" className="bg-[#090d16] text-rose-400 font-bold">🔴 Removed</option>
                       </select>
                     </div>
                   </div>
 
-                  <div>
-                    <label className="block text-xs font-bold text-slate-300 mb-1.5">
-                      Rating: <span className="text-amber-400 font-extrabold">{formData.rating} ★</span>
-                    </label>
+                  {/* Rating Slider Box */}
+                  <div className="p-4 rounded-2xl bg-[#050811]/90 border border-white/[0.08] space-y-2.5">
+                    <div className="flex items-center justify-between">
+                      <label className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
+                        <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
+                        <span>Rating Score</span>
+                      </label>
+                      <span className="bg-amber-500/10 border border-amber-500/25 text-amber-400 px-3 py-1 rounded-full text-xs font-black flex items-center gap-1">
+                        {formData.rating.toFixed(1)} ★
+                      </span>
+                    </div>
                     <input
                       type="range"
                       min={0}
@@ -1545,16 +1561,22 @@ export default function AdminPage() {
                       step={0.1}
                       value={formData.rating}
                       onChange={(e) => setFormData({ ...formData, rating: Number(e.target.value) })}
-                      className="w-full accent-[#e50914] cursor-pointer"
+                      className="w-full accent-[#e50914] h-2 bg-slate-800 rounded-lg cursor-pointer transition-all"
                     />
+                    <div className="flex justify-between text-[10px] text-slate-500 font-medium px-0.5">
+                      <span>0.0</span>
+                      <span>5.0 (Avg)</span>
+                      <span>7.5 (Good)</span>
+                      <span className="text-amber-400/90 font-bold">9.0+ (Masterpiece)</span>
+                    </div>
                   </div>
 
-                  {/* Poster Image Section with Pure File Upload & Quick Presets */}
-                  <div className="space-y-3 p-3.5 rounded-2xl bg-white/[0.03] border border-white/[0.08]">
+                  {/* Poster Image Upload */}
+                  <div className="p-4 rounded-2xl bg-[#050811]/90 border border-white/[0.08] space-y-3">
                     <div className="flex items-center justify-between">
-                      <label className="text-xs font-bold text-slate-200 flex items-center gap-1.5">
-                        <ImageIcon className="w-4 h-4 text-[#e50914]" />
-                        <span>Poster Image *</span>
+                      <label className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
+                        <ImageIcon className="w-3.5 h-3.5 text-[#e50914]" />
+                        <span>Poster Image <span className="text-[#e50914]">*</span></span>
                       </label>
                       {formData.image_url && (
                         <span className="text-[11px] font-bold text-emerald-400 flex items-center gap-1 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20">
@@ -1563,12 +1585,11 @@ export default function AdminPage() {
                       )}
                     </div>
 
-                    {/* Dedicated Clickable File Upload Area */}
                     <label
-                      className={`group relative flex flex-col items-center justify-center p-4 rounded-xl border-2 border-dashed transition-all cursor-pointer ${
+                      className={`group relative flex items-center gap-3.5 p-4 rounded-xl border-2 border-dashed transition-all cursor-pointer ${
                         formData.image_url
-                          ? "border-emerald-500/40 bg-emerald-950/10 hover:border-emerald-500/60"
-                          : "border-white/20 bg-black/40 hover:border-[#e50914] hover:bg-rose-950/10"
+                          ? "border-emerald-500/35 bg-emerald-500/[0.03] hover:border-emerald-500/60"
+                          : "border-white/[0.12] bg-white/[0.02] hover:border-[#e50914] hover:bg-[#e50914]/[0.04]"
                       }`}
                     >
                       <input
@@ -1578,30 +1599,27 @@ export default function AdminPage() {
                         className="hidden"
                         disabled={isUploadingImage}
                       />
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-white/10 group-hover:bg-[#e50914]/20 flex items-center justify-center text-white group-hover:text-[#e50914] transition-all">
-                          {isUploadingImage ? (
-                            <Loader2 className="w-5 h-5 animate-spin text-[#e50914]" />
-                          ) : (
-                            <Upload className="w-5 h-5" />
-                          )}
-                        </div>
-                        <div>
-                          <p className="text-xs font-bold text-white group-hover:text-rose-400 transition-colors">
-                            {isUploadingImage
-                              ? "Optimizing & Processing Image..."
-                              : formData.image_url
-                              ? "📁 Click to Choose / Change Poster from Device"
-                              : "📁 Click to Upload Poster from Device"}
-                          </p>
-                          <p className="text-[11px] text-slate-400">
-                            Supports PNG, JPG, JPEG, WEBP (Auto-optimized)
-                          </p>
-                        </div>
+                      <div className="w-10 h-10 rounded-xl bg-white/[0.06] group-hover:bg-[#e50914]/20 group-hover:text-[#e50914] text-slate-300 flex items-center justify-center transition-all shrink-0">
+                        {isUploadingImage ? (
+                          <Loader2 className="w-5 h-5 animate-spin text-[#e50914]" />
+                        ) : (
+                          <Upload className="w-5 h-5" />
+                        )}
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-xs font-bold text-white group-hover:text-rose-300 transition-colors truncate">
+                          {isUploadingImage
+                            ? "Optimizing & Processing Image..."
+                            : formData.image_url
+                            ? "Click to Choose / Change Poster"
+                            : "Click to Upload Poster from Device"}
+                        </p>
+                        <p className="text-[11px] text-slate-400 mt-0.5">
+                          Supports PNG, JPG, JPEG, WEBP (Auto-optimized)
+                        </p>
                       </div>
                     </label>
 
-                    {/* Remove button if image is selected */}
                     {formData.image_url && (
                       <div className="flex justify-end">
                         <button
@@ -1610,35 +1628,55 @@ export default function AdminPage() {
                             setFormData((prev) => ({ ...prev, image_url: "" }));
                             setImagePreviewStatus("idle");
                           }}
-                          className="text-[11px] font-semibold text-rose-400 hover:text-rose-300 flex items-center gap-1 hover:underline cursor-pointer"
+                          className="text-xs font-semibold text-rose-400 hover:text-rose-300 flex items-center gap-1 hover:underline cursor-pointer transition-colors"
                         >
-                          <X className="w-3 h-3" /> Remove poster
+                          <X className="w-3.5 h-3.5" /> Remove poster
                         </button>
                       </div>
                     )}
                   </div>
 
+                  {/* Synopsis Field */}
                   <div>
-                    <label className="block text-xs font-bold text-slate-300 mb-1.5">
-                      Synopsis / Description *
+                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
+                      Synopsis / Storyline <span className="text-[#e50914]">*</span>
                     </label>
                     <textarea
                       rows={3}
                       required
                       value={formData.description}
                       onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                      placeholder="Write a captivating plot description..."
-                      className="w-full bg-black/60 border border-white/[0.1] rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-[#e50914] transition-all resize-none"
+                      placeholder="Write a captivating plot description for CineVerse audience..."
+                      className="w-full bg-[#050811] border border-white/[0.1] hover:border-white/[0.18] focus:border-[#e50914] focus:ring-2 focus:ring-[#e50914]/20 rounded-xl px-4 py-3 text-xs text-slate-200 placeholder:text-slate-500 transition-all resize-none leading-relaxed custom-scrollbar"
                     />
                   </div>
                 </div>
 
-                {/* Live Cinema Poster Preview */}
-                <div className="flex flex-col items-center justify-center p-4 rounded-2xl bg-black/40 border border-white/[0.08]">
-                  <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-3">
-                    Live Poster Preview
-                  </p>
-                  <div className="w-36 aspect-[2/3] rounded-xl bg-black overflow-hidden border border-white/15 shadow-xl relative group">
+                {/* Right Column: Live Poster Studio Preview */}
+                <div className="lg:col-span-5 rounded-2xl bg-[#050811]/90 border border-white/[0.08] p-5 flex flex-col items-center justify-between gap-5 h-full">
+                  <div className="w-full flex items-center justify-between pb-3 border-b border-white/[0.06]">
+                    <p className="text-[11px] font-bold uppercase tracking-widest text-slate-400 flex items-center gap-1.5">
+                      <Film className="w-3.5 h-3.5 text-[#e50914]" /> Live Cinema Preview
+                    </p>
+                    {formData.image_url ? (
+                      imagePreviewStatus === "valid" ? (
+                        <span className="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-md flex items-center gap-1">
+                          <CheckCircle className="w-3 h-3" /> Ready
+                        </span>
+                      ) : imagePreviewStatus === "error" ? (
+                        <span className="text-[10px] font-bold text-rose-400 bg-rose-500/10 border border-rose-500/20 px-2 py-0.5 rounded-md flex items-center gap-1">
+                          <AlertTriangle className="w-3 h-3" /> Error
+                        </span>
+                      ) : (
+                        <span className="text-[10px] text-slate-400 bg-white/[0.04] px-2 py-0.5 rounded-md">Loading</span>
+                      )
+                    ) : (
+                      <span className="text-[10px] font-medium text-slate-500 bg-white/[0.04] px-2 py-0.5 rounded-md">Empty</span>
+                    )}
+                  </div>
+
+                  {/* Poster Preview Frame */}
+                  <div className="w-44 sm:w-48 aspect-[2/3] rounded-2xl bg-black overflow-hidden border-2 border-white/[0.12] shadow-[0_20px_50px_rgba(0,0,0,0.85)] relative group transition-all">
                     {formData.image_url ? (
                       <>
                         <img
@@ -1653,76 +1691,80 @@ export default function AdminPage() {
                             setImagePreviewStatus("error");
                           }}
                         />
-                        {/* Status Overlay Badge */}
-                        <div className="absolute top-2 right-2">
-                          {imagePreviewStatus === "valid" && (
-                            <span className="flex items-center gap-1 px-2 py-0.5 rounded-md bg-emerald-500/90 text-slate-950 text-[10px] font-black shadow backdrop-blur-sm">
-                              <Check className="w-3 h-3 stroke-[3]" /> OK
-                            </span>
-                          )}
-                          {imagePreviewStatus === "error" && (
-                            <span className="flex items-center gap-1 px-2 py-0.5 rounded-md bg-rose-500 text-white text-[10px] font-black shadow">
-                              <X className="w-3 h-3 stroke-[3]" /> Error
-                            </span>
-                          )}
+                        {/* Status Overlay Badges */}
+                        <div className="absolute top-2.5 left-2.5 pointer-events-none">
+                          <span className="px-2 py-0.5 rounded-md bg-black/75 backdrop-blur-md text-white text-[10px] font-bold border border-white/10 shadow">
+                            {formData.genre || "Cinema"}
+                          </span>
+                        </div>
+                        <div className="absolute top-2.5 right-2.5 pointer-events-none">
+                          <span className="px-2 py-0.5 rounded-md bg-amber-500 text-slate-950 text-[10px] font-black shadow flex items-center gap-0.5">
+                            {formData.rating.toFixed(1)} ★
+                          </span>
+                        </div>
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
+                        <div className="absolute bottom-2.5 left-2.5 right-2.5 pointer-events-none">
+                          <p className="text-white text-xs font-bold truncate drop-shadow">{formData.title || "Movie Title"}</p>
+                          <p className="text-slate-300 text-[10px] drop-shadow">{formData.release_year}</p>
                         </div>
                       </>
                     ) : (
-                      <div className="w-full h-full flex flex-col items-center justify-center p-3 text-center text-slate-600">
-                        <Film className="w-6 h-6 mb-1" />
-                        <span className="text-[10px]">Enter URL or Upload to Preview</span>
+                      <div className="w-full h-full flex flex-col items-center justify-center p-4 text-center text-slate-500 space-y-2">
+                        <div className="w-12 h-12 rounded-2xl bg-white/[0.04] flex items-center justify-center text-slate-600">
+                          <Film className="w-6 h-6" />
+                        </div>
+                        <p className="text-xs font-bold text-slate-400">No Poster Uploaded</p>
+                        <p className="text-[10px] text-slate-500 leading-tight">Upload an image on the left to see live preview</p>
                       </div>
                     )}
                   </div>
 
-                  {/* Status Indicator */}
-                  <div className="mt-2 text-center">
-                    {formData.image_url ? (
-                      imagePreviewStatus === "valid" ? (
-                        <span className="text-[11px] font-bold text-emerald-400 flex items-center gap-1 justify-center">
-                          <CheckCircle className="w-3.5 h-3.5" /> Poster Ready
-                        </span>
-                      ) : imagePreviewStatus === "error" ? (
-                        <span className="text-[11px] font-bold text-rose-400 flex items-center gap-1 justify-center">
-                          <AlertTriangle className="w-3.5 h-3.5" /> Link not working
-                        </span>
-                      ) : (
-                        <span className="text-[11px] font-medium text-slate-400">Loading preview...</span>
-                      )
-                    ) : (
-                      <span className="text-[11px] text-slate-500">No image chosen</span>
-                    )}
-                  </div>
-
-                  <div className="mt-4 w-full">
-                    <label className="flex items-center gap-2 p-2.5 rounded-xl bg-white/[0.04] border border-white/[0.08] cursor-pointer hover:bg-white/[0.07] transition-colors">
-                      <input
-                        type="checkbox"
-                        checked={formData.is_featured}
-                        onChange={(e) => setFormData({ ...formData, is_featured: e.target.checked })}
-                        className="w-4 h-4 accent-[#e50914] rounded cursor-pointer"
+                  {/* Hero Banner Feature Switch */}
+                  <div
+                    onClick={() => setFormData({ ...formData, is_featured: !formData.is_featured })}
+                    className="w-full p-3.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.08] transition-all cursor-pointer flex items-center justify-between group"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 shrink-0">
+                        <Star className={`w-4 h-4 ${formData.is_featured ? "fill-amber-400" : ""}`} />
+                      </div>
+                      <div>
+                        <p className="text-xs font-bold text-slate-200 group-hover:text-white transition-colors">
+                          Hero Banner Feature
+                        </p>
+                        <p className="text-[10px] text-slate-400">
+                          Pin movie on top homepage carousel
+                        </p>
+                      </div>
+                    </div>
+                    <div
+                      className={`w-9 h-5 rounded-full p-0.5 transition-colors relative flex items-center ${
+                        formData.is_featured ? "bg-[#e50914]" : "bg-slate-700"
+                      }`}
+                    >
+                      <div
+                        className={`w-4 h-4 rounded-full bg-white transition-transform ${
+                          formData.is_featured ? "translate-x-4" : "translate-x-0"
+                        }`}
                       />
-                      <span className="text-xs font-bold text-slate-200 flex items-center gap-1">
-                        <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
-                        <span>Hero Banner Feature</span>
-                      </span>
-                    </label>
+                    </div>
                   </div>
                 </div>
               </div>
 
-              <div className="flex items-center justify-end gap-3 pt-4 border-t border-white/[0.08]">
+              {/* Modal Actions */}
+              <div className="flex items-center justify-end gap-3 pt-5 border-t border-white/[0.08] mt-2">
                 <button
                   type="button"
                   onClick={() => setIsAddModalOpen(false)}
-                  className="px-5 py-2.5 rounded-xl text-xs font-bold text-slate-400 hover:text-white bg-white/5 hover:bg-white/10 transition-colors cursor-pointer"
+                  className="px-5 py-2.5 rounded-xl text-xs font-bold text-slate-300 hover:text-white bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] transition-all cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={formSubmitting}
-                  className="px-6 py-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-[#e50914] to-rose-600 hover:from-rose-600 hover:to-rose-700 shadow-lg shadow-rose-950/60 transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
+                  className="px-6 py-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-[#e50914] via-rose-600 to-rose-700 hover:from-rose-600 hover:to-rose-800 shadow-lg shadow-rose-950/60 transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
                 >
                   {formSubmitting ? (
                     <>
@@ -1743,110 +1785,127 @@ export default function AdminPage() {
       {/* EDIT MOVIE MODAL */}
       {/* ========================================================================= */}
       {isEditModalOpen && activeMovie && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-xl animate-fadeIn">
-          <div className="w-full max-w-3xl bg-[#0c101a] border border-white/[0.1] rounded-3xl p-6 sm:p-8 shadow-[0_25px_80px_rgba(0,0,0,0.9)] max-h-[90vh] overflow-y-auto custom-scrollbar">
-            <div className="flex items-center justify-between pb-4 border-b border-white/[0.08] mb-6">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-rose-600 to-rose-800 flex items-center justify-center text-white shadow-lg shadow-rose-950/60">
-                  <Edit2 className="w-5 h-5" />
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-2xl animate-fadeIn">
+          <div className="w-full max-w-4xl bg-[#090d16]/98 border border-white/[0.1] rounded-3xl p-6 sm:p-8 shadow-[0_30px_90px_rgba(0,0,0,0.95)] max-h-[92vh] overflow-y-auto custom-scrollbar">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between pb-5 border-b border-white/[0.08] mb-6">
+              <div className="flex items-center gap-3.5">
+                <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-[#e50914] to-rose-700 flex items-center justify-center text-white shadow-lg shadow-rose-950/60 ring-1 ring-white/20">
+                  <Edit2 className="w-5 h-5 stroke-[2.5]" />
                 </div>
                 <div>
-                  <h2 className="text-xl font-black text-white tracking-tight">Edit Movie Details</h2>
-                  <p className="text-xs text-slate-400">Modifying: <span className="text-white font-bold">{activeMovie.title}</span></p>
+                  <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">Edit Movie Details</h2>
+                  <p className="text-xs text-slate-400 mt-0.5 flex items-center gap-1.5">
+                    <span>Modifying:</span>
+                    <span className="bg-white/[0.06] text-rose-300 px-2 py-0.5 rounded-md border border-white/[0.08] font-bold text-xs">{activeMovie.title}</span>
+                  </p>
                 </div>
               </div>
               <button
                 onClick={() => setIsEditModalOpen(false)}
-                className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+                className="w-9 h-9 rounded-xl bg-white/[0.04] hover:bg-white/[0.1] border border-white/[0.08] text-slate-400 hover:text-white transition-all flex items-center justify-center cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             {formError && (
-              <div className="mb-5 p-3.5 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs flex items-center gap-2.5">
-                <AlertTriangle className="w-4 h-4 shrink-0" />
-                <span>{formError}</span>
+              <div className="mb-6 p-4 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs flex items-center gap-3">
+                <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0" />
+                <span className="font-medium">{formError}</span>
               </div>
             )}
 
-            <form onSubmit={handleEditSubmit} className="space-y-5">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="md:col-span-2 space-y-4">
+            <form onSubmit={handleEditSubmit} className="space-y-6">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-7 items-start">
+                {/* Left Column: Form Fields */}
+                <div className="lg:col-span-7 space-y-4">
+                  {/* Title Field */}
                   <div>
-                    <label className="block text-xs font-bold text-slate-300 mb-1.5">
-                      Movie Title *
+                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
+                      Movie Title <span className="text-[#e50914]">*</span>
                     </label>
                     <input
                       type="text"
                       required
                       value={formData.title}
                       onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                      className="w-full bg-black/60 border border-white/[0.1] rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-[#e50914] transition-all"
+                      placeholder="e.g. The Godfather"
+                      className="w-full bg-[#050811] border border-white/[0.1] hover:border-white/[0.18] focus:border-[#e50914] focus:ring-2 focus:ring-[#e50914]/20 rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-slate-500 transition-all font-medium"
                     />
                   </div>
 
+                  {/* 3 Columns: Genre, Year, Status */}
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     <div>
-                      <label className="block text-xs font-bold text-slate-300 mb-1.5">
-                        Genre *
+                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
+                        Genre <span className="text-[#e50914]">*</span>
                       </label>
                       <select
                         required
                         value={formData.genre}
                         onChange={(e) => setFormData({ ...formData, genre: e.target.value })}
-                        className="w-full bg-black/60 border border-white/[0.1] rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-[#e50914] transition-all font-semibold cursor-pointer"
+                        className="w-full bg-[#050811] border border-white/[0.1] hover:border-white/[0.18] focus:border-[#e50914] focus:ring-2 focus:ring-[#e50914]/20 rounded-xl px-3 py-2.5 text-xs text-white transition-all font-medium cursor-pointer"
                       >
                         {formData.genre && !genreCategories.some((c) => c.name.toLowerCase() === formData.genre.toLowerCase()) && (
-                          <option value={formData.genre} className="bg-[#0c101a] text-white font-medium">
+                          <option value={formData.genre} className="bg-[#090d16] text-white">
                             📁 {formData.genre}
                           </option>
                         )}
                         {genreCategories.map((cat) => (
-                          <option key={cat.id} value={cat.name} className="bg-[#0c101a] text-white font-medium">
+                          <option key={cat.id} value={cat.name} className="bg-[#090d16] text-white">
                             {cat.icon} {cat.name}
                           </option>
                         ))}
                       </select>
                     </div>
+
                     <div>
-                      <label className="block text-xs font-bold text-slate-300 mb-1.5">
-                        Release Year *
+                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
+                        Release Year <span className="text-[#e50914]">*</span>
                       </label>
                       <select
                         required
                         value={formData.release_year}
                         onChange={(e) => setFormData({ ...formData, release_year: Number(e.target.value) })}
-                        className="w-full bg-black/60 border border-white/[0.1] rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-[#e50914] transition-all font-semibold cursor-pointer"
+                        className="w-full bg-[#050811] border border-white/[0.1] hover:border-white/[0.18] focus:border-[#e50914] focus:ring-2 focus:ring-[#e50914]/20 rounded-xl px-3 py-2.5 text-xs text-white transition-all font-medium cursor-pointer"
                       >
                         {releaseYearsList.map((yr) => (
-                          <option key={yr} value={yr} className="bg-[#0c101a] text-white font-medium">
+                          <option key={yr} value={yr} className="bg-[#090d16] text-white">
                             {yr}
                           </option>
                         ))}
                       </select>
                     </div>
+
                     <div>
-                      <label className="block text-xs font-bold text-slate-300 mb-1.5">
-                        Visibility Status *
+                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
+                        Visibility <span className="text-[#e50914]">*</span>
                       </label>
                       <select
                         value={formData.status}
                         onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                        className="w-full bg-black/60 border border-white/[0.1] rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-[#e50914] transition-all font-semibold cursor-pointer"
+                        className="w-full bg-[#050811] border border-white/[0.1] hover:border-white/[0.18] focus:border-[#e50914] focus:ring-2 focus:ring-[#e50914]/20 rounded-xl px-3 py-2.5 text-xs text-white transition-all font-medium cursor-pointer"
                       >
-                        <option value="active" className="bg-[#0c101a] text-emerald-400 font-bold">🟢 Active (Live)</option>
-                        <option value="hidden" className="bg-[#0c101a] text-purple-300 font-bold">👁️ Hidden (Private)</option>
-                        <option value="under_review" className="bg-[#0c101a] text-amber-400 font-bold">🟡 Under Review</option>
-                        <option value="removed" className="bg-[#0c101a] text-rose-400 font-bold">🔴 Removed</option>
+                        <option value="active" className="bg-[#090d16] text-emerald-400 font-bold">🟢 Active (Live)</option>
+                        <option value="hidden" className="bg-[#090d16] text-purple-300 font-bold">👁️ Hidden</option>
+                        <option value="under_review" className="bg-[#090d16] text-amber-400 font-bold">🟡 Under Review</option>
+                        <option value="removed" className="bg-[#090d16] text-rose-400 font-bold">🔴 Removed</option>
                       </select>
                     </div>
                   </div>
 
-                  <div>
-                    <label className="block text-xs font-bold text-slate-300 mb-1.5">
-                      Rating: <span className="text-amber-400 font-extrabold">{formData.rating} ★</span>
-                    </label>
+                  {/* Rating Slider Box */}
+                  <div className="p-4 rounded-2xl bg-[#050811]/90 border border-white/[0.08] space-y-2.5">
+                    <div className="flex items-center justify-between">
+                      <label className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
+                        <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
+                        <span>Rating Score</span>
+                      </label>
+                      <span className="bg-amber-500/10 border border-amber-500/25 text-amber-400 px-3 py-1 rounded-full text-xs font-black flex items-center gap-1">
+                        {formData.rating.toFixed(1)} ★
+                      </span>
+                    </div>
                     <input
                       type="range"
                       min={0}
@@ -1854,16 +1913,22 @@ export default function AdminPage() {
                       step={0.1}
                       value={formData.rating}
                       onChange={(e) => setFormData({ ...formData, rating: Number(e.target.value) })}
-                      className="w-full accent-[#e50914] cursor-pointer"
+                      className="w-full accent-[#e50914] h-2 bg-slate-800 rounded-lg cursor-pointer transition-all"
                     />
+                    <div className="flex justify-between text-[10px] text-slate-500 font-medium px-0.5">
+                      <span>0.0</span>
+                      <span>5.0 (Avg)</span>
+                      <span>7.5 (Good)</span>
+                      <span className="text-amber-400/90 font-bold">9.0+ (Masterpiece)</span>
+                    </div>
                   </div>
 
-                  {/* Poster Image Section with Pure File Upload & Quick Presets */}
-                  <div className="space-y-3 p-3.5 rounded-2xl bg-white/[0.03] border border-white/[0.08]">
+                  {/* Poster Image Upload */}
+                  <div className="p-4 rounded-2xl bg-[#050811]/90 border border-white/[0.08] space-y-3">
                     <div className="flex items-center justify-between">
-                      <label className="text-xs font-bold text-slate-200 flex items-center gap-1.5">
-                        <ImageIcon className="w-4 h-4 text-[#e50914]" />
-                        <span>Poster Image *</span>
+                      <label className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
+                        <ImageIcon className="w-3.5 h-3.5 text-[#e50914]" />
+                        <span>Poster Image <span className="text-[#e50914]">*</span></span>
                       </label>
                       {formData.image_url && (
                         <span className="text-[11px] font-bold text-emerald-400 flex items-center gap-1 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20">
@@ -1872,12 +1937,11 @@ export default function AdminPage() {
                       )}
                     </div>
 
-                    {/* Dedicated Clickable File Upload Area */}
                     <label
-                      className={`group relative flex flex-col items-center justify-center p-4 rounded-xl border-2 border-dashed transition-all cursor-pointer ${
+                      className={`group relative flex items-center gap-3.5 p-4 rounded-xl border-2 border-dashed transition-all cursor-pointer ${
                         formData.image_url
-                          ? "border-emerald-500/40 bg-emerald-950/10 hover:border-emerald-500/60"
-                          : "border-white/20 bg-black/40 hover:border-[#e50914] hover:bg-rose-950/10"
+                          ? "border-emerald-500/35 bg-emerald-500/[0.03] hover:border-emerald-500/60"
+                          : "border-white/[0.12] bg-white/[0.02] hover:border-[#e50914] hover:bg-[#e50914]/[0.04]"
                       }`}
                     >
                       <input
@@ -1887,30 +1951,27 @@ export default function AdminPage() {
                         className="hidden"
                         disabled={isUploadingImage}
                       />
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-white/10 group-hover:bg-[#e50914]/20 flex items-center justify-center text-white group-hover:text-[#e50914] transition-all">
-                          {isUploadingImage ? (
-                            <Loader2 className="w-5 h-5 animate-spin text-[#e50914]" />
-                          ) : (
-                            <Upload className="w-5 h-5" />
-                          )}
-                        </div>
-                        <div>
-                          <p className="text-xs font-bold text-white group-hover:text-rose-400 transition-colors">
-                            {isUploadingImage
-                              ? "Optimizing & Processing Image..."
-                              : formData.image_url
-                              ? "📁 Click to Choose / Change Poster from Device"
-                              : "📁 Click to Upload Poster from Device"}
-                          </p>
-                          <p className="text-[11px] text-slate-400">
-                            Supports PNG, JPG, JPEG, WEBP (Auto-optimized)
-                          </p>
-                        </div>
+                      <div className="w-10 h-10 rounded-xl bg-white/[0.06] group-hover:bg-[#e50914]/20 group-hover:text-[#e50914] text-slate-300 flex items-center justify-center transition-all shrink-0">
+                        {isUploadingImage ? (
+                          <Loader2 className="w-5 h-5 animate-spin text-[#e50914]" />
+                        ) : (
+                          <Upload className="w-5 h-5" />
+                        )}
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-xs font-bold text-white group-hover:text-rose-300 transition-colors truncate">
+                          {isUploadingImage
+                            ? "Optimizing & Processing Image..."
+                            : formData.image_url
+                            ? "Click to Choose / Change Poster"
+                            : "Click to Upload Poster from Device"}
+                        </p>
+                        <p className="text-[11px] text-slate-400 mt-0.5">
+                          Supports PNG, JPG, JPEG, WEBP (Auto-optimized)
+                        </p>
                       </div>
                     </label>
 
-                    {/* Remove button if image is selected */}
                     {formData.image_url && (
                       <div className="flex justify-end">
                         <button
@@ -1919,34 +1980,55 @@ export default function AdminPage() {
                             setFormData((prev) => ({ ...prev, image_url: "" }));
                             setImagePreviewStatus("idle");
                           }}
-                          className="text-[11px] font-semibold text-rose-400 hover:text-rose-300 flex items-center gap-1 hover:underline cursor-pointer"
+                          className="text-xs font-semibold text-rose-400 hover:text-rose-300 flex items-center gap-1 hover:underline cursor-pointer transition-colors"
                         >
-                          <X className="w-3 h-3" /> Remove poster
+                          <X className="w-3.5 h-3.5" /> Remove poster
                         </button>
                       </div>
                     )}
                   </div>
 
+                  {/* Synopsis Field */}
                   <div>
-                    <label className="block text-xs font-bold text-slate-300 mb-1.5">
-                      Synopsis / Description *
+                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
+                      Synopsis / Storyline <span className="text-[#e50914]">*</span>
                     </label>
                     <textarea
                       rows={3}
                       required
                       value={formData.description}
                       onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                      className="w-full bg-black/60 border border-white/[0.1] rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-[#e50914] transition-all resize-none"
+                      placeholder="Write a captivating plot description for CineVerse audience..."
+                      className="w-full bg-[#050811] border border-white/[0.1] hover:border-white/[0.18] focus:border-[#e50914] focus:ring-2 focus:ring-[#e50914]/20 rounded-xl px-4 py-3 text-xs text-slate-200 placeholder:text-slate-500 transition-all resize-none leading-relaxed custom-scrollbar"
                     />
                   </div>
                 </div>
 
-                {/* Poster Preview */}
-                <div className="flex flex-col items-center justify-center p-4 rounded-2xl bg-black/40 border border-white/[0.08]">
-                  <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-3">
-                    Poster Preview
-                  </p>
-                  <div className="w-36 aspect-[2/3] rounded-xl bg-black overflow-hidden border border-white/15 shadow-xl relative group">
+                {/* Right Column: Live Poster Studio Preview */}
+                <div className="lg:col-span-5 rounded-2xl bg-[#050811]/90 border border-white/[0.08] p-5 flex flex-col items-center justify-between gap-5 h-full">
+                  <div className="w-full flex items-center justify-between pb-3 border-b border-white/[0.06]">
+                    <p className="text-[11px] font-bold uppercase tracking-widest text-slate-400 flex items-center gap-1.5">
+                      <Film className="w-3.5 h-3.5 text-[#e50914]" /> Poster Preview
+                    </p>
+                    {formData.image_url ? (
+                      imagePreviewStatus === "valid" ? (
+                        <span className="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-md flex items-center gap-1">
+                          <CheckCircle className="w-3 h-3" /> Ready
+                        </span>
+                      ) : imagePreviewStatus === "error" ? (
+                        <span className="text-[10px] font-bold text-rose-400 bg-rose-500/10 border border-rose-500/20 px-2 py-0.5 rounded-md flex items-center gap-1">
+                          <AlertTriangle className="w-3 h-3" /> Error
+                        </span>
+                      ) : (
+                        <span className="text-[10px] text-slate-400 bg-white/[0.04] px-2 py-0.5 rounded-md">Loading</span>
+                      )
+                    ) : (
+                      <span className="text-[10px] font-medium text-slate-500 bg-white/[0.04] px-2 py-0.5 rounded-md">Empty</span>
+                    )}
+                  </div>
+
+                  {/* Poster Preview Frame */}
+                  <div className="w-44 sm:w-48 aspect-[2/3] rounded-2xl bg-black overflow-hidden border-2 border-white/[0.12] shadow-[0_20px_50px_rgba(0,0,0,0.85)] relative group transition-all">
                     {formData.image_url ? (
                       <>
                         <img
@@ -1961,76 +2043,80 @@ export default function AdminPage() {
                             setImagePreviewStatus("error");
                           }}
                         />
-                        {/* Status Overlay Badge */}
-                        <div className="absolute top-2 right-2">
-                          {imagePreviewStatus === "valid" && (
-                            <span className="flex items-center gap-1 px-2 py-0.5 rounded-md bg-emerald-500/90 text-slate-950 text-[10px] font-black shadow backdrop-blur-sm">
-                              <Check className="w-3 h-3 stroke-[3]" /> OK
-                            </span>
-                          )}
-                          {imagePreviewStatus === "error" && (
-                            <span className="flex items-center gap-1 px-2 py-0.5 rounded-md bg-rose-500 text-white text-[10px] font-black shadow">
-                              <X className="w-3 h-3 stroke-[3]" /> Error
-                            </span>
-                          )}
+                        {/* Status Overlay Badges */}
+                        <div className="absolute top-2.5 left-2.5 pointer-events-none">
+                          <span className="px-2 py-0.5 rounded-md bg-black/75 backdrop-blur-md text-white text-[10px] font-bold border border-white/10 shadow">
+                            {formData.genre || "Cinema"}
+                          </span>
+                        </div>
+                        <div className="absolute top-2.5 right-2.5 pointer-events-none">
+                          <span className="px-2 py-0.5 rounded-md bg-amber-500 text-slate-950 text-[10px] font-black shadow flex items-center gap-0.5">
+                            {formData.rating.toFixed(1)} ★
+                          </span>
+                        </div>
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
+                        <div className="absolute bottom-2.5 left-2.5 right-2.5 pointer-events-none">
+                          <p className="text-white text-xs font-bold truncate drop-shadow">{formData.title || "Movie Title"}</p>
+                          <p className="text-slate-300 text-[10px] drop-shadow">{formData.release_year}</p>
                         </div>
                       </>
                     ) : (
-                      <div className="w-full h-full flex flex-col items-center justify-center p-3 text-center text-slate-600">
-                        <Film className="w-6 h-6 mb-1" />
-                        <span className="text-[10px]">Enter URL or Upload to Preview</span>
+                      <div className="w-full h-full flex flex-col items-center justify-center p-4 text-center text-slate-500 space-y-2">
+                        <div className="w-12 h-12 rounded-2xl bg-white/[0.04] flex items-center justify-center text-slate-600">
+                          <Film className="w-6 h-6" />
+                        </div>
+                        <p className="text-xs font-bold text-slate-400">No Poster Uploaded</p>
+                        <p className="text-[10px] text-slate-500 leading-tight">Upload an image on the left to see live preview</p>
                       </div>
                     )}
                   </div>
 
-                  {/* Status Indicator */}
-                  <div className="mt-2 text-center">
-                    {formData.image_url ? (
-                      imagePreviewStatus === "valid" ? (
-                        <span className="text-[11px] font-bold text-emerald-400 flex items-center gap-1 justify-center">
-                          <CheckCircle className="w-3.5 h-3.5" /> Poster Ready
-                        </span>
-                      ) : imagePreviewStatus === "error" ? (
-                        <span className="text-[11px] font-bold text-rose-400 flex items-center gap-1 justify-center">
-                          <AlertTriangle className="w-3.5 h-3.5" /> Link not working
-                        </span>
-                      ) : (
-                        <span className="text-[11px] font-medium text-slate-400">Loading preview...</span>
-                      )
-                    ) : (
-                      <span className="text-[11px] text-slate-500">No image chosen</span>
-                    )}
-                  </div>
-
-                  <div className="mt-4 w-full">
-                    <label className="flex items-center gap-2 p-2.5 rounded-xl bg-white/[0.04] border border-white/[0.08] cursor-pointer hover:bg-white/[0.07] transition-colors">
-                      <input
-                        type="checkbox"
-                        checked={formData.is_featured}
-                        onChange={(e) => setFormData({ ...formData, is_featured: e.target.checked })}
-                        className="w-4 h-4 accent-[#e50914] rounded cursor-pointer"
+                  {/* Hero Banner Feature Switch */}
+                  <div
+                    onClick={() => setFormData({ ...formData, is_featured: !formData.is_featured })}
+                    className="w-full p-3.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.08] transition-all cursor-pointer flex items-center justify-between group"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 shrink-0">
+                        <Star className={`w-4 h-4 ${formData.is_featured ? "fill-amber-400" : ""}`} />
+                      </div>
+                      <div>
+                        <p className="text-xs font-bold text-slate-200 group-hover:text-white transition-colors">
+                          Hero Banner Feature
+                        </p>
+                        <p className="text-[10px] text-slate-400">
+                          Pin movie on top homepage carousel
+                        </p>
+                      </div>
+                    </div>
+                    <div
+                      className={`w-9 h-5 rounded-full p-0.5 transition-colors relative flex items-center ${
+                        formData.is_featured ? "bg-[#e50914]" : "bg-slate-700"
+                      }`}
+                    >
+                      <div
+                        className={`w-4 h-4 rounded-full bg-white transition-transform ${
+                          formData.is_featured ? "translate-x-4" : "translate-x-0"
+                        }`}
                       />
-                      <span className="text-xs font-bold text-slate-200 flex items-center gap-1">
-                        <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
-                        <span>Hero Banner Feature</span>
-                      </span>
-                    </label>
+                    </div>
                   </div>
                 </div>
               </div>
 
-              <div className="flex items-center justify-end gap-3 pt-4 border-t border-white/[0.08]">
+              {/* Modal Actions */}
+              <div className="flex items-center justify-end gap-3 pt-5 border-t border-white/[0.08] mt-2">
                 <button
                   type="button"
                   onClick={() => setIsEditModalOpen(false)}
-                  className="px-5 py-2.5 rounded-xl text-xs font-bold text-slate-400 hover:text-white bg-white/5 hover:bg-white/10 transition-colors cursor-pointer"
+                  className="px-5 py-2.5 rounded-xl text-xs font-bold text-slate-300 hover:text-white bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] transition-all cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={formSubmitting}
-                  className="px-6 py-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-[#e50914] to-rose-600 hover:from-rose-600 hover:to-rose-700 shadow-lg shadow-rose-950/60 transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
+                  className="px-6 py-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-[#e50914] via-rose-600 to-rose-700 hover:from-rose-600 hover:to-rose-800 shadow-lg shadow-rose-950/60 transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
                 >
                   {formSubmitting ? (
                     <>
