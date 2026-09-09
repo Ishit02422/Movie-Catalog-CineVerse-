@@ -10,10 +10,11 @@ interface AuthContextType {
   isLoading: boolean;
   login: (credentials: LoginCredentials) => Promise<void>;
   register: (credentials: RegisterCredentials) => Promise<void>;
-  checkUser: (identifier: string) => Promise<{ exists: boolean; data?: any }>;
+  checkUser: (identifier: string, country_code?: string) => Promise<{ exists: boolean; data?: any }>;
   sendPhoneOtp: (
     identifier: string,
-    mode?: "signin" | "register"
+    mode?: "signin" | "register",
+    country_code?: string
   ) => Promise<{
     success: boolean;
     type?: "phone" | "email";
@@ -145,12 +146,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const checkUser = async (
-    identifier: string
+    identifier: string,
+    country_code?: string
   ): Promise<{ exists: boolean; data?: any }> => {
     const res = await fetch(`${API_BASE_URL}/auth/check-user`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ identifier }),
+      body: JSON.stringify({ identifier, country_code }),
     });
 
     const data = await res.json();
@@ -162,7 +164,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const sendPhoneOtp = async (
     identifier: string,
-    mode?: "signin" | "register"
+    mode?: "signin" | "register",
+    country_code?: string
   ): Promise<{
     success: boolean;
     type?: "phone" | "email";
@@ -176,7 +179,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     const res = await fetch(`${API_BASE_URL}/auth/phone/send-otp`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ identifier, mode }),
+      body: JSON.stringify({ identifier, mode, country_code }),
     });
 
     const data = await res.json();

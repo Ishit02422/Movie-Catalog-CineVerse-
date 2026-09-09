@@ -28,7 +28,43 @@ import {
   Minus,
   Star,
   Flame,
+  Search,
+  Globe,
 } from "lucide-react";
+
+export interface Country {
+  code: string;
+  name: string;
+  dialCode: string;
+  flag: string;
+  maxLength: number;
+  startsPattern?: RegExp;
+}
+
+export const COUNTRIES: Country[] = [
+  { code: "IN", name: "India", dialCode: "+91", flag: "🇮🇳", maxLength: 10, startsPattern: /^[5-9]/ },
+  { code: "US", name: "United States", dialCode: "+1", flag: "🇺🇸", maxLength: 10 },
+  { code: "GB", name: "United Kingdom", dialCode: "+44", flag: "🇬🇧", maxLength: 10 },
+  { code: "CA", name: "Canada", dialCode: "+1", flag: "🇨🇦", maxLength: 10 },
+  { code: "AE", name: "United Arab Emirates", dialCode: "+971", flag: "🇦🇪", maxLength: 9 },
+  { code: "AU", name: "Australia", dialCode: "+61", flag: "🇦🇺", maxLength: 9 },
+  { code: "SG", name: "Singapore", dialCode: "+65", flag: "🇸🇬", maxLength: 8 },
+  { code: "DE", name: "Germany", dialCode: "+49", flag: "🇩🇪", maxLength: 11 },
+  { code: "FR", name: "France", dialCode: "+33", flag: "🇫🇷", maxLength: 9 },
+  { code: "SA", name: "Saudi Arabia", dialCode: "+966", flag: "🇸🇦", maxLength: 9 },
+  { code: "QA", name: "Qatar", dialCode: "+974", flag: "🇶🇦", maxLength: 8 },
+  { code: "KW", name: "Kuwait", dialCode: "+965", flag: "🇰🇼", maxLength: 8 },
+  { code: "OM", name: "Oman", dialCode: "+968", flag: "🇴🇲", maxLength: 8 },
+  { code: "BH", name: "Bahrain", dialCode: "+973", flag: "🇧🇭", maxLength: 8 },
+  { code: "NP", name: "Nepal", dialCode: "+977", flag: "🇳🇵", maxLength: 10 },
+  { code: "BD", name: "Bangladesh", dialCode: "+880", flag: "🇧🇩", maxLength: 10 },
+  { code: "PK", name: "Pakistan", dialCode: "+92", flag: "🇵🇰", maxLength: 10 },
+  { code: "LK", name: "Sri Lanka", dialCode: "+94", flag: "🇱🇰", maxLength: 9 },
+  { code: "MY", name: "Malaysia", dialCode: "+60", flag: "🇲🇾", maxLength: 10 },
+  { code: "NZ", name: "New Zealand", dialCode: "+64", flag: "🇳🇿", maxLength: 9 },
+  { code: "ZA", name: "South Africa", dialCode: "+27", flag: "🇿🇦", maxLength: 9 },
+  { code: "JP", name: "Japan", dialCode: "+81", flag: "🇯🇵", maxLength: 10 },
+];
 
 interface PhoneAuthHeroProps {
   sampleMovies?: Movie[];
@@ -109,6 +145,11 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
   const [isPrivacyOpen, setIsPrivacyOpen] = useState<boolean>(false);
   const [isHelpOpen, setIsHelpOpen] = useState<boolean>(false);
 
+  // Country code state (Default India +91)
+  const [selectedCountry, setSelectedCountry] = useState<Country>(COUNTRIES[0]);
+  const [isCountryPickerOpen, setIsCountryPickerOpen] = useState<boolean>(false);
+  const [countrySearchQuery, setCountrySearchQuery] = useState<string>("");
+
   // Form states
   const [identifier, setIdentifier] = useState<string>(""); // Email or Mobile number
   const [existingUser, setExistingUser] = useState<{ name?: string; first_name?: string; surname?: string; phone?: string; email?: string } | null>(null);
@@ -122,6 +163,27 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [receivedDevOtp, setReceivedDevOtp] = useState<string | null>(null);
+
+  // Filtered countries for search modal
+  const filteredCountries = COUNTRIES.filter((c) => {
+    const q = countrySearchQuery.toLowerCase().trim();
+    if (!q) return true;
+    return (
+      c.name.toLowerCase().includes(q) ||
+      c.dialCode.toLowerCase().includes(q) ||
+      c.code.toLowerCase().includes(q)
+    );
+  });
+
+  const handleSelectCountry = (country: Country) => {
+    setSelectedCountry(country);
+    setIsCountryPickerOpen(false);
+    setCountrySearchQuery("");
+    if (isNumericPhone) {
+      setIdentifier((prev) => prev.slice(0, country.maxLength));
+    }
+    if (error) setError(null);
+  };
 
   // Auto cycle carousel slides on landing screen
   useEffect(() => {
@@ -137,26 +199,26 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
     ? sampleMovies.map((m) => m.image_url).filter(Boolean)
     : FALLBACK_POSTERS;
 
-  // Smart Indian Phone & Form validation
+  // Smart Phone & Form validation
   // Only pure digits without any letters or @ are treated as numeric phone
   const isNumericPhone = /^\d+$/.test(identifier) && !/[a-zA-Z@]/.test(identifier);
   const isLandingInputFilled = isNumericPhone
-    ? identifier.length === 10
+    ? identifier.length === selectedCountry.maxLength
     : identifier.trim().length > 0;
   const isScreen2Valid =
     authMode === "signin"
-      ? (isNumericPhone ? identifier.length === 10 : identifier.trim().length > 0)
-      : (isNumericPhone ? identifier.length === 10 : identifier.trim().length > 0) &&
+      ? (isNumericPhone ? identifier.length === selectedCountry.maxLength : identifier.trim().length > 0)
+      : (isNumericPhone ? identifier.length === selectedCountry.maxLength : identifier.trim().length > 0) &&
         firstName.trim().length > 0 &&
         surname.trim().length > 0;
   const isOtpValid = otpCode.trim().length === 6;
 
-  // Smart Input Sanitizer (Strict 10-Digit Capping for Indian Numbers, Full Length for Emails)
+  // Smart Input Sanitizer (Strict length capping for Selected Country, Full Length for Emails)
   const handleIdentifierChange = (raw: string) => {
     const noSpaces = raw.replace(/\s+/g, "");
-    // If only digits are typed so far, cap strictly at 10 digits
+    // If only digits are typed so far, cap strictly at selected country's max length
     if (/^\d+$/.test(noSpaces)) {
-      setIdentifier(noSpaces.slice(0, 10));
+      setIdentifier(noSpaces.slice(0, selectedCountry.maxLength));
     } else {
       // If contains letters or @ (e.g. 22bmiit022@gmail.com), allow full email up to 50 chars
       setIdentifier(noSpaces.slice(0, 50));
@@ -194,7 +256,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
 
     // If empty input, prevent submission and prompt user
     if (!rawVal) {
-      setError("Please enter your email or 10-digit mobile number.");
+      setError(`Please enter your email or ${selectedCountry.maxLength}-digit mobile number.`);
       return;
     }
 
@@ -216,7 +278,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
     }
 
     if (!val) {
-      setError("Please enter your email address or 10-digit mobile number.");
+      setError(`Please enter your email address or ${selectedCountry.maxLength}-digit mobile number.`);
       return;
     }
 
@@ -224,13 +286,20 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
     const cleanPhone = val.replace(/\D/g, "");
 
     if (isNum) {
-      if (cleanPhone.length !== 10) {
-        setError("Indian mobile number must be exactly 10 digits.");
-        return;
-      }
-      if (!/^[5-9]\d{9}$/.test(cleanPhone)) {
-        setError("Please enter a valid Indian mobile number starting with 5, 6, 7, 8, or 9.");
-        return;
+      if (selectedCountry.code === "IN") {
+        if (cleanPhone.length !== 10) {
+          setError("Indian mobile number must be exactly 10 digits.");
+          return;
+        }
+        if (!/^[5-9]\d{9}$/.test(cleanPhone)) {
+          setError("Please enter a valid Indian mobile number starting with 5, 6, 7, 8, or 9.");
+          return;
+        }
+      } else {
+        if (cleanPhone.length !== selectedCountry.maxLength) {
+          setError(`${selectedCountry.name} mobile number must be exactly ${selectedCountry.maxLength} digits.`);
+          return;
+        }
       }
       val = cleanPhone;
     } else {
@@ -249,12 +318,12 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
     try {
       if (screen === "landing") {
         // Smart Landing Flow: Check if user exists first WITHOUT sending premature OTP
-        const checkRes = await checkUser(val);
+        const checkRes = await checkUser(val, isNum ? selectedCountry.dialCode : undefined);
 
         if (checkRes.exists) {
           // Existing User -> Send Sign In OTP & go to OTP Screen
           setAuthMode("signin");
-          const sendRes = await sendPhoneOtp(val, "signin");
+          const sendRes = await sendPhoneOtp(val, "signin", isNum ? selectedCountry.dialCode : undefined);
           setReceivedDevOtp(sendRes.dev_otp || null);
 
           if (checkRes.data?.first_name || checkRes.data?.name) {
@@ -267,7 +336,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
             });
           }
           if (isNum) {
-            setSuccessMessage(`Welcome back! Verification code sent via SMS to +91-${cleanPhone.slice(-10)}`);
+            setSuccessMessage(`Welcome back! Verification code sent via SMS to ${selectedCountry.dialCode}-${cleanPhone}`);
           } else {
             setSuccessMessage(`Welcome back! Verification code sent to ${val.toLowerCase()}`);
           }
@@ -281,7 +350,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
         }
       } else {
         // Explicit Screen 2 Flow (User clicks "Sign In with OTP" or "Sign Up & Send Code")
-        const sendRes = await sendPhoneOtp(val, authMode);
+        const sendRes = await sendPhoneOtp(val, authMode, isNum ? selectedCountry.dialCode : undefined);
         if (sendRes.user_name) {
           setExistingUser({ name: sendRes.user_name });
         } else {
@@ -290,7 +359,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
         setReceivedDevOtp(sendRes.dev_otp || null);
 
         if (isNum) {
-          setSuccessMessage(`Verification code sent via SMS to +91-${cleanPhone.slice(-10)}`);
+          setSuccessMessage(`Verification code sent via SMS to ${selectedCountry.dialCode}-${cleanPhone}`);
         } else {
           setSuccessMessage(`Verification code sent to ${val.toLowerCase()}`);
         }
@@ -529,10 +598,16 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                 >
                   <div className="relative w-full sm:flex-1">
                     {isNumericPhone && (
-                      <div className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-800/95 border border-slate-700 text-xs sm:text-sm font-bold text-white select-none pointer-events-none animate-in fade-in zoom-in-95 duration-150 z-10 shadow-sm">
-                        <span className="text-base">🇮🇳</span>
-                        <span className="text-slate-200 font-mono tracking-wide">+91</span>
-                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setIsCountryPickerOpen(true)}
+                        className="absolute left-2.5 top-1/2 -translate-y-1/2 flex items-center gap-1.5 px-2.5 py-1.5 rounded-md bg-slate-800/95 hover:bg-slate-700/95 border border-slate-600 hover:border-slate-400 text-xs sm:text-sm font-bold text-white transition-all cursor-pointer active:scale-95 z-10 shadow-sm group"
+                        title="Click to change country"
+                      >
+                        <span className="text-base">{selectedCountry.flag}</span>
+                        <span className="text-slate-200 font-mono tracking-wide">{selectedCountry.dialCode}</span>
+                        <ChevronDown className="w-3.5 h-3.5 text-slate-400 group-hover:text-white transition-transform" />
+                      </button>
                     )}
                     <input
                       type="text"
@@ -543,12 +618,12 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                           e.preventDefault();
                         }
                       }}
-                      maxLength={isNumericPhone ? 10 : 50}
-                      placeholder={isNumericPhone ? "Enter 10-digit mobile" : "Email or mobile number"}
+                      maxLength={isNumericPhone ? selectedCountry.maxLength : 50}
+                      placeholder={isNumericPhone ? `Enter ${selectedCountry.maxLength}-digit mobile` : "Email or mobile number"}
                       className={`w-full py-3.5 sm:py-4 rounded-md bg-black/80 border ${
                         error ? "border-red-500/80 focus:border-red-400 focus:ring-1 focus:ring-red-400" : "border-slate-600 focus:border-white focus:ring-1 focus:ring-white"
                       } text-white text-base placeholder:text-slate-400 outline-none backdrop-blur-md transition-all font-medium ${
-                        isNumericPhone ? "pl-23 sm:pl-25 pr-4 tracking-wider font-mono text-base sm:text-lg" : "px-4"
+                        isNumericPhone ? "pl-26 sm:pl-28 pr-4 tracking-wider font-mono text-base sm:text-lg" : "px-4"
                       }`}
                     />
                   </div>
@@ -955,10 +1030,16 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                   )}
                   <div className="relative w-full">
                     {isNumericPhone && (
-                      <div className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-800/95 border border-slate-700 text-xs sm:text-sm font-bold text-white select-none pointer-events-none animate-in fade-in zoom-in-95 duration-150 z-10 shadow-sm">
-                        <span className="text-base">🇮🇳</span>
-                        <span className="text-slate-200 font-mono tracking-wide">+91</span>
-                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setIsCountryPickerOpen(true)}
+                        className="absolute left-2.5 top-1/2 -translate-y-1/2 flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-800/95 hover:bg-slate-700/95 border border-slate-600 hover:border-slate-400 text-xs sm:text-sm font-bold text-white transition-all cursor-pointer active:scale-95 z-10 shadow-sm group"
+                        title="Click to change country"
+                      >
+                        <span className="text-base">{selectedCountry.flag}</span>
+                        <span className="text-slate-200 font-mono tracking-wide">{selectedCountry.dialCode}</span>
+                        <ChevronDown className="w-3.5 h-3.5 text-slate-400 group-hover:text-white transition-transform" />
+                      </button>
                     )}
                     <input
                       type="text"
@@ -969,16 +1050,16 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                           e.preventDefault();
                         }
                       }}
-                      maxLength={isNumericPhone ? 10 : 50}
+                      maxLength={isNumericPhone ? selectedCountry.maxLength : 50}
                       placeholder={
                         isNumericPhone
-                          ? "Enter 10-digit mobile number"
+                          ? `Enter ${selectedCountry.maxLength}-digit mobile number`
                           : authMode === "signin"
                           ? "Email or mobile number"
-                          : "Enter your email or 10-digit mobile"
+                          : `Enter your email or ${selectedCountry.maxLength}-digit mobile`
                       }
                       className={`w-full py-3.5 rounded-xl bg-slate-900/90 border border-slate-700 focus:border-rose-500 focus:ring-2 focus:ring-rose-500/30 text-white text-base placeholder:text-slate-400 outline-none transition-all font-medium ${
-                        isNumericPhone ? "pl-23 sm:pl-25 pr-4 tracking-wider font-mono text-base sm:text-lg" : "px-4"
+                        isNumericPhone ? "pl-26 sm:pl-28 pr-4 tracking-wider font-mono text-base sm:text-lg" : "px-4"
                       }`}
                       autoFocus={authMode === "signin"}
                     />
@@ -1344,6 +1425,94 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
               >
                 Close
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* ========================================================================= */}
+      {/* COUNTRY SELECTOR MODAL DIALOG                                              */}
+      {/* ========================================================================= */}
+      {isCountryPickerOpen && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in duration-200">
+          <div className="w-full max-w-md bg-slate-950 border border-white/15 rounded-3xl p-6 space-y-4 text-left shadow-2xl animate-in zoom-in-95 duration-200 max-h-[85vh] flex flex-col">
+            {/* Header */}
+            <div className="flex items-center justify-between border-b border-white/10 pb-3 shrink-0">
+              <div className="flex items-center gap-2">
+                <Globe className="w-5 h-5 text-[#e50914]" />
+                <h3 className="text-lg font-bold text-white">Select Country Code</h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsCountryPickerOpen(false);
+                  setCountrySearchQuery("");
+                }}
+                className="text-slate-400 hover:text-white p-1.5 rounded-full hover:bg-white/10 transition-colors cursor-pointer"
+                title="Close"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Search Input */}
+            <div className="relative shrink-0">
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+              <input
+                type="text"
+                value={countrySearchQuery}
+                onChange={(e) => setCountrySearchQuery(e.target.value)}
+                placeholder="Search country or code (e.g. India, +1, +44)..."
+                className="w-full pl-10 pr-9 py-3 rounded-xl bg-slate-900 border border-slate-700 focus:border-red-500 focus:ring-1 focus:ring-red-500 text-white text-sm placeholder:text-slate-500 outline-none transition-all"
+                autoFocus
+              />
+              {countrySearchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setCountrySearchQuery("")}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white cursor-pointer"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              )}
+            </div>
+
+            {/* Country List */}
+            <div className="flex-1 overflow-y-auto space-y-1.5 pr-1 max-h-[50vh]">
+              {filteredCountries.length > 0 ? (
+                filteredCountries.map((c) => {
+                  const isSelected = selectedCountry.code === c.code;
+                  return (
+                    <button
+                      key={c.code}
+                      type="button"
+                      onClick={() => handleSelectCountry(c)}
+                      className={`w-full flex items-center justify-between p-3 rounded-xl transition-all text-left cursor-pointer ${
+                        isSelected
+                          ? "bg-[#e50914]/20 border border-[#e50914]/50 text-white shadow-md shadow-red-950/30"
+                          : "hover:bg-slate-900/90 border border-transparent text-slate-200"
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <span className="text-2xl">{c.flag}</span>
+                        <div>
+                          <div className="text-sm font-semibold text-white">{c.name}</div>
+                          <div className="text-xs text-slate-400 font-mono">{c.maxLength} digits format</div>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-mono font-bold px-2.5 py-1 rounded-md bg-slate-800 text-slate-200 border border-slate-700">
+                          {c.dialCode}
+                        </span>
+                        {isSelected && <CheckCircle2 className="w-4 h-4 text-[#e50914]" />}
+                      </div>
+                    </button>
+                  );
+                })
+              ) : (
+                <div className="py-8 text-center text-slate-400 text-sm">
+                  No country found matching &ldquo;{countrySearchQuery}&rdquo;
+                </div>
+              )}
             </div>
           </div>
         </div>

@@ -6,12 +6,17 @@ export interface SendSmsResult {
 
 export const sendRealSms = async (
   phone: string,
-  otp: string
+  otp: string,
+  countryCode: string = "+91"
 ): Promise<SendSmsResult> => {
   const cleanPhone = phone.replace(/\D/g, "");
-  const formattedPhone = cleanPhone.startsWith("91") && cleanPhone.length === 12
+  const normalizedCountryCode = countryCode.startsWith("+") ? countryCode : `+${countryCode}`;
+  const codeDigits = normalizedCountryCode.replace(/\D/g, "");
+  
+  // Format to standard E.164: +<CountryCode><NationalNumber>
+  const formattedPhone = cleanPhone.startsWith(codeDigits) && cleanPhone.length > codeDigits.length + 6
     ? `+${cleanPhone}`
-    : `+91${cleanPhone.slice(-10)}`;
+    : `${normalizedCountryCode}${cleanPhone}`;
 
   // 1. Try Twilio Verify Service if configured
   const accountSid = process.env.TWILIO_ACCOUNT_SID;

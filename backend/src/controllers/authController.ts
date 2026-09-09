@@ -148,20 +148,27 @@ export const checkUser = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const { identifier } = req.body;
+    const { identifier, country_code } = req.body;
+    const countryCode = String(country_code || "+91").trim();
 
     if (!identifier || String(identifier).trim().length === 0) {
       throw new ApiError("Please provide an email or phone number.", 400);
     }
 
     const raw = String(identifier).trim();
-    const isNum = /^[0-9+ -]+$/.test(raw) && raw.replace(/\D/g, "").length >= 10;
+    const isNum = /^[0-9+ -]+$/.test(raw) && raw.replace(/\D/g, "").length >= 7;
     const cleanPhone = raw.replace(/\D/g, "");
     const cleanEmail = raw.toLowerCase();
 
     let user = null;
     if (isNum) {
-      user = await User.findOne({ phone: cleanPhone });
+      user = await User.findOne({
+        $or: [
+          { phone: cleanPhone },
+          { phone: `${countryCode}${cleanPhone}` },
+          { phone: `+${cleanPhone}` },
+        ],
+      });
     } else {
       user = await User.findOne({ email: cleanEmail });
     }
@@ -205,9 +212,10 @@ export const sendPhoneOtp = async (
 ): Promise<void> => {
   try {
     const rawInput = req.body.identifier || req.body.phone || req.body.email;
+    const countryCode = String(req.body.country_code || "+91").trim();
 
     if (!rawInput || String(rawInput).trim().length === 0) {
-      throw new ApiError("Please provide a valid email or 10-digit mobile number.", 400);
+      throw new ApiError("Please provide a valid email or mobile number.", 400);
     }
 
     const inputStr = String(rawInput).trim().replace(/\s+/g, "");
@@ -218,11 +226,17 @@ export const sendPhoneOtp = async (
     let cleanIdentifier = "";
 
     if (isNum) {
-      if (cleanPhone.length !== 10) {
-        throw new ApiError("Indian mobile number must be exactly 10 digits.", 400);
-      }
-      if (!/^[5-9]\d{9}$/.test(cleanPhone)) {
-        throw new ApiError("Please enter a valid 10-digit Indian mobile number starting with 5, 6, 7, 8, or 9.", 400);
+      if (countryCode === "+91") {
+        if (cleanPhone.length !== 10) {
+          throw new ApiError("Indian mobile number must be exactly 10 digits.", 400);
+        }
+        if (!/^[5-9]\d{9}$/.test(cleanPhone)) {
+          throw new ApiError("Please enter a valid 10-digit Indian mobile number starting with 5, 6, 7, 8, or 9.", 400);
+        }
+      } else {
+        if (cleanPhone.length < 7 || cleanPhone.length > 15) {
+          throw new ApiError("Please enter a valid international mobile number (7-15 digits).", 400);
+        }
       }
       cleanIdentifier = cleanPhone;
     } else {
@@ -317,10 +331,10 @@ export const sendPhoneOtp = async (
       expires_at: expiresAt,
     });
 
-    console.log(`📱 [SMS Gateway] OTP sent to +91-${cleanPhone}: Your CineVerse verification code is ${generatedOtp}`);
+    console.log(`📱 [SMS Gateway] OTP sent to ${countryCode}-${cleanPhone}: Your CineVerse verification code is ${generatedOtp}`);
 
     // Dispatch live SMS via Twilio & Fast2SMS
-    const smsResult = await sendRealSms(cleanPhone, generatedOtp);
+    const smsResult = await sendRealSms(cleanPhone, generatedOtp, countryCode);
 
     res.status(200).json({
       success: true,
@@ -328,9 +342,10 @@ export const sendPhoneOtp = async (
       exists: !!existingUser,
       isNewUser: !existingUser,
       user_name: existingUser?.first_name || existingUser?.name || null,
-      message: `OTP sent via SMS to +91-${cleanPhone}!`,
+      message: `OTP sent via SMS to ${countryCode}-${cleanPhone}!`,
       identifier: cleanPhone,
       phone: cleanPhone,
+      country_code: countryCode,
       dev_otp: generatedOtp,
     });
   } catch (error) {
