@@ -162,16 +162,19 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
     setError(null);
     setSuccessMessage(null);
 
-    // If user is on landing page, clicking Continue / Sign Up Free should open the form screen directly
-    if (screen === "landing") {
+    const rawVal = identifier.trim().replace(/\s+/g, "");
+
+    // If user clicked Get Started on landing page with an empty input
+    if (screen === "landing" && !rawVal) {
       setAuthMode("register");
       setScreen("signin");
       return;
     }
 
-    let val = identifier.trim().replace(/\s+/g, "");
+    let val = rawVal;
 
-    if (authMode === "register") {
+    // Validate name fields only if explicitly on screen 2 in register mode
+    if (screen !== "landing" && authMode === "register") {
       const firstError = validateName(firstName, "First Name");
       if (firstError) {
         setError(firstError);
@@ -202,6 +205,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
         setError("Please enter a valid Indian mobile number starting with 6, 7, 8, or 9.");
         return;
       }
+      val = cleanPhone;
     } else {
       let emailCandidate = val.includes("@") ? val.toLowerCase() : `${val.toLowerCase()}@gmail.com`;
       const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -216,23 +220,49 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
     setIsLoading(true);
 
     try {
-      // Send dynamic real OTP (Email or Phone) via live API with explicit mode
-      const sendRes = await sendPhoneOtp(val, authMode);
-      if (sendRes.user_name) {
-        setExistingUser({ name: sendRes.user_name });
-      } else {
-        setExistingUser(null);
-      }
-      setReceivedDevOtp(sendRes.dev_otp || null);
+      if (screen === "landing") {
+        // Smart Landing Flow: Send OTP without forced mode to auto-detect existing vs new user
+        const sendRes = await sendPhoneOtp(val);
+        setReceivedDevOtp(sendRes.dev_otp || null);
 
-      if (isNum) {
-        setSuccessMessage(`Verification code sent via SMS to +91-${cleanPhone.slice(-10)}`);
+        if (sendRes.exists) {
+          // Existing User -> Auto Sign In OTP Screen
+          setAuthMode("signin");
+          if (sendRes.user_name) {
+            setExistingUser({ name: sendRes.user_name });
+          }
+          if (isNum) {
+            setSuccessMessage(`Welcome back! Verification code sent via SMS to +91-${cleanPhone.slice(-10)}`);
+          } else {
+            setSuccessMessage(`Welcome back! Verification code sent to ${val.toLowerCase()}`);
+          }
+          setScreen("otp");
+          setOtpCode("");
+        } else {
+          // New User -> Open Sign Up Screen with pre-filled identifier to collect name
+          setAuthMode("register");
+          setExistingUser(null);
+          setScreen("signin");
+        }
       } else {
-        setSuccessMessage(`Verification code sent to ${val.toLowerCase()}`);
-      }
+        // Explicit Screen 2 Flow (Sign In tab or Sign Up tab)
+        const sendRes = await sendPhoneOtp(val, authMode);
+        if (sendRes.user_name) {
+          setExistingUser({ name: sendRes.user_name });
+        } else {
+          setExistingUser(null);
+        }
+        setReceivedDevOtp(sendRes.dev_otp || null);
 
-      setScreen("otp");
-      setOtpCode("");
+        if (isNum) {
+          setSuccessMessage(`Verification code sent via SMS to +91-${cleanPhone.slice(-10)}`);
+        } else {
+          setSuccessMessage(`Verification code sent to ${val.toLowerCase()}`);
+        }
+
+        setScreen("otp");
+        setOtpCode("");
+      }
     } catch (err: any) {
       console.error("Auth flow notice:", err);
       setError(err.message || "Failed to send verification code. Please try again.");
