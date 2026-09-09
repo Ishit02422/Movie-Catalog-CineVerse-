@@ -1066,6 +1066,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                 type="button"
                 onClick={() => {
                   setError(null);
+                  setAuthMode("signin");
                   setScreen("signin");
                 }}
                 className="p-2 -ml-2 rounded-full text-white/90 hover:text-white hover:bg-white/10 transition-all cursor-pointer"
@@ -1112,7 +1113,11 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                     </span>
                     <button
                       type="button"
-                      onClick={() => setScreen("signin")}
+                      onClick={() => {
+                        setError(null);
+                        setAuthMode("signin");
+                        setScreen("signin");
+                      }}
                       className="text-rose-400 hover:text-rose-300 font-bold ml-1.5 hover:underline cursor-pointer text-xs"
                     >
                       Change
@@ -1143,7 +1148,11 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                   </div>
                   <button
                     type="button"
-                    onClick={() => setScreen("signin")}
+                    onClick={() => {
+                      setError(null);
+                      setAuthMode("signin");
+                      setScreen("signin");
+                    }}
                     className="text-[#e50914] hover:underline text-xs sm:text-sm font-semibold cursor-pointer"
                   >
                     Edit
