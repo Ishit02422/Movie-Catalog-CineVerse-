@@ -677,19 +677,28 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
       {/* ========================================================================= */}
       {screen === "signin" && (
         <div className="relative min-h-screen w-full flex flex-col justify-between bg-black overflow-hidden">
-          {/* Ambient Cinema Posters Backdrop */}
-          <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none opacity-20">
-            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3 sm:gap-4 p-3 scale-110 transform -translate-y-8 blur-[1px]">
+          {/* Ambient Cinema Posters Backdrop (High Visibility & Rich Gradient) */}
+          <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none opacity-55">
+            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3 sm:gap-4 p-3 scale-110 transform -translate-y-8 animate-in fade-in duration-700">
               {[...posters, ...posters].slice(0, 32).map((imgUrl, idx) => (
                 <div
                   key={idx}
-                  className="aspect-[2/3] rounded-lg overflow-hidden bg-slate-900 border border-white/5"
+                  className="relative aspect-[2/3] w-full rounded-xl overflow-hidden bg-slate-900 shadow-xl shadow-black/90 border border-white/5"
                 >
-                  <img src={imgUrl} alt="" className="w-full h-full object-cover" />
+                  <img
+                    src={imgUrl}
+                    alt="Movie poster"
+                    className="w-full h-full object-cover object-center"
+                    loading={idx < 8 ? "eager" : "lazy"}
+                  />
+                  <div className="absolute inset-0 bg-black/20" />
                 </div>
               ))}
             </div>
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/85 to-black/90" />
+            {/* Cinematic Vignette Overlays & Radial Glow */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/75 to-black/60" />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-black" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(229,9,20,0.18)_0%,rgba(0,0,0,0.85)_75%)]" />
           </div>
 
           {/* Top Bar with Back Arrow & Red Logo */}
@@ -723,9 +732,9 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
             </button>
           </header>
 
-          {/* Centered Glassmorphic Auth Card */}
-          <main className="relative z-10 flex-1 w-full max-w-[460px] mx-auto px-4 py-8 sm:py-12 flex flex-col justify-center">
-            <div className="relative w-full p-7 sm:p-9 rounded-3xl bg-slate-950/90 backdrop-blur-2xl border border-white/10 shadow-[0_20px_70px_rgba(0,0,0,0.85)] space-y-5 animate-in zoom-in-95 duration-200 overflow-hidden">
+          {/* Centered Glassmorphic Auth Card (Spacious & Premium) */}
+          <main className="relative z-10 flex-1 w-full max-w-[540px] mx-auto px-4 py-8 sm:py-12 flex flex-col justify-center">
+            <div className="relative w-full p-8 sm:p-11 rounded-3xl bg-slate-950/92 backdrop-blur-2xl border border-white/10 shadow-[0_25px_80px_rgba(0,0,0,0.9)] space-y-6 animate-in zoom-in-95 duration-200 overflow-hidden">
               {/* Top Accent Line */}
               <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-rose-500 to-transparent" />
 
@@ -737,13 +746,13 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                     setAuthMode("signin");
                     setError(null);
                   }}
-                  className={`py-2.5 text-xs sm:text-sm font-bold rounded-lg transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
+                  className={`py-3 text-xs sm:text-sm font-bold rounded-lg transition-all cursor-pointer flex items-center justify-center gap-2 ${
                     authMode === "signin"
                       ? "bg-gradient-to-r from-[#e50914] to-[#b80710] text-white shadow-md shadow-red-950/50"
                       : "text-slate-400 hover:text-white"
                   }`}
                 >
-                  <Lock className="w-3.5 h-3.5" />
+                  <Lock className="w-4 h-4" />
                   <span>Sign In</span>
                 </button>
                 <button
@@ -752,23 +761,23 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                     setAuthMode("register");
                     setError(null);
                   }}
-                  className={`py-2.5 text-xs sm:text-sm font-bold rounded-lg transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
+                  className={`py-3 text-xs sm:text-sm font-bold rounded-lg transition-all cursor-pointer flex items-center justify-center gap-2 ${
                     authMode === "register"
                       ? "bg-gradient-to-r from-[#e50914] to-[#b80710] text-white shadow-md shadow-red-950/50"
                       : "text-slate-400 hover:text-white"
                   }`}
                 >
-                  <Users className="w-3.5 h-3.5" />
+                  <Users className="w-4 h-4" />
                   <span>Sign Up</span>
                 </button>
               </div>
 
               {/* Title & Subtitle */}
-              <div className="space-y-1 text-center">
-                <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+              <div className="space-y-1.5 text-center">
+                <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
                   {authMode === "signin" ? "Sign In to CineVerse" : "Create Your Account"}
                 </h2>
-                <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
+                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
                   {authMode === "signin"
                     ? "Welcome back! Enter your details to receive an instant passcode."
                     : "Join CineVerse today. Enter your details to start streaming."}
@@ -777,7 +786,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
 
               {/* Error Notification */}
               {error && (
-                <div className="p-3.5 rounded-xl bg-red-950/50 border border-red-500/40 text-red-200 text-xs sm:text-sm space-y-2 animate-in fade-in">
+                <div className="p-3.5 sm:p-4 rounded-xl bg-red-950/50 border border-red-500/40 text-red-200 text-xs sm:text-sm space-y-2 animate-in fade-in">
                   <div className="flex items-start gap-2">
                     <AlertCircle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
                     <span className="leading-snug">{error}</span>
@@ -789,7 +798,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                         setAuthMode("register");
                         setError(null);
                       }}
-                      className="w-full py-1.5 rounded-lg bg-[#e50914] hover:bg-[#b80710] text-white text-xs font-bold transition-all shadow cursor-pointer active:scale-95"
+                      className="w-full py-2 rounded-lg bg-[#e50914] hover:bg-[#b80710] text-white text-xs font-bold transition-all shadow cursor-pointer active:scale-95"
                     >
                       📝 Click Here to Sign Up (New Account)
                     </button>
@@ -801,7 +810,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                         setAuthMode("signin");
                         setError(null);
                       }}
-                      className="w-full py-1.5 rounded-lg bg-[#e50914] hover:bg-[#b80710] text-white text-xs font-bold transition-all shadow cursor-pointer active:scale-95"
+                      className="w-full py-2 rounded-lg bg-[#e50914] hover:bg-[#b80710] text-white text-xs font-bold transition-all shadow cursor-pointer active:scale-95"
                     >
                       🔑 Click Here to Sign In (Existing User)
                     </button>
@@ -810,12 +819,12 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
               )}
 
               {/* Form */}
-              <form onSubmit={handleContinue} className="space-y-3.5">
+              <form onSubmit={handleContinue} className="space-y-4">
                 {authMode === "register" && (
-                  <div className="space-y-3 animate-in fade-in">
-                    <div className="grid grid-cols-2 gap-2.5">
-                      <div className="space-y-1">
-                        <label className="text-[11px] font-semibold text-slate-300">First Name *</label>
+                  <div className="space-y-3.5 animate-in fade-in">
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="space-y-1.5">
+                        <label className="text-xs font-semibold text-slate-300">First Name *</label>
                         <input
                           type="text"
                           value={firstName}
@@ -835,12 +844,12 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                           placeholder="e.g. Rahul"
                           maxLength={20}
                           autoComplete="given-name"
-                          className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900/90 border border-slate-700 focus:border-rose-500 focus:ring-2 focus:ring-rose-500/30 text-white text-sm placeholder:text-slate-500 outline-none transition-all"
+                          className="w-full px-4 py-3 rounded-xl bg-slate-900/90 border border-slate-700 focus:border-rose-500 focus:ring-2 focus:ring-rose-500/30 text-white text-sm placeholder:text-slate-500 outline-none transition-all"
                           required
                         />
                       </div>
-                      <div className="space-y-1">
-                        <label className="text-[11px] font-semibold text-slate-300">Last Name *</label>
+                      <div className="space-y-1.5">
+                        <label className="text-xs font-semibold text-slate-300">Last Name *</label>
                         <input
                           type="text"
                           value={surname}
@@ -860,18 +869,18 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                           placeholder="e.g. Sharma"
                           maxLength={20}
                           autoComplete="family-name"
-                          className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900/90 border border-slate-700 focus:border-rose-500 focus:ring-2 focus:ring-rose-500/30 text-white text-sm placeholder:text-slate-500 outline-none transition-all"
+                          className="w-full px-4 py-3 rounded-xl bg-slate-900/90 border border-slate-700 focus:border-rose-500 focus:ring-2 focus:ring-rose-500/30 text-white text-sm placeholder:text-slate-500 outline-none transition-all"
                           required
                         />
                       </div>
                     </div>
 
-                    <div className="space-y-1">
-                      <label className="text-[11px] font-semibold text-slate-300">Gender</label>
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-semibold text-slate-300">Gender</label>
                       <select
                         value={gender}
                         onChange={(e) => setGender(e.target.value as any)}
-                        className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900/90 border border-slate-700 focus:border-rose-500 focus:ring-2 focus:ring-rose-500/30 text-white text-sm outline-none cursor-pointer"
+                        className="w-full px-4 py-3 rounded-xl bg-slate-900/90 border border-slate-700 focus:border-rose-500 focus:ring-2 focus:ring-rose-500/30 text-white text-sm outline-none cursor-pointer"
                       >
                         <option value="Male">Male</option>
                         <option value="Female">Female</option>
@@ -881,9 +890,9 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                   </div>
                 )}
 
-                <div className="space-y-1">
+                <div className="space-y-1.5">
                   {authMode === "register" && (
-                    <label className="text-[11px] font-semibold text-slate-300">Email or Mobile Number *</label>
+                    <label className="text-xs font-semibold text-slate-300">Email or Mobile Number *</label>
                   )}
                   <input
                     type="text"
@@ -903,7 +912,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                         ? "Email or mobile number"
                         : "Enter your email or 10-digit mobile"
                     }
-                    className="w-full px-4 py-3 rounded-xl bg-slate-900/90 border border-slate-700 focus:border-rose-500 focus:ring-2 focus:ring-rose-500/30 text-white text-sm placeholder:text-slate-400 outline-none transition-all font-medium"
+                    className="w-full px-4 py-3.5 rounded-xl bg-slate-900/90 border border-slate-700 focus:border-rose-500 focus:ring-2 focus:ring-rose-500/30 text-white text-base placeholder:text-slate-400 outline-none transition-all font-medium"
                     autoFocus={authMode === "signin"}
                   />
                 </div>
@@ -911,10 +920,10 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#e50914] to-[#b80710] hover:from-[#f40612] hover:to-[#c70812] disabled:opacity-60 text-white font-bold text-sm sm:text-base tracking-wide transition-all duration-200 active:scale-[0.98] shadow-xl shadow-red-950/50 flex items-center justify-center gap-2 cursor-pointer mt-1"
+                  className="w-full py-4 rounded-xl bg-gradient-to-r from-[#e50914] to-[#b80710] hover:from-[#f40612] hover:to-[#c70812] disabled:opacity-60 text-white font-black text-base sm:text-lg tracking-wide transition-all duration-200 active:scale-[0.98] shadow-2xl shadow-red-950/60 flex items-center justify-center gap-2 cursor-pointer mt-2"
                 >
                   {isLoading ? (
-                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                   ) : (
                     <span>
                       {authMode === "signin" ? "Sign In with OTP" : "Sign Up & Send Code"}
@@ -924,7 +933,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
               </form>
 
               {/* Switch Mode Footer Toggle */}
-              <div className="text-center text-xs text-slate-400 pt-1">
+              <div className="text-center text-xs sm:text-sm text-slate-400 pt-1">
                 {authMode === "signin" ? (
                   <p>
                     New to CineVerse?{" "}
@@ -960,7 +969,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
               <div className="pt-1">
                 <div className="relative flex items-center justify-center my-2">
                   <div className="w-full border-t border-slate-800" />
-                  <span className="bg-slate-950 px-3 text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
+                  <span className="bg-slate-950 px-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">
                     Or
                   </span>
                 </div>
@@ -969,9 +978,9 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                   type="button"
                   onClick={handleGoogleLogin}
                   disabled={isLoading}
-                  className="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-850 border border-slate-800 hover:border-slate-700 text-slate-200 hover:text-white font-medium text-xs sm:text-sm flex items-center justify-center gap-2.5 transition-all cursor-pointer active:scale-[0.98]"
+                  className="w-full py-3 rounded-xl bg-slate-900 hover:bg-slate-850 border border-slate-800 hover:border-slate-700 text-slate-200 hover:text-white font-semibold text-sm sm:text-base flex items-center justify-center gap-2.5 transition-all cursor-pointer active:scale-[0.98]"
                 >
-                  <svg className="w-4 h-4" viewBox="0 0 24 24">
+                  <svg className="w-5 h-5" viewBox="0 0 24 24">
                     <path
                       fill="#4285F4"
                       d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -1006,19 +1015,28 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
       {/* ========================================================================= */}
       {screen === "otp" && (
         <div className="relative min-h-screen w-full flex flex-col justify-between bg-black overflow-hidden">
-          {/* Ambient Cinema Posters Backdrop */}
-          <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none opacity-20">
-            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3 sm:gap-4 p-3 scale-110 transform -translate-y-8 blur-[1px]">
+          {/* Ambient Cinema Posters Backdrop (High Visibility & Rich Gradient) */}
+          <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none opacity-55">
+            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3 sm:gap-4 p-3 scale-110 transform -translate-y-8 animate-in fade-in duration-700">
               {[...posters, ...posters].slice(0, 32).map((imgUrl, idx) => (
                 <div
                   key={idx}
-                  className="aspect-[2/3] rounded-lg overflow-hidden bg-slate-900 border border-white/5"
+                  className="relative aspect-[2/3] w-full rounded-xl overflow-hidden bg-slate-900 shadow-xl shadow-black/90 border border-white/5"
                 >
-                  <img src={imgUrl} alt="" className="w-full h-full object-cover" />
+                  <img
+                    src={imgUrl}
+                    alt="Movie poster"
+                    className="w-full h-full object-cover object-center"
+                    loading={idx < 8 ? "eager" : "lazy"}
+                  />
+                  <div className="absolute inset-0 bg-black/20" />
                 </div>
               ))}
             </div>
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/85 to-black/90" />
+            {/* Cinematic Vignette Overlays & Radial Glow */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/75 to-black/60" />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-black" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(229,9,20,0.18)_0%,rgba(0,0,0,0.85)_75%)]" />
           </div>
 
           {/* Top Bar with Back Arrow */}
@@ -1044,30 +1062,30 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
             </div>
           </header>
 
-          {/* Centered Glassmorphic OTP Card */}
-          <main className="relative z-10 flex-1 w-full max-w-[460px] mx-auto px-4 py-8 sm:py-12 flex flex-col justify-center">
-            <div className="relative w-full p-7 sm:p-9 rounded-3xl bg-slate-950/90 backdrop-blur-2xl border border-white/10 shadow-[0_20px_70px_rgba(0,0,0,0.85)] space-y-5 animate-in zoom-in-95 duration-200 overflow-hidden">
+          {/* Centered Glassmorphic OTP Card (Spacious & Premium) */}
+          <main className="relative z-10 flex-1 w-full max-w-[540px] mx-auto px-4 py-8 sm:py-12 flex flex-col justify-center">
+            <div className="relative w-full p-8 sm:p-11 rounded-3xl bg-slate-950/92 backdrop-blur-2xl border border-white/10 shadow-[0_25px_80px_rgba(0,0,0,0.9)] space-y-6 sm:space-y-7 animate-in zoom-in-95 duration-200 overflow-hidden">
               {/* Top Accent Line */}
               <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-rose-500 to-transparent" />
 
               {/* Glowing Icon Badge */}
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-rose-600 via-red-600 to-rose-500 p-0.5 shadow-xl shadow-red-600/25 mx-auto flex items-center justify-center">
+              <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-tr from-rose-600 via-red-600 to-rose-500 p-0.5 shadow-[0_0_30px_rgba(229,9,20,0.45)] mx-auto flex items-center justify-center">
                 <div className="w-full h-full rounded-[14px] bg-slate-950 flex items-center justify-center text-rose-400">
-                  <Lock className="w-5 h-5" />
+                  <Lock className="w-6 h-6 sm:w-7 sm:h-7" />
                 </div>
               </div>
 
               {/* Title & Target Details Badge */}
-              <div className="space-y-2 text-center">
-                <h2 className="text-2xl sm:text-[26px] font-extrabold text-white tracking-tight">
+              <div className="space-y-2.5 text-center">
+                <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
                   {authMode === "signin"
                     ? `Welcome back${existingUser?.first_name ? `, ${existingUser.first_name}` : ""}!`
                     : "Verify your Account"}
                 </h2>
                 <div className="flex items-center justify-center pt-0.5">
-                  <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900 border border-slate-800 text-xs text-slate-300">
-                    {identifier.includes("@") ? <Mail className="w-3.5 h-3.5 text-rose-400" /> : <Phone className="w-3.5 h-3.5 text-rose-400" />}
-                    <span className="font-semibold text-white">
+                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-900/90 border border-slate-700/80 text-xs sm:text-sm text-slate-300 shadow-inner">
+                    {identifier.includes("@") ? <Mail className="w-4 h-4 text-rose-400" /> : <Phone className="w-4 h-4 text-rose-400" />}
+                    <span className="font-bold text-white tracking-wide">
                       {identifier.includes("@")
                         ? identifier.toLowerCase()
                         : `+91 ${identifier.replace(/\D/g, "").slice(-10)}`}
@@ -1075,7 +1093,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                     <button
                       type="button"
                       onClick={() => setScreen("signin")}
-                      className="text-rose-400 hover:text-rose-300 font-bold ml-1 hover:underline cursor-pointer text-[11px]"
+                      className="text-rose-400 hover:text-rose-300 font-bold ml-1.5 hover:underline cursor-pointer text-xs"
                     >
                       Change
                     </button>
@@ -1085,7 +1103,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
 
               {/* Error Notification */}
               {error && (
-                <div className="p-3.5 rounded-xl bg-red-950/50 border border-red-500/40 text-red-200 text-xs sm:text-sm flex items-start gap-2.5 animate-in fade-in">
+                <div className="p-3.5 sm:p-4 rounded-xl bg-red-950/50 border border-red-500/40 text-red-200 text-xs sm:text-sm flex items-start gap-2.5 animate-in fade-in">
                   <AlertCircle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
                   <span className="leading-snug">{error}</span>
                 </div>
@@ -1093,12 +1111,12 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
 
               {/* Registration User Summary Badge */}
               {authMode === "register" && firstName && surname && (
-                <div className="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 flex items-center justify-between text-xs animate-in fade-in">
+                <div className="p-3.5 sm:p-4 rounded-xl bg-slate-900/90 border border-slate-800 flex items-center justify-between text-xs sm:text-sm animate-in fade-in">
                   <div className="space-y-0.5">
-                    <span className="text-slate-400 text-[11px] block">Registering Account For</span>
-                    <strong className="text-white text-sm font-bold flex items-center gap-2">
+                    <span className="text-slate-400 text-xs block">Registering Account For</span>
+                    <strong className="text-white text-sm sm:text-base font-bold flex items-center gap-2">
                       <span>{firstName} {surname}</span>
-                      <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-slate-800 text-slate-300 border border-slate-700">
+                      <span className="px-2 py-0.5 rounded-full text-xs font-semibold bg-slate-800 text-slate-300 border border-slate-700">
                         {gender}
                       </span>
                     </strong>
@@ -1106,7 +1124,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                   <button
                     type="button"
                     onClick={() => setScreen("signin")}
-                    className="text-[#e50914] hover:underline text-xs font-semibold cursor-pointer"
+                    className="text-[#e50914] hover:underline text-xs sm:text-sm font-semibold cursor-pointer"
                   >
                     Edit
                   </button>
@@ -1114,13 +1132,13 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
               )}
 
               {/* OTP Form */}
-              <form onSubmit={handleVerifyOtp} className="space-y-4">
+              <form onSubmit={handleVerifyOtp} className="space-y-5">
                 {/* 6-Digit OTP Interactive Boxes */}
-                <div className="space-y-2.5">
-                  <label className="block text-center text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+                <div className="space-y-3">
+                  <label className="block text-center text-xs font-bold text-slate-400 uppercase tracking-widest">
                     Enter 6-Digit Passcode
                   </label>
-                  <div className="relative flex items-center justify-center gap-2 sm:gap-2.5 my-1">
+                  <div className="relative flex items-center justify-center gap-2.5 sm:gap-3.5 my-2">
                     {/* Synchronized hidden input */}
                     <input
                       type="text"
@@ -1142,20 +1160,20 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                       return (
                         <div
                           key={index}
-                          className={`w-11 sm:w-12 h-13 sm:h-14 rounded-2xl border flex items-center justify-center text-xl sm:text-2xl font-black font-mono transition-all duration-200 ${
+                          className={`w-12 sm:w-14 h-14 sm:h-16 rounded-2xl border-2 flex items-center justify-center text-2xl sm:text-3xl font-black font-mono transition-all duration-200 ${
                             isFilled
-                              ? "bg-slate-900 border-rose-500/80 text-white shadow-md shadow-rose-950/30 scale-[1.02]"
+                              ? "bg-slate-900 border-rose-500 text-white shadow-[0_0_15px_rgba(229,9,20,0.35)] scale-[1.04]"
                               : isCurrent
-                              ? "bg-slate-900/90 border-white text-white ring-2 ring-rose-500/30"
+                              ? "bg-slate-900/90 border-white text-white ring-4 ring-rose-500/25 scale-[1.02]"
                               : "bg-slate-950/70 border-slate-800 text-slate-600"
                           }`}
                         >
                           {digit ? (
                             <span className="animate-in zoom-in-75 duration-150">{digit}</span>
                           ) : isCurrent ? (
-                            <span className="w-1 h-5 bg-rose-500 rounded-full animate-pulse" />
+                            <span className="w-1 h-6 bg-rose-500 rounded-full animate-pulse" />
                           ) : (
-                            <span className="w-1.5 h-1.5 rounded-full bg-slate-700/60" />
+                            <span className="w-2 h-2 rounded-full bg-slate-700/60" />
                           )}
                         </div>
                       );
@@ -1164,15 +1182,15 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
 
                   {/* Quick Dev / Demo OTP Helper */}
                   {receivedDevOtp && (
-                    <div className="p-3 rounded-xl bg-gradient-to-r from-red-950/40 via-rose-950/30 to-red-950/40 border border-red-500/30 flex items-center justify-between text-xs animate-in fade-in shadow-inner mt-2">
-                      <div className="flex items-center gap-2 text-rose-200">
-                        <Sparkles className="w-4 h-4 text-amber-400 animate-pulse shrink-0" />
-                        <span>Demo OTP: <strong className="font-mono text-white text-sm tracking-widest ml-1 font-bold">{receivedDevOtp}</strong></span>
+                    <div className="p-3.5 sm:p-4 rounded-xl bg-gradient-to-r from-red-950/50 via-rose-950/40 to-red-950/50 border border-red-500/40 flex items-center justify-between text-xs sm:text-sm animate-in fade-in shadow-inner mt-2">
+                      <div className="flex items-center gap-2.5 text-rose-200">
+                        <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-amber-400 animate-pulse shrink-0" />
+                        <span>Demo OTP: <strong className="font-mono text-white text-base sm:text-lg tracking-widest ml-1 font-black">{receivedDevOtp}</strong></span>
                       </div>
                       <button
                         type="button"
                         onClick={() => setOtpCode(receivedDevOtp)}
-                        className="px-3 py-1 rounded-lg bg-[#e50914] hover:bg-[#b80710] text-white font-bold text-xs cursor-pointer transition-all active:scale-95 shadow-md shadow-red-950/50"
+                        className="px-3.5 py-1.5 rounded-lg bg-[#e50914] hover:bg-[#b80710] text-white font-bold text-xs sm:text-sm cursor-pointer transition-all active:scale-95 shadow-lg shadow-red-950/50"
                       >
                         Auto Fill
                       </button>
@@ -1180,7 +1198,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                   )}
 
                   {/* Resend Code */}
-                  <div className="flex items-center justify-between text-xs px-1 text-slate-400 pt-1">
+                  <div className="flex items-center justify-between text-xs sm:text-sm px-1 text-slate-400 pt-1">
                     <span>Didn&apos;t receive code?</span>
                     <button
                       type="button"
@@ -1197,10 +1215,10 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                 <button
                   type="submit"
                   disabled={isLoading || otpCode.length < 6}
-                  className="w-full py-3.5 rounded-xl bg-[#e50914] hover:bg-[#b80710] disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold text-base tracking-wide transition-all duration-200 active:scale-[0.98] shadow-xl shadow-red-950/50 flex items-center justify-center gap-2 cursor-pointer mt-1"
+                  className="w-full py-4 rounded-xl bg-[#e50914] hover:bg-[#b80710] disabled:opacity-40 disabled:cursor-not-allowed text-white font-black text-base sm:text-lg tracking-wide transition-all duration-200 active:scale-[0.98] shadow-2xl shadow-red-950/60 flex items-center justify-center gap-2 cursor-pointer mt-2"
                 >
                   {isLoading ? (
-                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                   ) : (
                     <span>
                       {authMode === "signin" ? "Sign In & Start Watching" : "Complete Registration & Start Watching"}
@@ -1211,7 +1229,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
             </div>
           </main>
 
-          <footer className="relative z-10 w-full py-4 text-center text-[10px] text-slate-600">
+          <footer className="relative z-10 w-full py-4 text-center text-xs text-slate-600">
             Protected with end-to-end encryption.
           </footer>
         </div>
