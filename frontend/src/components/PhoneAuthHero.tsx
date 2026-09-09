@@ -141,7 +141,6 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
   // Screen state: "landing" (Photo 1) | "signin" (Photo 2) | "otp"
   const [screen, setScreen] = useState<"landing" | "signin" | "otp">("landing");
   const [activeSlide, setActiveSlide] = useState<number>(0);
-  const [activeTrendingIndex, setActiveTrendingIndex] = useState<number>(0);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [isPrivacyOpen, setIsPrivacyOpen] = useState<boolean>(false);
   const [isHelpOpen, setIsHelpOpen] = useState<boolean>(false);
@@ -195,19 +194,29 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
     return () => clearInterval(interval);
   }, [screen]);
 
-  // Auto cycle trending movie spotlight every 7 seconds
-  useEffect(() => {
-    if (screen !== "landing") return;
-    const interval = setInterval(() => {
-      setActiveTrendingIndex((prev) => (prev + 1) % 6);
-    }, 7000);
-    return () => clearInterval(interval);
-  }, [screen]);
-
   // Extract poster URLs for background wall
   const posters = sampleMovies.length > 0
     ? sampleMovies.map((m) => m.image_url).filter(Boolean)
     : FALLBACK_POSTERS;
+
+  const [trendingOffset, setTrendingOffset] = useState<number>(0);
+
+  // Auto cycle trending movie posters rotation every 7 seconds
+  useEffect(() => {
+    if (screen !== "landing" || posters.length === 0) return;
+    const interval = setInterval(() => {
+      setTrendingOffset((prev) => (prev + 1) % posters.length);
+    }, 7000);
+    return () => clearInterval(interval);
+  }, [screen, posters.length]);
+
+  const visibleTrendingPosters = Array.from({ length: Math.min(6, posters.length) }, (_, i) => {
+    const posterIndex = (trendingOffset + i) % posters.length;
+    return {
+      url: posters[posterIndex],
+      index: posterIndex,
+    };
+  });
 
   // Smart Phone & Form validation
   // Only pure digits without any letters or @ are treated as numeric phone
@@ -669,7 +678,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
           </div>
 
           {/* ========================================================================= */}
-          {/* SECTION 2: TRENDING NOW POSTER ROW                                        */}
+          {/* SECTION 2: TRENDING NOW POSTER ROW (Auto-Rotating Posters Every 7 Seconds)  */}
           {/* ========================================================================= */}
           <section className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-8 py-12 border-t border-slate-900">
             <div className="flex items-center justify-between mb-6">
@@ -679,50 +688,43 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                   Trending Now on CineVerse
                 </h2>
               </div>
-              <span className="text-xs text-slate-400">Top 10 in India Today</span>
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-slate-400 mr-2 hidden sm:inline">Top 10 in India Today</span>
+                <button
+                  type="button"
+                  onClick={() => setTrendingOffset((prev) => (prev - 1 + posters.length) % posters.length)}
+                  className="p-1.5 rounded-full bg-slate-900 hover:bg-[#e50914] text-slate-400 hover:text-white border border-slate-800 transition-all cursor-pointer shadow-sm active:scale-95"
+                  title="Previous Trending"
+                >
+                  <ChevronLeft className="w-3.5 h-3.5" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setTrendingOffset((prev) => (prev + 1) % posters.length)}
+                  className="p-1.5 rounded-full bg-slate-900 hover:bg-[#e50914] text-slate-400 hover:text-white border border-slate-800 transition-all cursor-pointer shadow-sm active:scale-95"
+                  title="Next Trending"
+                >
+                  <ChevronRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-              {posters.slice(0, 6).map((imgUrl, idx) => {
-                const isActive = activeTrendingIndex === idx;
-                return (
-                  <div
-                    key={idx}
-                    onClick={() => {
-                      setActiveTrendingIndex(idx);
-                      setScreen("signin");
-                    }}
-                    onMouseEnter={() => setActiveTrendingIndex(idx)}
-                    className={`group relative aspect-[2/3] w-full rounded-2xl overflow-hidden bg-slate-900 border transition-all duration-500 cursor-pointer ${
-                      isActive
-                        ? "border-[#e50914] scale-105 shadow-2xl shadow-red-600/50 ring-2 ring-[#e50914]/40 z-10"
-                        : "border-slate-800/90 hover:border-[#e50914]/70 hover:scale-105 shadow-lg hover:shadow-red-950/40 opacity-80 hover:opacity-100"
-                    }`}
-                  >
-                    <img
-                      src={imgUrl}
-                      alt="Trending Movie"
-                      className={`w-full h-full object-cover object-center transition-transform duration-700 ${
-                        isActive ? "scale-110" : "group-hover:scale-105"
-                      }`}
-                      loading="lazy"
-                    />
-                    <div
-                      className={`absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-transparent transition-opacity duration-300 ${
-                        isActive ? "opacity-40" : "opacity-65 group-hover:opacity-40"
-                      }`}
-                    />
-
-                    {/* Active Spotlight Badge with Pulsing Ping */}
-                    {isActive && (
-                      <div className="absolute top-2.5 right-2.5 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#e50914] text-[10px] font-black uppercase tracking-wider text-white shadow-xl shadow-red-950/80 backdrop-blur-md animate-in fade-in zoom-in-95 duration-300">
-                        <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping" />
-                        <span>#{idx + 1}</span>
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
+              {visibleTrendingPosters.map((item, idx) => (
+                <div
+                  key={`${item.url}-${idx}`}
+                  onClick={() => setScreen("signin")}
+                  className="group relative aspect-[2/3] w-full rounded-2xl overflow-hidden bg-slate-900 border border-slate-800/90 hover:border-[#e50914] transition-all duration-500 hover:scale-105 cursor-pointer shadow-lg hover:shadow-red-950/40"
+                >
+                  <img
+                    src={item.url}
+                    alt="Trending Movie"
+                    className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-110"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-50 group-hover:opacity-20 transition-opacity duration-300" />
+                </div>
+              ))}
             </div>
           </section>
 
