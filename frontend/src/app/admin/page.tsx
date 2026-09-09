@@ -82,91 +82,6 @@ const GENRE_ICONS: Record<string, string> = {
   Western: "🤠",
 };
 
-export interface PosterPreset {
-  name: string;
-  title: string;
-  genre: string;
-  year: number;
-  rating: number;
-  poster: string;
-  description: string;
-}
-
-export const SAMPLE_POSTER_PRESETS: PosterPreset[] = [
-  {
-    name: "Stree 2",
-    title: "Stree 2: Sarkate Ka Aatank",
-    genre: "Horror, Comedy",
-    year: 2024,
-    rating: 8.6,
-    poster: "https://upload.wikimedia.org/wikipedia/en/3/3d/Stree_2_poster.jpg",
-    description: "After the events of Stree, the town of Chanderi is haunted by a headless entity named Sarkata who abducts progressive women.",
-  },
-  {
-    name: "Kalki 2898 AD",
-    title: "Kalki 2898 AD",
-    genre: "Sci-Fi, Action",
-    year: 2024,
-    rating: 8.8,
-    poster: "https://upload.wikimedia.org/wikipedia/en/4/4c/Kalki_2898_AD.jpg",
-    description: "A modern avatar of Vishnu descends to Earth to protect humanity from dark forces in a dystopian future city called Kasi.",
-  },
-  {
-    name: "Pushpa 2",
-    title: "Pushpa 2: The Rule",
-    genre: "Action, Crime",
-    year: 2024,
-    rating: 8.9,
-    poster: "https://upload.wikimedia.org/wikipedia/en/1/13/Pushpa_2_The_Rule.jpg",
-    description: "Pushpa Raj expands his red sandalwood empire while confronting corrupt police officials and rival underworld bosses.",
-  },
-  {
-    name: "Jawan",
-    title: "Jawan",
-    genre: "Action, Thriller",
-    year: 2023,
-    rating: 8.4,
-    poster: "https://upload.wikimedia.org/wikipedia/en/3/39/Jawan_film_poster.jpg",
-    description: "A former soldier leads a women's team in daring vigilante operations to fight corruption across society.",
-  },
-  {
-    name: "The Conjuring",
-    title: "The Conjuring",
-    genre: "Horror, Thriller",
-    year: 2013,
-    rating: 8.7,
-    poster: "https://upload.wikimedia.org/wikipedia/en/1/1f/The_Conjuring_poster.jpg",
-    description: "Paranormal investigators Ed and Lorraine Warren assist a Rhode Island family terrorized by a malevolent presence.",
-  },
-  {
-    name: "Interstellar",
-    title: "Interstellar",
-    genre: "Sci-Fi, Adventure",
-    year: 2014,
-    rating: 9.2,
-    poster: "https://upload.wikimedia.org/wikipedia/en/b/bc/Interstellar_film_poster.jpg",
-    description: "A team of space explorers travels through a wormhole near Saturn in search of a new habitable planet for mankind.",
-  },
-  {
-    name: "Animal",
-    title: "Animal",
-    genre: "Action, Drama",
-    year: 2023,
-    rating: 8.1,
-    poster: "https://upload.wikimedia.org/wikipedia/en/9/90/Animal_%282023_film%29_poster.jpg",
-    description: "A man's fierce love for his distant father pushes him into a brutal underworld vendetta against dangerous enemies.",
-  },
-  {
-    name: "The Dark Knight",
-    title: "The Dark Knight",
-    genre: "Action, Crime",
-    year: 2008,
-    rating: 9.5,
-    poster: "https://upload.wikimedia.org/wikipedia/en/1/1c/The_Dark_Knight_%282008_film%29.jpg",
-    description: "Batman confronts his greatest psychological and physical test when the sadistic mastermind known as the Joker unleashes chaos on Gotham City.",
-  },
-];
-
 /**
  * Smart URL cleaner that automatically extracts the real direct image URL
  * if a user pastes a Google Image search / redirect URL.
@@ -511,21 +426,6 @@ export default function AdminPage() {
     } finally {
       setIsUploadingImage(false);
     }
-  };
-
-  // 1-Click Preset Selection Handler
-  const handleSelectPreset = (preset: PosterPreset) => {
-    setFormData((prev) => ({
-      ...prev,
-      title: prev.title.trim() === "" ? preset.title : prev.title,
-      genre: prev.genre.trim() === "" || prev.genre === "Action" ? preset.genre : prev.genre,
-      release_year: preset.year,
-      rating: preset.rating,
-      image_url: preset.poster,
-      description: prev.description.trim() === "" ? preset.description : prev.description,
-    }));
-    setImagePreviewStatus("loading");
-    setFormError("");
   };
 
   // Delete Modal trigger
@@ -1727,27 +1627,6 @@ export default function AdminPage() {
                         </button>
                       </div>
                     )}
-
-                    {/* Quick Working Sample Presets */}
-                    <div>
-                      <div className="flex items-center gap-1 text-[11px] font-bold text-slate-400 mb-1.5">
-                        <Sparkles className="w-3 h-3 text-amber-400" />
-                        <span>⚡ Or 1-Click Auto-Fill Sample Blockbuster:</span>
-                      </div>
-                      <div className="flex items-center gap-1.5 overflow-x-auto pb-1.5 no-scrollbar scroll-smooth">
-                        {SAMPLE_POSTER_PRESETS.map((p) => (
-                          <button
-                            key={p.name}
-                            type="button"
-                            onClick={() => handleSelectPreset(p)}
-                            className="shrink-0 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-white/5 hover:bg-rose-500/20 text-slate-300 hover:text-white hover:border-rose-500/40 border border-white/10 transition-all cursor-pointer active:scale-95"
-                            title={`Click to auto-fill with ${p.title}`}
-                          >
-                            {p.name}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
                   </div>
 
                   <div>
@@ -2057,27 +1936,6 @@ export default function AdminPage() {
                         </button>
                       </div>
                     )}
-
-                    {/* Quick Working Sample Presets */}
-                    <div>
-                      <div className="flex items-center gap-1 text-[11px] font-bold text-slate-400 mb-1.5">
-                        <Sparkles className="w-3 h-3 text-amber-400" />
-                        <span>⚡ Or 1-Click Auto-Fill Sample Blockbuster:</span>
-                      </div>
-                      <div className="flex items-center gap-1.5 overflow-x-auto pb-1.5 no-scrollbar scroll-smooth">
-                        {SAMPLE_POSTER_PRESETS.map((p) => (
-                          <button
-                            key={p.name}
-                            type="button"
-                            onClick={() => handleSelectPreset(p)}
-                            className="shrink-0 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-white/5 hover:bg-rose-500/20 text-slate-300 hover:text-white hover:border-rose-500/40 border border-white/10 transition-all cursor-pointer active:scale-95"
-                            title={`Click to set poster to ${p.title}`}
-                          >
-                            {p.name}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
                   </div>
 
                   <div>
