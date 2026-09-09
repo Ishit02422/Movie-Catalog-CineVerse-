@@ -229,15 +229,23 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
 
     try {
       if (screen === "landing") {
-        // Smart Landing Flow: Send OTP without forced mode to auto-detect existing vs new user
-        const sendRes = await sendPhoneOtp(val);
-        setReceivedDevOtp(sendRes.dev_otp || null);
+        // Smart Landing Flow: Check if user exists first WITHOUT sending premature OTP
+        const checkRes = await checkUser(val);
 
-        if (sendRes.exists) {
-          // Existing User -> Auto Sign In OTP Screen
+        if (checkRes.exists) {
+          // Existing User -> Send Sign In OTP & go to OTP Screen
           setAuthMode("signin");
-          if (sendRes.user_name) {
-            setExistingUser({ name: sendRes.user_name });
+          const sendRes = await sendPhoneOtp(val, "signin");
+          setReceivedDevOtp(sendRes.dev_otp || null);
+
+          if (checkRes.data?.first_name || checkRes.data?.name) {
+            setExistingUser({
+              name: checkRes.data.name,
+              first_name: checkRes.data.first_name,
+              surname: checkRes.data.surname,
+              phone: checkRes.data.phone,
+              email: checkRes.data.email,
+            });
           }
           if (isNum) {
             setSuccessMessage(`Welcome back! Verification code sent via SMS to +91-${cleanPhone.slice(-10)}`);
@@ -247,13 +255,13 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
           setScreen("otp");
           setOtpCode("");
         } else {
-          // New User -> Open Sign Up Screen with pre-filled identifier to collect name
+          // New User -> Open Sign Up Screen to collect name (NO OTP SENT YET - NO DUPLICATE OTP)
           setAuthMode("register");
           setExistingUser(null);
           setScreen("signin");
         }
       } else {
-        // Explicit Screen 2 Flow (Sign In tab or Sign Up tab)
+        // Explicit Screen 2 Flow (User clicks "Sign In with OTP" or "Sign Up & Send Code")
         const sendRes = await sendPhoneOtp(val, authMode);
         if (sendRes.user_name) {
           setExistingUser({ name: sendRes.user_name });
