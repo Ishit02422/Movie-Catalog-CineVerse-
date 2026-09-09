@@ -163,8 +163,8 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
         setError("First Name must be at least 2 characters long.");
         return;
       }
-      if (!/^[A-Za-z\s'-]+$/.test(cleanFirst)) {
-        setError("First Name can only contain letters (no numbers or special characters).");
+      if (!/^[A-Za-z]+$/.test(cleanFirst)) {
+        setError("First Name can only contain letters (A-Z, a-z). Numbers and symbols are not allowed.");
         return;
       }
 
@@ -176,8 +176,8 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
         setError("Last Name must be at least 2 characters long.");
         return;
       }
-      if (!/^[A-Za-z\s'-]+$/.test(cleanLast)) {
-        setError("Last Name can only contain letters (no numbers or special characters).");
+      if (!/^[A-Za-z]+$/.test(cleanLast)) {
+        setError("Last Name can only contain letters (A-Z, a-z). Numbers and symbols are not allowed.");
         return;
       }
     }
@@ -255,12 +255,12 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
       const cleanFirst = firstName.trim();
       const cleanLast = surname.trim();
 
-      if (!cleanFirst || cleanFirst.length < 2 || !/^[A-Za-z\s'-]+$/.test(cleanFirst)) {
-        setError("Please enter a valid First Name (at least 2 letters).");
+      if (!cleanFirst || cleanFirst.length < 2 || !/^[A-Za-z]+$/.test(cleanFirst)) {
+        setError("Please enter a valid First Name (only letters A-Z, a-z).");
         return;
       }
-      if (!cleanLast || cleanLast.length < 2 || !/^[A-Za-z\s'-]+$/.test(cleanLast)) {
-        setError("Please enter a valid Last Name (at least 2 letters).");
+      if (!cleanLast || cleanLast.length < 2 || !/^[A-Za-z]+$/.test(cleanLast)) {
+        setError("Please enter a valid Last Name (only letters A-Z, a-z).");
         return;
       }
     }
@@ -752,9 +752,17 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                         type="text"
                         value={firstName}
                         onChange={(e) => {
-                          const sanitized = e.target.value.replace(/[^A-Za-z\s'-]/g, "");
+                          const sanitized = e.target.value.replace(/[^A-Za-z]/g, "");
                           setFirstName(sanitized);
                           if (error) setError(null);
+                        }}
+                        onKeyDown={(e) => {
+                          if (
+                            !/^[A-Za-z]$/.test(e.key) &&
+                            !["Backspace", "Tab", "ArrowLeft", "ArrowRight", "Delete"].includes(e.key)
+                          ) {
+                            e.preventDefault();
+                          }
                         }}
                         placeholder="e.g. Rahul"
                         maxLength={30}
@@ -769,9 +777,17 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                         type="text"
                         value={surname}
                         onChange={(e) => {
-                          const sanitized = e.target.value.replace(/[^A-Za-z\s'-]/g, "");
+                          const sanitized = e.target.value.replace(/[^A-Za-z]/g, "");
                           setSurname(sanitized);
                           if (error) setError(null);
+                        }}
+                        onKeyDown={(e) => {
+                          if (
+                            !/^[A-Za-z]$/.test(e.key) &&
+                            !["Backspace", "Tab", "ArrowLeft", "ArrowRight", "Delete"].includes(e.key)
+                          ) {
+                            e.preventDefault();
+                          }
                         }}
                         placeholder="e.g. Sharma"
                         maxLength={30}

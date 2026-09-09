@@ -394,11 +394,11 @@ export const verifyPhoneOtp = async (
       }
       const cleanFirst = String(first_name || "").trim();
       const cleanLast = String(surname || "").trim();
-      if (!cleanFirst || cleanFirst.length < 2 || !/^[A-Za-z\s'-]+$/.test(cleanFirst)) {
-        throw new ApiError("First Name must be at least 2 characters and contain only letters.", 400);
+      if (!cleanFirst || cleanFirst.length < 2 || !/^[A-Za-z]+$/.test(cleanFirst)) {
+        throw new ApiError("First Name must contain only English letters (A-Z, a-z) with minimum 2 characters.", 400);
       }
-      if (!cleanLast || cleanLast.length < 2 || !/^[A-Za-z\s'-]+$/.test(cleanLast)) {
-        throw new ApiError("Last Name must be at least 2 characters and contain only letters.", 400);
+      if (!cleanLast || cleanLast.length < 2 || !/^[A-Za-z]+$/.test(cleanLast)) {
+        throw new ApiError("Last Name must contain only English letters (A-Z, a-z) with minimum 2 characters.", 400);
       }
     }
 
