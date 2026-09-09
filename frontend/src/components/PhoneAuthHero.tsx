@@ -138,7 +138,8 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
     : FALLBACK_POSTERS;
 
   // Smart Indian Phone & Form validation
-  const isNumericPhone = /^\d/.test(identifier);
+  // Only pure digits without any letters or @ are treated as numeric phone
+  const isNumericPhone = /^\d+$/.test(identifier) && !/[a-zA-Z@]/.test(identifier);
   const isLandingInputFilled = isNumericPhone
     ? identifier.length === 10
     : identifier.trim().length > 0;
@@ -150,13 +151,14 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
         surname.trim().length > 0;
   const isOtpValid = otpCode.trim().length === 6;
 
-  // Smart Input Sanitizer (Strict 10-Digit Capping for Indian Numbers)
+  // Smart Input Sanitizer (Strict 10-Digit Capping for Indian Numbers, Full Length for Emails)
   const handleIdentifierChange = (raw: string) => {
     const noSpaces = raw.replace(/\s+/g, "");
-    if (/^\d/.test(noSpaces)) {
-      const digitsOnly = noSpaces.replace(/\D/g, "").slice(0, 10);
-      setIdentifier(digitsOnly);
+    // If only digits are typed so far, cap strictly at 10 digits
+    if (/^\d+$/.test(noSpaces)) {
+      setIdentifier(noSpaces.slice(0, 10));
     } else {
+      // If contains letters or @ (e.g. 22bmiit022@gmail.com), allow full email up to 50 chars
       setIdentifier(noSpaces.slice(0, 50));
     }
     if (error) setError(null);
