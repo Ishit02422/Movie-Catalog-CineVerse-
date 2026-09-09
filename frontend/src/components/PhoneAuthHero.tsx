@@ -419,7 +419,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                     disabled={isLoading}
                     className="w-full sm:w-auto px-6 sm:px-8 py-3.5 sm:py-4 rounded-md bg-[#e50914] hover:bg-[#b80710] active:scale-[0.98] text-white font-bold text-base sm:text-lg tracking-wide transition-all duration-200 shadow-xl shadow-red-950/60 flex items-center justify-center gap-2 cursor-pointer shrink-0"
                   >
-                    <span>Sign Up Free</span>
+                    <span>Get Started</span>
                     <ChevronRight className="w-5 h-5" />
                   </button>
                 </form>
