@@ -141,6 +141,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
   // Screen state: "landing" (Photo 1) | "signin" (Photo 2) | "otp"
   const [screen, setScreen] = useState<"landing" | "signin" | "otp">("landing");
   const [activeSlide, setActiveSlide] = useState<number>(0);
+  const [activeTrendingIndex, setActiveTrendingIndex] = useState<number>(0);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [isPrivacyOpen, setIsPrivacyOpen] = useState<boolean>(false);
   const [isHelpOpen, setIsHelpOpen] = useState<boolean>(false);
@@ -191,6 +192,15 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
     const interval = setInterval(() => {
       setActiveSlide((prev) => (prev + 1) % CAROUSEL_SLIDES.length);
     }, 4500);
+    return () => clearInterval(interval);
+  }, [screen]);
+
+  // Auto cycle trending movie spotlight every 7 seconds
+  useEffect(() => {
+    if (screen !== "landing") return;
+    const interval = setInterval(() => {
+      setActiveTrendingIndex((prev) => (prev + 1) % 6);
+    }, 7000);
     return () => clearInterval(interval);
   }, [screen]);
 
@@ -673,21 +683,46 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-              {posters.slice(0, 6).map((imgUrl, idx) => (
-                <div
-                  key={idx}
-                  onClick={() => setScreen("signin")}
-                  className="group relative aspect-[2/3] w-full rounded-xl overflow-hidden bg-slate-900 border border-slate-800 hover:border-[#e50914] transition-all duration-300 hover:scale-105 cursor-pointer shadow-lg hover:shadow-red-950/40"
-                >
-                  <img
-                    src={imgUrl}
-                    alt="Trending Movie"
-                    className="w-full h-full object-cover object-center"
-                    loading="lazy"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
-                </div>
-              ))}
+              {posters.slice(0, 6).map((imgUrl, idx) => {
+                const isActive = activeTrendingIndex === idx;
+                return (
+                  <div
+                    key={idx}
+                    onClick={() => {
+                      setActiveTrendingIndex(idx);
+                      setScreen("signin");
+                    }}
+                    onMouseEnter={() => setActiveTrendingIndex(idx)}
+                    className={`group relative aspect-[2/3] w-full rounded-2xl overflow-hidden bg-slate-900 border transition-all duration-500 cursor-pointer ${
+                      isActive
+                        ? "border-[#e50914] scale-105 shadow-2xl shadow-red-600/50 ring-2 ring-[#e50914]/40 z-10"
+                        : "border-slate-800/90 hover:border-[#e50914]/70 hover:scale-105 shadow-lg hover:shadow-red-950/40 opacity-80 hover:opacity-100"
+                    }`}
+                  >
+                    <img
+                      src={imgUrl}
+                      alt="Trending Movie"
+                      className={`w-full h-full object-cover object-center transition-transform duration-700 ${
+                        isActive ? "scale-110" : "group-hover:scale-105"
+                      }`}
+                      loading="lazy"
+                    />
+                    <div
+                      className={`absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-transparent transition-opacity duration-300 ${
+                        isActive ? "opacity-40" : "opacity-65 group-hover:opacity-40"
+                      }`}
+                    />
+
+                    {/* Active Spotlight Badge with Pulsing Ping */}
+                    {isActive && (
+                      <div className="absolute top-2.5 right-2.5 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#e50914] text-[10px] font-black uppercase tracking-wider text-white shadow-xl shadow-red-950/80 backdrop-blur-md animate-in fade-in zoom-in-95 duration-300">
+                        <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping" />
+                        <span>#{idx + 1}</span>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           </section>
 
