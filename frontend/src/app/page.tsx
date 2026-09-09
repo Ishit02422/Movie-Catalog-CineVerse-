@@ -108,10 +108,11 @@ export default function Home() {
     }
   }, [debouncedSearch, selectedGenre, selectedYear, selectedSort, isAuthenticated]);
 
-  // Comprehensive list of all release years from 2026 down to 1900 (Full 126+ years of cinema)
+  // Dynamic release years: starts from current year (e.g. 2026, rolls over automatically every new year) down to 1950
   const availableYears = useMemo(() => {
+    const currentYear = new Date().getFullYear();
     const years: number[] = [];
-    for (let y = 2026; y >= 1900; y--) {
+    for (let y = currentYear; y >= 1950; y--) {
       years.push(y);
     }
     return years;

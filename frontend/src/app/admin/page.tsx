@@ -1609,8 +1609,8 @@ export default function AdminPage() {
                       <input
                         type="number"
                         required
-                        min={1888}
-                        max={2030}
+                        min={1950}
+                        max={new Date().getFullYear() + 2}
                         value={formData.release_year}
                         onChange={(e) => setFormData({ ...formData, release_year: Number(e.target.value) })}
                         className="w-full bg-slate-950 border border-white/10 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-[#e50914] transition-all"
@@ -1926,8 +1926,8 @@ export default function AdminPage() {
                       <input
                         type="number"
                         required
-                        min={1888}
-                        max={2030}
+                        min={1950}
+                        max={new Date().getFullYear() + 2}
                         value={formData.release_year}
                         onChange={(e) => setFormData({ ...formData, release_year: Number(e.target.value) })}
                         className="w-full bg-slate-950 border border-white/10 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-[#e50914] transition-all"
