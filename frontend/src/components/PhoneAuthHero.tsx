@@ -731,12 +731,8 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                 </div>
               </div>
 
-              {/* Navigation Arrows & Live Badge */}
+              {/* Navigation Arrows */}
               <div className="flex items-center gap-2.5 self-end sm:self-center">
-                <span className="text-xs font-bold text-slate-400 bg-slate-900/90 border border-slate-800 px-3 py-1.5 rounded-full hidden md:inline-flex items-center gap-1.5 backdrop-blur-md">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                  Top 10 Today
-                </span>
                 <div className="flex items-center gap-1.5 bg-slate-950/90 border border-slate-800/90 p-1 rounded-2xl backdrop-blur-md shadow-md">
                   <button
                     type="button"
