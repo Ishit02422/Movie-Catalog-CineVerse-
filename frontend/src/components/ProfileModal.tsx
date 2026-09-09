@@ -339,7 +339,19 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
                   data-lpignore="true"
                   maxLength={10}
                   value={phone}
-                  onChange={(e) => setPhone(e.target.value.replace(/\D/g, ""))}
+                  onChange={(e) => {
+                    const sanitized = e.target.value.replace(/\D/g, "");
+                    setPhone(sanitized);
+                    if (errorMessage) setErrorMessage(null);
+                  }}
+                  onKeyDown={(e) => {
+                    if (
+                      !/^\d$/.test(e.key) &&
+                      !["Backspace", "Tab", "ArrowLeft", "ArrowRight", "Delete"].includes(e.key)
+                    ) {
+                      e.preventDefault();
+                    }
+                  }}
                   placeholder="Enter 10-digit mobile number"
                   className="w-full pl-11 pr-3.5 py-2.5 bg-slate-950/70 border border-slate-800 rounded-xl text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 transition-all font-mono"
                 />
@@ -362,7 +374,16 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
                   autoComplete="off"
                   data-lpignore="true"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => {
+                    const sanitized = e.target.value.replace(/\s+/g, "");
+                    setEmail(sanitized);
+                    if (errorMessage) setErrorMessage(null);
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === " ") {
+                      e.preventDefault();
+                    }
+                  }}
                   placeholder="name@example.com"
                   className="w-full pl-9 pr-3.5 py-2.5 bg-slate-950/70 border border-slate-800 rounded-xl text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 transition-all"
                 />

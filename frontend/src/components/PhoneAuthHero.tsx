@@ -169,7 +169,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
       return;
     }
 
-    let val = identifier.trim();
+    let val = identifier.trim().replace(/\s+/g, "");
 
     if (authMode === "register") {
       const firstError = validateName(firstName, "First Name");
@@ -443,7 +443,16 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                     <input
                       type="text"
                       value={identifier}
-                      onChange={(e) => setIdentifier(e.target.value)}
+                      onChange={(e) => {
+                        const sanitized = e.target.value.replace(/\s+/g, "");
+                        setIdentifier(sanitized);
+                        if (error) setError(null);
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === " ") {
+                          e.preventDefault();
+                        }
+                      }}
                       placeholder="Email or mobile number"
                       className="w-full px-4 py-3.5 sm:py-4 rounded-md bg-black/80 border border-slate-600 focus:border-white focus:ring-1 focus:ring-white text-white text-base placeholder:text-slate-400 outline-none backdrop-blur-md transition-all"
                     />
@@ -587,7 +596,16 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                 <input
                   type="text"
                   value={identifier}
-                  onChange={(e) => setIdentifier(e.target.value)}
+                  onChange={(e) => {
+                    const sanitized = e.target.value.replace(/\s+/g, "");
+                    setIdentifier(sanitized);
+                    if (error) setError(null);
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === " ") {
+                      e.preventDefault();
+                    }
+                  }}
                   placeholder="Email or mobile number"
                   className="w-full px-4 py-3.5 rounded-md bg-slate-900 border border-slate-700 text-white text-sm focus:border-white focus:outline-none"
                 />
@@ -824,8 +842,14 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                   type="text"
                   value={identifier}
                   onChange={(e) => {
-                    setIdentifier(e.target.value);
+                    const sanitized = e.target.value.replace(/\s+/g, "");
+                    setIdentifier(sanitized);
                     if (error) setError(null);
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === " ") {
+                      e.preventDefault();
+                    }
                   }}
                   placeholder={
                     authMode === "signin"

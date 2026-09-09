@@ -210,7 +210,7 @@ export const sendPhoneOtp = async (
       throw new ApiError("Please provide a valid email or 10-digit mobile number.", 400);
     }
 
-    const inputStr = String(rawInput).trim();
+    const inputStr = String(rawInput).trim().replace(/\s+/g, "");
     const isNum = /^[0-9+ -]+$/.test(inputStr);
     const cleanPhone = inputStr.replace(/\D/g, "");
 
@@ -362,8 +362,8 @@ export const verifyPhoneOtp = async (
       throw new ApiError("Please provide both email/phone and 6-digit OTP code.", 400);
     }
 
-    const inputStr = String(rawInput).trim();
-    const cleanOtp = String(otp).trim();
+    const inputStr = String(rawInput).trim().replace(/\s+/g, "");
+    const cleanOtp = String(otp).trim().replace(/\s+/g, "");
     const isEmail = inputStr.includes("@");
     const cleanIdentifier = isEmail ? inputStr.toLowerCase() : inputStr.replace(/\D/g, "");
 
@@ -626,7 +626,7 @@ export const updateProfile = async (
     }
 
     if (email) {
-      const cleanEmail = String(email).trim().toLowerCase();
+      const cleanEmail = String(email).trim().replace(/\s+/g, "").toLowerCase();
       const emailConflict = await User.findOne({
         email: cleanEmail,
         _id: { $ne: user._id },
