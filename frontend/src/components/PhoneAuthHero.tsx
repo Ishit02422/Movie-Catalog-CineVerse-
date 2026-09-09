@@ -136,6 +136,14 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
     ? sampleMovies.map((m) => m.image_url).filter(Boolean)
     : FALLBACK_POSTERS;
 
+  // Validation status for interactive button activation (only active when filled)
+  const isLandingInputFilled = identifier.trim().length > 0;
+  const isScreen2Valid =
+    authMode === "signin"
+      ? identifier.trim().length > 0
+      : identifier.trim().length > 0 && firstName.trim().length > 0 && surname.trim().length > 0;
+  const isOtpValid = otpCode.trim().length === 6;
+
   // Strict Realistic Human Name Validator (Anti-spam & Anti-gibberish)
   const validateName = (raw: string, fieldLabel: "First Name" | "Last Name"): string | null => {
     const name = raw.trim();
@@ -164,10 +172,9 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
 
     const rawVal = identifier.trim().replace(/\s+/g, "");
 
-    // If user clicked Get Started on landing page with an empty input
-    if (screen === "landing" && !rawVal) {
-      setAuthMode("register");
-      setScreen("signin");
+    // If empty input, prevent submission and prompt user
+    if (!rawVal) {
+      setError("Please enter your email or 10-digit mobile number.");
       return;
     }
 
@@ -489,11 +496,15 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                   </div>
                   <button
                     type="submit"
-                    disabled={isLoading}
-                    className="w-full sm:w-auto px-6 sm:px-8 py-3.5 sm:py-4 rounded-md bg-[#e50914] hover:bg-[#b80710] active:scale-[0.98] text-white font-bold text-base sm:text-lg tracking-wide transition-all duration-200 shadow-xl shadow-red-950/60 flex items-center justify-center gap-2 cursor-pointer shrink-0"
+                    disabled={isLoading || !isLandingInputFilled}
+                    className={`w-full sm:w-auto px-6 sm:px-8 py-3.5 sm:py-4 rounded-md font-bold text-base sm:text-lg tracking-wide transition-all duration-300 flex items-center justify-center gap-2 shrink-0 ${
+                      !isLandingInputFilled || isLoading
+                        ? "bg-red-950/40 text-white/40 border border-white/5 cursor-not-allowed shadow-none"
+                        : "bg-[#e50914] hover:bg-[#b80710] text-white shadow-xl shadow-red-950/60 active:scale-[0.98] cursor-pointer"
+                    }`}
                   >
                     <span>Get Started</span>
-                    <ChevronRight className="w-5 h-5" />
+                    <ChevronRight className={`w-5 h-5 transition-transform ${isLandingInputFilled ? "translate-x-0 group-hover:translate-x-1" : "opacity-40"}`} />
                   </button>
                 </form>
               </div>
@@ -642,7 +653,12 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                 <button
                   type="button"
                   onClick={handleContinue}
-                  className="w-full sm:w-auto px-6 py-3.5 rounded-md bg-[#e50914] hover:bg-[#b80710] text-white font-bold text-sm whitespace-nowrap transition-colors cursor-pointer"
+                  disabled={isLoading || !isLandingInputFilled}
+                  className={`w-full sm:w-auto px-6 py-3.5 rounded-md font-bold text-sm whitespace-nowrap transition-all duration-300 ${
+                    !isLandingInputFilled || isLoading
+                      ? "bg-red-950/40 text-white/40 border border-white/5 cursor-not-allowed shadow-none"
+                      : "bg-[#e50914] hover:bg-[#b80710] text-white shadow-lg shadow-red-950/50 cursor-pointer active:scale-95"
+                  }`}
                 >
                   Get Started
                 </button>
@@ -919,8 +935,12 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
 
                 <button
                   type="submit"
-                  disabled={isLoading}
-                  className="w-full py-4 rounded-xl bg-gradient-to-r from-[#e50914] to-[#b80710] hover:from-[#f40612] hover:to-[#c70812] disabled:opacity-60 text-white font-black text-base sm:text-lg tracking-wide transition-all duration-200 active:scale-[0.98] shadow-2xl shadow-red-950/60 flex items-center justify-center gap-2 cursor-pointer mt-2"
+                  disabled={isLoading || !isScreen2Valid}
+                  className={`w-full py-4 rounded-xl font-black text-base sm:text-lg tracking-wide transition-all duration-300 flex items-center justify-center gap-2 mt-2 ${
+                    !isScreen2Valid || isLoading
+                      ? "bg-red-950/40 text-white/40 border border-white/5 cursor-not-allowed shadow-none"
+                      : "bg-gradient-to-r from-[#e50914] to-[#b80710] hover:from-[#f40612] hover:to-[#c70812] text-white shadow-2xl shadow-red-950/60 active:scale-[0.98] cursor-pointer"
+                  }`}
                 >
                   {isLoading ? (
                     <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -1214,8 +1234,12 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                 {/* Big Red Button */}
                 <button
                   type="submit"
-                  disabled={isLoading || otpCode.length < 6}
-                  className="w-full py-4 rounded-xl bg-[#e50914] hover:bg-[#b80710] disabled:opacity-40 disabled:cursor-not-allowed text-white font-black text-base sm:text-lg tracking-wide transition-all duration-200 active:scale-[0.98] shadow-2xl shadow-red-950/60 flex items-center justify-center gap-2 cursor-pointer mt-2"
+                  disabled={isLoading || !isOtpValid}
+                  className={`w-full py-4 rounded-xl font-black text-base sm:text-lg tracking-wide transition-all duration-300 flex items-center justify-center gap-2 mt-2 ${
+                    !isOtpValid || isLoading
+                      ? "bg-red-950/40 text-white/40 border border-white/5 cursor-not-allowed shadow-none"
+                      : "bg-[#e50914] hover:bg-[#b80710] text-white shadow-2xl shadow-red-950/60 active:scale-[0.98] cursor-pointer"
+                  }`}
                 >
                   {isLoading ? (
                     <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
