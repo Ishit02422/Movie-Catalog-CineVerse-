@@ -9,6 +9,7 @@ import {
   ArrowLeft,
   ChevronDown,
   ChevronUp,
+  ChevronLeft,
   ChevronRight,
   ShieldCheck,
   Sparkles,
@@ -437,30 +438,75 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
 
             {/* Foreground Main Hero Box */}
             <div className="relative z-10 max-w-4xl mx-auto space-y-6 sm:space-y-8">
-              {/* Dynamic Carousel Headlines */}
-              <div className="min-h-[140px] sm:min-h-[160px] flex flex-col justify-center space-y-4">
-                <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.15] drop-shadow-2xl">
-                  {CAROUSEL_SLIDES[activeSlide].title}
-                </h1>
-                <p className="text-base sm:text-xl lg:text-2xl text-slate-200 font-normal leading-relaxed max-w-2xl mx-auto drop-shadow-md">
-                  {CAROUSEL_SLIDES[activeSlide].subtitle}
-                </p>
+              {/* Dynamic Carousel Headlines with Floating Side Arrows */}
+              <div className="relative w-full max-w-4xl mx-auto flex items-center justify-between">
+                <button
+                  type="button"
+                  onClick={() => setActiveSlide((prev) => (prev - 1 + CAROUSEL_SLIDES.length) % CAROUSEL_SLIDES.length)}
+                  aria-label="Previous slide"
+                  className="hidden sm:flex -ml-2 lg:-ml-6 p-2.5 rounded-full bg-slate-900/80 hover:bg-[#e50914] text-slate-300 hover:text-white border border-white/10 hover:border-transparent backdrop-blur-md transition-all cursor-pointer active:scale-90 hover:scale-110 shadow-xl"
+                  title="Previous slide"
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </button>
+
+                <div className="min-h-[140px] sm:min-h-[160px] flex-1 flex flex-col justify-center space-y-4 px-2 sm:px-6">
+                  <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.15] drop-shadow-2xl transition-all duration-300">
+                    {CAROUSEL_SLIDES[activeSlide].title}
+                  </h1>
+                  <p className="text-base sm:text-xl lg:text-2xl text-slate-200 font-normal leading-relaxed max-w-2xl mx-auto drop-shadow-md transition-all duration-300">
+                    {CAROUSEL_SLIDES[activeSlide].subtitle}
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setActiveSlide((prev) => (prev + 1) % CAROUSEL_SLIDES.length)}
+                  aria-label="Next slide"
+                  className="hidden sm:flex -mr-2 lg:-mr-6 p-2.5 rounded-full bg-slate-900/80 hover:bg-[#e50914] text-slate-300 hover:text-white border border-white/10 hover:border-transparent backdrop-blur-md transition-all cursor-pointer active:scale-90 hover:scale-110 shadow-xl"
+                  title="Next slide"
+                >
+                  <ChevronRight className="w-5 h-5" />
+                </button>
               </div>
 
-              {/* 4 Pagination Dots */}
-              <div className="flex items-center justify-center gap-2 py-1">
-                {CAROUSEL_SLIDES.map((_, i) => (
-                  <button
-                    key={i}
-                    type="button"
-                    onClick={() => setActiveSlide(i)}
-                    aria-label={`Go to slide ${i + 1}`}
-                    className={`transition-all duration-300 cursor-pointer ${activeSlide === i
-                        ? "w-7 h-2 rounded-full bg-[#e50914] scale-105"
-                        : "w-2 h-2 rounded-full bg-white/40 hover:bg-white/70"
+              {/* Navigation Controls: Prev Arrow, 4 Dots, Next Arrow */}
+              <div className="flex items-center justify-center gap-3 py-1">
+                <button
+                  type="button"
+                  onClick={() => setActiveSlide((prev) => (prev - 1 + CAROUSEL_SLIDES.length) % CAROUSEL_SLIDES.length)}
+                  aria-label="Previous slide"
+                  className="p-1.5 rounded-full bg-slate-900/80 hover:bg-[#e50914] text-slate-300 hover:text-white border border-white/10 transition-all cursor-pointer active:scale-90 shadow-md"
+                  title="Previous"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                </button>
+
+                <div className="flex items-center gap-2">
+                  {CAROUSEL_SLIDES.map((_, i) => (
+                    <button
+                      key={i}
+                      type="button"
+                      onClick={() => setActiveSlide(i)}
+                      aria-label={`Go to slide ${i + 1}`}
+                      className={`transition-all duration-300 cursor-pointer ${
+                        activeSlide === i
+                          ? "w-7 h-2 rounded-full bg-[#e50914] scale-105"
+                          : "w-2 h-2 rounded-full bg-white/40 hover:bg-white/70"
                       }`}
-                  />
-                ))}
+                    />
+                  ))}
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setActiveSlide((prev) => (prev + 1) % CAROUSEL_SLIDES.length)}
+                  aria-label="Next slide"
+                  className="p-1.5 rounded-full bg-slate-900/80 hover:bg-[#e50914] text-slate-300 hover:text-white border border-white/10 transition-all cursor-pointer active:scale-90 shadow-md"
+                  title="Next"
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </button>
               </div>
 
               {/* Inline Input + Get Started CTA Bar */}
