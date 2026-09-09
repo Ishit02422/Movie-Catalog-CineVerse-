@@ -556,10 +556,10 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
             </div>
           </header>
 
-          {/* Hero Section with Poster Wall Background */}
-          <div className="relative min-h-[85vh] sm:min-h-[90vh] flex flex-col justify-center items-center px-4 sm:px-6 lg:px-8 text-center -mt-20 pt-24 pb-16 overflow-hidden">
+          {/* Hero Section with Poster Wall Background (Seamless Flowing Layout) */}
+          <div className="relative flex flex-col justify-center items-center px-4 sm:px-6 lg:px-8 text-center pt-24 sm:pt-28 pb-8 sm:pb-10 overflow-hidden">
             {/* High-Density Movie Posters Wall Grid */}
-            <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none opacity-55">
+            <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none opacity-50">
               <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3 sm:gap-4 p-3 scale-110 transform -translate-y-8 animate-in fade-in duration-1000">
                 {[...posters, ...posters].slice(0, 32).map((imgUrl, idx) => (
                   <div
@@ -578,15 +578,15 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
               </div>
 
               {/* Cinematic Vignette Overlays & Radial Glow */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-black/60" />
-              <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-black" />
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(229,9,20,0.15)_0%,rgba(0,0,0,0.9)_70%)]" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#04060b] via-[#04060b]/70 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-[#04060b]" />
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(229,9,20,0.18)_0%,rgba(0,0,0,0.85)_70%)]" />
             </div>
 
             {/* Foreground Main Hero Box */}
-            <div className="relative z-10 max-w-4xl mx-auto space-y-6 sm:space-y-8">
+            <div className="relative z-10 max-w-4xl mx-auto space-y-5 sm:space-y-6">
               {/* Dynamic Carousel Headlines */}
-              <div className="min-h-[140px] sm:min-h-[160px] flex flex-col justify-center space-y-4">
+              <div className="min-h-[120px] sm:min-h-[140px] flex flex-col justify-center space-y-3">
                 <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.15] drop-shadow-2xl transition-all duration-300">
                   {CAROUSEL_SLIDES[activeSlide].title}
                 </h1>
@@ -596,7 +596,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
               </div>
 
               {/* Navigation Controls: Prev Arrow, 4 Dots, Next Arrow */}
-              <div className="flex items-center justify-center gap-3 py-1">
+              <div className="flex items-center justify-center gap-3 py-0.5">
                 <button
                   type="button"
                   onClick={() => setActiveSlide((prev) => (prev - 1 + CAROUSEL_SLIDES.length) % CAROUSEL_SLIDES.length)}
@@ -635,7 +635,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
               </div>
 
               {/* Inline Input + Get Started CTA Bar */}
-              <div className="max-w-xl mx-auto pt-2">
+              <div className="max-w-xl mx-auto pt-1">
                 <p className="text-xs sm:text-sm text-slate-300 mb-3 font-normal">
                   Ready to watch? Enter your email or mobile number to create your CineVerse membership.
                 </p>
@@ -672,7 +672,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                       onChange={(e) => handleIdentifierChange(e.target.value)}
                       onKeyDown={(e) => {
                         if (e.key === " ") {
-                          e.preventDefault();
+                           e.preventDefault();
                         }
                       }}
                       maxLength={isNumericPhone ? selectedCountry.maxLength : 50}
@@ -710,9 +710,9 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
           </div>
 
           {/* ========================================================================= */}
-          {/* SECTION 2: TRENDING NOW POSTER ROW                                        */}
+          {/* SECTION 2: TRENDING NOW POSTER ROW (Direct Continuous Flow)               */}
           {/* ========================================================================= */}
-          <section className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 border-t border-slate-900/70">
+          <section className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-2 pb-10">
             {/* Ambient Background Glow */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[200px] bg-rose-950/20 blur-[100px] pointer-events-none rounded-full" />
 
