@@ -557,14 +557,16 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
           </header>
 
           {/* Hero Section with Poster Wall Background (Seamless Flowing Layout) */}
-          <div className="relative flex flex-col justify-center items-center px-4 sm:px-6 lg:px-8 text-center pt-24 sm:pt-28 pb-8 sm:pb-10 overflow-hidden">
-            {/* High-Density Movie Posters Wall Grid */}
-            <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none opacity-50">
-              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3 sm:gap-4 p-3 scale-110 transform -translate-y-8 animate-in fade-in duration-1000">
+          <div className="relative flex flex-col justify-center items-center px-4 sm:px-6 lg:px-8 text-center pt-20 sm:pt-24 pb-6 sm:pb-8 overflow-hidden">
+            {/* High-Density Movie Posters Wall Grid with Smooth Bottom Mask */}
+            <div 
+              className="absolute inset-0 z-0 overflow-hidden pointer-events-none opacity-40 [mask-image:linear-gradient(to_bottom,black_0%,black_35%,transparent_85%)] [-webkit-mask-image:linear-gradient(to_bottom,black_0%,black_35%,transparent_85%)]"
+            >
+              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3 sm:gap-4 p-3 scale-110 transform -translate-y-6 animate-in fade-in duration-1000">
                 {[...posters, ...posters].slice(0, 32).map((imgUrl, idx) => (
                   <div
                     key={idx}
-                    className="relative aspect-[2/3] w-full rounded-xl overflow-hidden bg-slate-900 shadow-xl shadow-black/90 border border-white/5"
+                    className="relative aspect-[2/3] w-full rounded-xl overflow-hidden bg-slate-900 shadow-2xl shadow-black"
                   >
                     <img
                       src={imgUrl}
@@ -572,15 +574,15 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                       className="w-full h-full object-cover object-center"
                       loading={idx < 8 ? "eager" : "lazy"}
                     />
-                    <div className="absolute inset-0 bg-black/25" />
+                    <div className="absolute inset-0 bg-black/30" />
                   </div>
                 ))}
               </div>
 
               {/* Cinematic Vignette Overlays & Radial Glow */}
-              <div className="absolute inset-0 bg-gradient-to-t from-[#04060b] via-[#04060b]/70 to-transparent" />
-              <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-[#04060b]" />
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(229,9,20,0.18)_0%,rgba(0,0,0,0.85)_70%)]" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#04060b] via-[#04060b]/80 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/20 to-[#04060b]" />
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(229,9,20,0.15)_0%,rgba(4,6,11,0.95)_80%)]" />
             </div>
 
             {/* Foreground Main Hero Box */}
@@ -710,82 +712,72 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
           </div>
 
           {/* ========================================================================= */}
-          {/* SECTION 2: TRENDING NOW POSTER ROW (Premium Glass Showcase Stage)         */}
+          {/* SECTION 2: TRENDING NOW POSTER ROW (Clean & Borderless Seamless Flow)     */}
           {/* ========================================================================= */}
-          <section className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-b from-slate-900/75 via-slate-950/85 to-slate-950/95 border border-white/10 p-5 sm:p-7 backdrop-blur-2xl shadow-2xl shadow-rose-950/30">
-              {/* Vibrant Ambient Glow behind showcase */}
-              <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-[500px] h-[180px] bg-red-600/15 blur-[90px] pointer-events-none rounded-full" />
-
-              {/* Showcase Header */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 relative z-10">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 sm:p-2.5 rounded-2xl bg-gradient-to-br from-red-600 to-rose-700 text-white shadow-lg shadow-red-600/30">
-                    <Flame className="w-5 h-5 animate-pulse" />
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <h2 className="text-lg sm:text-2xl font-black text-white tracking-tight">
-                        Trending Now on CineVerse
-                      </h2>
-                      <span className="hidden sm:inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-red-600/20 text-rose-400 border border-red-500/30">
-                        Live 4K
-                      </span>
-                    </div>
-                    <p className="text-xs sm:text-sm text-slate-400 font-medium mt-0.5">
-                      India&apos;s most watched blockbusters • Streaming in Ultra HD
-                    </p>
-                  </div>
+          <section className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-0 pb-10">
+            {/* Showcase Header */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
+              <div className="flex items-center gap-3">
+                <div className="p-2 sm:p-2.5 rounded-2xl bg-gradient-to-br from-red-600 to-rose-700 text-white shadow-lg shadow-red-600/30">
+                  <Flame className="w-5 h-5 animate-pulse" />
                 </div>
-
-                {/* Left & Right Navigation Arrow Buttons */}
-                <div className="flex items-center gap-2 self-end sm:self-center">
-                  <button
-                    type="button"
-                    onClick={() => setTrendingOffset((prev) => (prev - 1 + posters.length) % posters.length)}
-                    aria-label="Previous Trending Movies"
-                    className="p-2 sm:p-2.5 rounded-xl bg-slate-900/90 hover:bg-[#e50914] text-slate-300 hover:text-white border border-slate-700/80 hover:border-red-500/80 flex items-center justify-center backdrop-blur-md shadow-md transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer"
-                    title="Previous"
-                  >
-                    <ChevronLeft className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setTrendingOffset((prev) => (prev + 1) % posters.length)}
-                    aria-label="Next Trending Movies"
-                    className="p-2 sm:p-2.5 rounded-xl bg-slate-900/90 hover:bg-[#e50914] text-slate-300 hover:text-white border border-slate-700/80 hover:border-red-500/80 flex items-center justify-center backdrop-blur-md shadow-md transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer"
-                    title="Next"
-                  >
-                    <ChevronRight className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
-                  </button>
+                <div>
+                  <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
+                    Trending Now on CineVerse
+                  </h2>
+                  <p className="text-xs sm:text-sm text-slate-400 font-medium mt-0.5">
+                    India&apos;s most watched blockbusters • Streaming in 4K Ultra HD
+                  </p>
                 </div>
               </div>
 
-              {/* 6 High-Gloss Movie Cards */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4 relative z-10">
-                {visibleTrendingPosters.map((item, idx) => (
-                  <div
-                    key={`${item.url}-${idx}`}
-                    onClick={() => setPreviewMovie(getMovieForPoster(item.url, item.index))}
-                    className="group relative aspect-[2/3] w-full rounded-2xl overflow-hidden bg-slate-950 border border-white/10 hover:border-rose-500/80 transition-all duration-500 hover:scale-[1.05] hover:-translate-y-2 cursor-pointer shadow-xl hover:shadow-2xl hover:shadow-rose-600/40 select-none"
-                  >
-                    <img
-                      src={item.url}
-                      alt="Trending Movie"
-                      className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-110"
-                      loading="lazy"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-40 group-hover:opacity-10 transition-opacity duration-300" />
-                  </div>
-                ))}
+              {/* Left & Right Navigation Arrow Buttons */}
+              <div className="flex items-center gap-2 self-end sm:self-center">
+                <button
+                  type="button"
+                  onClick={() => setTrendingOffset((prev) => (prev - 1 + posters.length) % posters.length)}
+                  aria-label="Previous Trending Movies"
+                  className="p-2 sm:p-2.5 rounded-xl bg-slate-900/90 hover:bg-[#e50914] text-slate-300 hover:text-white border border-slate-800 hover:border-red-500/80 flex items-center justify-center backdrop-blur-md shadow-md transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer"
+                  title="Previous"
+                >
+                  <ChevronLeft className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setTrendingOffset((prev) => (prev + 1) % posters.length)}
+                  aria-label="Next Trending Movies"
+                  className="p-2 sm:p-2.5 rounded-xl bg-slate-900/90 hover:bg-[#e50914] text-slate-300 hover:text-white border border-slate-800 hover:border-red-500/80 flex items-center justify-center backdrop-blur-md shadow-md transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer"
+                  title="Next"
+                >
+                  <ChevronRight className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
+                </button>
               </div>
+            </div>
+
+            {/* 6 High-Gloss Movie Cards */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4">
+              {visibleTrendingPosters.map((item, idx) => (
+                <div
+                  key={`${item.url}-${idx}`}
+                  onClick={() => setPreviewMovie(getMovieForPoster(item.url, item.index))}
+                  className="group relative aspect-[2/3] w-full rounded-2xl overflow-hidden bg-slate-950 border border-slate-800/80 hover:border-rose-500/80 transition-all duration-500 hover:scale-[1.05] hover:-translate-y-2 cursor-pointer shadow-xl hover:shadow-2xl hover:shadow-rose-600/40 select-none"
+                >
+                  <img
+                    src={item.url}
+                    alt="Trending Movie"
+                    className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-110"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-40 group-hover:opacity-10 transition-opacity duration-300" />
+                </div>
+              ))}
             </div>
           </section>
 
           {/* ========================================================================= */}
           {/* SECTION 3: MORE REASONS TO JOIN (4 Feature Cards)                         */}
           {/* ========================================================================= */}
-          <section className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-8 py-12 border-t border-slate-900">
+          <section className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-8 py-8 sm:py-10">
             <h2 className="text-xl sm:text-2xl font-bold text-white mb-6">
               More Reasons to Join
             </h2>
@@ -836,7 +828,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
           {/* ========================================================================= */}
           {/* SECTION 4: FREQUENTLY ASKED QUESTIONS (FAQ)                               */}
           {/* ========================================================================= */}
-          <section className="relative z-10 w-full max-w-4xl mx-auto px-4 sm:px-8 py-12 border-t border-slate-900 space-y-6">
+          <section className="relative z-10 w-full max-w-4xl mx-auto px-4 sm:px-8 py-8 sm:py-10 space-y-6">
             <h2 className="text-xl sm:text-3xl font-bold text-white text-center">
               Frequently Asked Questions
             </h2>
@@ -912,7 +904,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
           </section>
 
           {/* Footer */}
-          <footer className="w-full border-t border-slate-900 py-10 px-4 sm:px-8 text-xs text-slate-500 space-y-4">
+          <footer className="w-full py-10 px-4 sm:px-8 text-xs text-slate-500 space-y-4">
             <div className="max-w-7xl mx-auto space-y-4">
               <p className="text-slate-400">Questions? Call 000-800-919-1694</p>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[11px] text-slate-500">
