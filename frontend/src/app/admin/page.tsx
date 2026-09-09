@@ -82,52 +82,6 @@ const GENRE_ICONS: Record<string, string> = {
   Western: "🤠",
 };
 
-export const ALL_GENRES = [
-  "Action",
-  "Adventure",
-  "Animation",
-  "Biography",
-  "Comedy",
-  "Crime",
-  "Documentary",
-  "Drama",
-  "Family",
-  "Fantasy",
-  "History",
-  "Horror",
-  "Music",
-  "Mystery",
-  "Romance",
-  "Sci-Fi",
-  "Sport",
-  "Thriller",
-  "War",
-  "Western",
-];
-
-const DEFAULT_GENRE_NAMES = [
-  "Action",
-  "Sci-Fi",
-  "Drama",
-  "Romance",
-  "Comedy",
-  "Thriller",
-  "Crime",
-  "Animation",
-  "Documentary",
-  "Horror",
-  "Fantasy",
-  "Adventure",
-  "Biography",
-  "Family",
-  "History",
-  "Music",
-  "Mystery",
-  "Sport",
-  "War",
-  "Western",
-];
-
 export interface PosterPreset {
   name: string;
   title: string;
@@ -371,26 +325,30 @@ export default function AdminPage() {
     }
   }, [isAdmin]);
 
-  // Compute dynamic genre categories list (defaults + any custom genres found in database)
+  // Dynamic genre categories extracted strictly from current database movies
   const genreCategories = useMemo<GenreCategory[]>(() => {
     const dynamicGenreNames = new Set<string>();
-    
-    // Add default popular genres
-    DEFAULT_GENRE_NAMES.forEach((g) => dynamicGenreNames.add(g));
 
-    // Add any genre present in current movies
+    // Extract all genres present in current database movies
     movies.forEach((m) => {
       if (m.genre) {
-        m.genre.split(/[,/]/).forEach((part) => {
+        m.genre.split(/[,/|]/).forEach((part) => {
           const clean = part.trim();
           if (clean) {
-            // Capitalize first letter properly (e.g., "fantasy" -> "Fantasy")
+            // Capitalize first letter properly
             const capitalized = clean.charAt(0).toUpperCase() + clean.slice(1);
             dynamicGenreNames.add(capitalized);
           }
         });
       }
     });
+
+    // Fallback if movies not loaded yet
+    if (dynamicGenreNames.size === 0) {
+      ["Action", "Sci-Fi", "Drama", "Comedy", "Romance", "Thriller", "Crime", "Animation"].forEach((g) =>
+        dynamicGenreNames.add(g)
+      );
+    }
 
     return Array.from(dynamicGenreNames).map((name) => {
       const matchingKey = Object.keys(GENRE_ICONS).find(
@@ -493,7 +451,7 @@ export default function AdminPage() {
   const handleOpenAddModal = () => {
     setFormData({
       title: "",
-      genre: selectedNav !== "all" && selectedNav !== "featured" && ALL_GENRES.includes(selectedNav) ? selectedNav : "Action",
+      genre: selectedNav !== "all" && selectedNav !== "featured" && genreCategories.some((c) => c.id === selectedNav) ? selectedNav : (genreCategories[0]?.name || "Action"),
       release_year: new Date().getFullYear(),
       rating: 8.5,
       description: "",
@@ -1641,14 +1599,14 @@ export default function AdminPage() {
                         onChange={(e) => setFormData({ ...formData, genre: e.target.value })}
                         className="w-full bg-slate-950 border border-white/10 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-[#e50914] transition-all font-semibold cursor-pointer"
                       >
-                        {formData.genre && !ALL_GENRES.includes(formData.genre) && (
+                        {formData.genre && !genreCategories.some((c) => c.name.toLowerCase() === formData.genre.toLowerCase()) && (
                           <option value={formData.genre} className="bg-slate-900 text-white font-medium">
                             📁 {formData.genre}
                           </option>
                         )}
-                        {ALL_GENRES.map((g) => (
-                          <option key={g} value={g} className="bg-slate-900 text-white font-medium">
-                            {GENRE_ICONS[g] ? `${GENRE_ICONS[g]} ${g}` : g}
+                        {genreCategories.map((cat) => (
+                          <option key={cat.id} value={cat.name} className="bg-slate-900 text-white font-medium">
+                            {cat.icon} {cat.name}
                           </option>
                         ))}
                       </select>
@@ -1971,14 +1929,14 @@ export default function AdminPage() {
                         onChange={(e) => setFormData({ ...formData, genre: e.target.value })}
                         className="w-full bg-slate-950 border border-white/10 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-[#e50914] transition-all font-semibold cursor-pointer"
                       >
-                        {formData.genre && !ALL_GENRES.includes(formData.genre) && (
+                        {formData.genre && !genreCategories.some((c) => c.name.toLowerCase() === formData.genre.toLowerCase()) && (
                           <option value={formData.genre} className="bg-slate-900 text-white font-medium">
                             📁 {formData.genre}
                           </option>
                         )}
-                        {ALL_GENRES.map((g) => (
-                          <option key={g} value={g} className="bg-slate-900 text-white font-medium">
-                            {GENRE_ICONS[g] ? `${GENRE_ICONS[g]} ${g}` : g}
+                        {genreCategories.map((cat) => (
+                          <option key={cat.id} value={cat.name} className="bg-slate-900 text-white font-medium">
+                            {cat.icon} {cat.name}
                           </option>
                         ))}
                       </select>
