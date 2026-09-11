@@ -37,3 +37,7 @@ router.delete("/profile", protect as any, deleteProfile as any);
 
 export default router;
 
+
+
+
+
