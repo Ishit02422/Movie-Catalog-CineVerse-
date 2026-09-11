@@ -205,6 +205,9 @@ export default function MovieDetailsPage() {
       setReviewComment("");
       setUserRating(0);
       setReviewMessage("🎉 Your review has been posted successfully!");
+
+
+
       // Reload reviews and movie to update average score
       await loadReviews(id);
       const updatedMovie = await fetchMovieById(id);
@@ -255,11 +258,10 @@ export default function MovieDetailsPage() {
               <button
                 type="button"
                 onClick={handleWatchlistToggle}
-                className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl border text-sm font-semibold transition-all cursor-pointer shadow-md active:scale-95 ${
-                  isSaved
-                    ? "bg-[#e50914] text-white border-[#e50914] shadow-red-950/50"
-                    : "bg-slate-900/80 hover:bg-[#e50914] text-slate-200 hover:text-white border-slate-800 hover:border-[#e50914]"
-                }`}
+                className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl border text-sm font-semibold transition-all cursor-pointer shadow-md active:scale-95 ${isSaved
+                  ? "bg-[#e50914] text-white border-[#e50914] shadow-red-950/50"
+                  : "bg-slate-900/80 hover:bg-[#e50914] text-slate-200 hover:text-white border-slate-800 hover:border-[#e50914]"
+                  }`}
               >
                 {isSaved ? (
                   <>
@@ -394,13 +396,12 @@ export default function MovieDetailsPage() {
                         return (
                           <Star
                             key={star}
-                            className={`w-4 h-4 ${
-                              isFilled
-                                ? "fill-amber-400 text-amber-400"
-                                : isHalf
+                            className={`w-4 h-4 ${isFilled
+                              ? "fill-amber-400 text-amber-400"
+                              : isHalf
                                 ? "fill-amber-400/50 text-amber-400"
                                 : "text-slate-700"
-                            }`}
+                              }`}
                           />
                         );
                       })}
@@ -425,11 +426,10 @@ export default function MovieDetailsPage() {
                   <button
                     type="button"
                     onClick={handleWatchlistToggle}
-                    className={`px-5 py-3 rounded-xl border text-sm font-semibold flex items-center gap-2 cursor-pointer transition-all active:scale-95 ${
-                      isSaved
-                        ? "bg-[#e50914] text-white border-[#e50914] shadow-md shadow-red-950/40"
-                        : "bg-slate-900/80 hover:bg-slate-800 text-slate-200 border-slate-700"
-                    }`}
+                    className={`px-5 py-3 rounded-xl border text-sm font-semibold flex items-center gap-2 cursor-pointer transition-all active:scale-95 ${isSaved
+                      ? "bg-[#e50914] text-white border-[#e50914] shadow-md shadow-red-950/40"
+                      : "bg-slate-900/80 hover:bg-slate-800 text-slate-200 border-slate-700"
+                      }`}
                   >
                     {isSaved ? <Check className="w-4 h-4 stroke-[3]" /> : <Bookmark className="w-4 h-4" />}
                     <span>{isSaved ? "Saved in My List" : "Add to Watchlist"}</span>
@@ -520,11 +520,10 @@ export default function MovieDetailsPage() {
 
                 {reviewMessage && (
                   <div
-                    className={`p-3 rounded-xl text-xs flex items-center gap-2.5 transition-all ${
-                      reviewMessage.includes("successfully")
-                        ? "bg-emerald-500/10 border border-emerald-500/30 text-emerald-300"
-                        : "bg-rose-500/10 border border-rose-500/30 text-rose-300"
-                    }`}
+                    className={`p-3 rounded-xl text-xs flex items-center gap-2.5 transition-all ${reviewMessage.includes("successfully")
+                      ? "bg-emerald-500/10 border border-emerald-500/30 text-emerald-300"
+                      : "bg-rose-500/10 border border-rose-500/30 text-rose-300"
+                      }`}
                   >
                     {reviewMessage.includes("successfully") ? (
                       <Check className="w-4 h-4 shrink-0 text-emerald-400" />
@@ -545,40 +544,39 @@ export default function MovieDetailsPage() {
                       {/* Dynamic Live Emotion Badge */}
                       {(hoverRating || userRating) > 0 ? (
                         <div
-                          className={`px-2.5 py-0.5 rounded-full text-xs font-bold border flex items-center gap-1.5 transition-all ${
-                            (hoverRating || userRating) === 1
-                              ? "text-rose-400 bg-rose-500/10 border-rose-500/30"
-                              : (hoverRating || userRating) === 2
+                          className={`px-2.5 py-0.5 rounded-full text-xs font-bold border flex items-center gap-1.5 transition-all ${(hoverRating || userRating) === 1
+                            ? "text-rose-400 bg-rose-500/10 border-rose-500/30"
+                            : (hoverRating || userRating) === 2
                               ? "text-orange-400 bg-orange-500/10 border-orange-500/30"
                               : (hoverRating || userRating) === 3
-                              ? "text-yellow-300 bg-yellow-500/10 border-yellow-500/30"
-                              : (hoverRating || userRating) === 4
-                              ? "text-emerald-400 bg-emerald-500/10 border-emerald-500/30"
-                              : "text-amber-300 bg-amber-500/15 border-amber-500/30"
-                          }`}
+                                ? "text-yellow-300 bg-yellow-500/10 border-yellow-500/30"
+                                : (hoverRating || userRating) === 4
+                                  ? "text-emerald-400 bg-emerald-500/10 border-emerald-500/30"
+                                  : "text-amber-300 bg-amber-500/15 border-amber-500/30"
+                            }`}
                         >
                           <span>
                             {(hoverRating || userRating) === 1
                               ? "😡"
                               : (hoverRating || userRating) === 2
-                              ? "😕"
-                              : (hoverRating || userRating) === 3
-                              ? "😐"
-                              : (hoverRating || userRating) === 4
-                              ? "😊"
-                              : "🤩"}
+                                ? "😕"
+                                : (hoverRating || userRating) === 3
+                                  ? "😐"
+                                  : (hoverRating || userRating) === 4
+                                    ? "😊"
+                                    : "🤩"}
                           </span>
                           <span>
                             {hoverRating || userRating} / 5 •{" "}
                             {(hoverRating || userRating) === 1
                               ? "Poor"
                               : (hoverRating || userRating) === 2
-                              ? "Fair"
-                              : (hoverRating || userRating) === 3
-                              ? "Good"
-                              : (hoverRating || userRating) === 4
-                              ? "Very Good"
-                              : "Masterpiece"}
+                                ? "Fair"
+                                : (hoverRating || userRating) === 3
+                                  ? "Good"
+                                  : (hoverRating || userRating) === 4
+                                    ? "Very Good"
+                                    : "Masterpiece"}
                           </span>
                         </div>
                       ) : (
@@ -602,11 +600,10 @@ export default function MovieDetailsPage() {
                             title={`${star} Star`}
                           >
                             <Star
-                              className={`w-7 h-7 transition-all ${
-                                activeStar
-                                  ? "fill-amber-400 text-amber-400 drop-shadow-[0_0_8px_rgba(251,191,36,0.5)]"
-                                  : "text-slate-700 hover:text-slate-500"
-                              }`}
+                              className={`w-7 h-7 transition-all ${activeStar
+                                ? "fill-amber-400 text-amber-400 drop-shadow-[0_0_8px_rgba(251,191,36,0.5)]"
+                                : "text-slate-700 hover:text-slate-500"
+                                }`}
                             />
                           </button>
                         );
@@ -711,11 +708,10 @@ export default function MovieDetailsPage() {
                             {[1, 2, 3, 4, 5].map((s) => (
                               <Star
                                 key={s}
-                                className={`w-3.5 h-3.5 ${
-                                  s <= rev.rating
-                                    ? "fill-amber-400 text-amber-400"
-                                    : "text-slate-800"
-                                }`}
+                                className={`w-3.5 h-3.5 ${s <= rev.rating
+                                  ? "fill-amber-400 text-amber-400"
+                                  : "text-slate-800"
+                                  }`}
                               />
                             ))}
                           </div>

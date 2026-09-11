@@ -95,7 +95,7 @@ export default function Home() {
       console.error("Error fetching movies:", err);
       setError(
         err.message ||
-          "Unable to connect to the backend server. Please verify the API is running on port 5000."
+        "Unable to connect to the backend server. Please verify the API is running on port 5000."
       );
     } finally {
       setIsLoading(false);
@@ -242,22 +242,20 @@ export default function Home() {
               <button
                 type="button"
                 onClick={() => setActiveTab("all")}
-                className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
-                  activeTab === "all"
+                className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${activeTab === "all"
                     ? "bg-[#e50914] text-white shadow-sm"
                     : "text-slate-400 hover:text-white"
-                }`}
+                  }`}
               >
                 All Movies
               </button>
               <button
                 type="button"
                 onClick={() => setActiveTab("watchlist")}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
-                  activeTab === "watchlist"
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all cursor-pointer ${activeTab === "watchlist"
                     ? "bg-[#e50914] text-white shadow-sm"
                     : "text-slate-400 hover:text-white"
-                }`}
+                  }`}
               >
                 <Bookmark className="w-3.5 h-3.5" />
                 <span>My List ({watchlist.length})</span>

@@ -204,6 +204,8 @@ export default function AdminPage() {
   const [formError, setFormError] = useState("");
   const [imagePreviewStatus, setImagePreviewStatus] = useState<"idle" | "loading" | "valid" | "error">("idle");
   const [isUploadingImage, setIsUploadingImage] = useState(false);
+  const [isCustomGenre, setIsCustomGenre] = useState(false);
+  const [customGenreInput, setCustomGenreInput] = useState("");
 
   // Dynamic release years list: from current year down to 1950
   const releaseYearsList = useMemo(() => {
@@ -364,6 +366,8 @@ export default function AdminPage() {
 
   // Add Modal trigger
   const handleOpenAddModal = () => {
+    setIsCustomGenre(false);
+    setCustomGenreInput("");
     setFormData({
       title: "",
       genre: selectedNav !== "all" && selectedNav !== "featured" && genreCategories.some((c) => c.id === selectedNav) ? selectedNav : (genreCategories[0]?.name || "Action"),
@@ -382,6 +386,9 @@ export default function AdminPage() {
   // Edit Modal trigger
   const handleOpenEditModal = (movie: Movie) => {
     setActiveMovie(movie);
+    const isPredefined = genreCategories.some((c) => c.name.toLowerCase() === (movie.genre || "").toLowerCase());
+    setIsCustomGenre(!isPredefined && !!movie.genre);
+    setCustomGenreInput(!isPredefined && movie.genre ? movie.genre : "");
     setFormData({
       title: movie.title,
       genre: movie.genre || "Action",
@@ -438,8 +445,8 @@ export default function AdminPage() {
   const handleAddSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormError("");
-    if (!formData.title.trim() || !formData.image_url.trim() || !formData.description.trim()) {
-      setFormError("Please fill in Title, Poster Image URL, and Description.");
+    if (!formData.title.trim() || !formData.genre.trim() || !formData.image_url.trim() || !formData.description.trim()) {
+      setFormError("Please fill in Title, Genre/Category, Poster Image URL, and Description.");
       return;
     }
 
@@ -1486,26 +1493,70 @@ export default function AdminPage() {
                   {/* 3 Columns: Genre, Year, Status */}
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
                     <div>
-                      <label className="block text-sm font-bold uppercase tracking-wider text-slate-200 mb-2">
-                        Genre <span className="text-[#e50914]">*</span>
-                      </label>
-                      <select
-                        required
-                        value={formData.genre}
-                        onChange={(e) => setFormData({ ...formData, genre: e.target.value })}
-                        className="w-full bg-[#131b2e] border border-slate-700/80 hover:border-slate-500 focus:border-[#e50914] focus:ring-2 focus:ring-[#e50914]/25 rounded-xl px-3.5 py-3 text-sm sm:text-base font-semibold text-white transition-all cursor-pointer"
-                      >
-                        {formData.genre && !genreCategories.some((c) => c.name.toLowerCase() === formData.genre.toLowerCase()) && (
-                          <option value={formData.genre} className="bg-[#0f172a] text-white">
-                            📁 {formData.genre}
+                      <div className="flex items-center justify-between mb-2">
+                        <label className="text-sm font-bold uppercase tracking-wider text-slate-200">
+                          Genre <span className="text-[#e50914]">*</span>
+                        </label>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (!isCustomGenre) {
+                              setIsCustomGenre(true);
+                              setFormData((prev) => ({ ...prev, genre: customGenreInput.trim() || "" }));
+                            } else {
+                              setIsCustomGenre(false);
+                              setFormData((prev) => ({ ...prev, genre: genreCategories[0]?.name || "Action" }));
+                            }
+                          }}
+                          className="text-xs font-bold text-rose-400 hover:text-rose-300 hover:underline cursor-pointer flex items-center gap-1"
+                        >
+                          {isCustomGenre ? "← Select from List" : "+ Custom Category"}
+                        </button>
+                      </div>
+
+                      {isCustomGenre ? (
+                        <input
+                          type="text"
+                          required
+                          value={formData.genre}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            setFormData({ ...formData, genre: val });
+                            setCustomGenreInput(val);
+                          }}
+                          placeholder="e.g. Anime, Documentary, K-Drama"
+                          className="w-full bg-[#131b2e] border border-rose-500/60 focus:border-[#e50914] focus:ring-2 focus:ring-[#e50914]/25 rounded-xl px-3.5 py-3 text-sm sm:text-base font-semibold text-white placeholder:text-slate-500 transition-all shadow-inner"
+                          autoFocus
+                        />
+                      ) : (
+                        <select
+                          required
+                          value={formData.genre}
+                          onChange={(e) => {
+                            if (e.target.value === "__NEW_CUSTOM_GENRE__") {
+                              setIsCustomGenre(true);
+                              setFormData({ ...formData, genre: "" });
+                            } else {
+                              setFormData({ ...formData, genre: e.target.value });
+                            }
+                          }}
+                          className="w-full bg-[#131b2e] border border-slate-700/80 hover:border-slate-500 focus:border-[#e50914] focus:ring-2 focus:ring-[#e50914]/25 rounded-xl px-3.5 py-3 text-sm sm:text-base font-semibold text-white transition-all cursor-pointer"
+                        >
+                          {formData.genre && !genreCategories.some((c) => c.name.toLowerCase() === formData.genre.toLowerCase()) && (
+                            <option value={formData.genre} className="bg-[#0f172a] text-white">
+                              📁 {formData.genre}
+                            </option>
+                          )}
+                          {genreCategories.map((cat) => (
+                            <option key={cat.id} value={cat.name} className="bg-[#0f172a] text-white">
+                              {cat.icon} {cat.name}
+                            </option>
+                          ))}
+                          <option value="__NEW_CUSTOM_GENRE__" className="bg-[#1e1b4b] text-rose-300 font-bold">
+                            ✨ + Add Custom Category...
                           </option>
-                        )}
-                        {genreCategories.map((cat) => (
-                          <option key={cat.id} value={cat.name} className="bg-[#0f172a] text-white">
-                            {cat.icon} {cat.name}
-                          </option>
-                        ))}
-                      </select>
+                        </select>
+                      )}
                     </div>
 
                     <div>
@@ -1838,26 +1889,70 @@ export default function AdminPage() {
                   {/* 3 Columns: Genre, Year, Status */}
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
                     <div>
-                      <label className="block text-sm font-bold uppercase tracking-wider text-slate-200 mb-2">
-                        Genre <span className="text-[#e50914]">*</span>
-                      </label>
-                      <select
-                        required
-                        value={formData.genre}
-                        onChange={(e) => setFormData({ ...formData, genre: e.target.value })}
-                        className="w-full bg-[#131b2e] border border-slate-700/80 hover:border-slate-500 focus:border-[#e50914] focus:ring-2 focus:ring-[#e50914]/25 rounded-xl px-3.5 py-3 text-sm sm:text-base font-semibold text-white transition-all cursor-pointer"
-                      >
-                        {formData.genre && !genreCategories.some((c) => c.name.toLowerCase() === formData.genre.toLowerCase()) && (
-                          <option value={formData.genre} className="bg-[#0f172a] text-white">
-                            📁 {formData.genre}
+                      <div className="flex items-center justify-between mb-2">
+                        <label className="text-sm font-bold uppercase tracking-wider text-slate-200">
+                          Genre <span className="text-[#e50914]">*</span>
+                        </label>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (!isCustomGenre) {
+                              setIsCustomGenre(true);
+                              setFormData((prev) => ({ ...prev, genre: customGenreInput.trim() || "" }));
+                            } else {
+                              setIsCustomGenre(false);
+                              setFormData((prev) => ({ ...prev, genre: genreCategories[0]?.name || "Action" }));
+                            }
+                          }}
+                          className="text-xs font-bold text-rose-400 hover:text-rose-300 hover:underline cursor-pointer flex items-center gap-1"
+                        >
+                          {isCustomGenre ? "← Select from List" : "+ Custom Category"}
+                        </button>
+                      </div>
+
+                      {isCustomGenre ? (
+                        <input
+                          type="text"
+                          required
+                          value={formData.genre}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            setFormData({ ...formData, genre: val });
+                            setCustomGenreInput(val);
+                          }}
+                          placeholder="e.g. Anime, Documentary, K-Drama"
+                          className="w-full bg-[#131b2e] border border-rose-500/60 focus:border-[#e50914] focus:ring-2 focus:ring-[#e50914]/25 rounded-xl px-3.5 py-3 text-sm sm:text-base font-semibold text-white placeholder:text-slate-500 transition-all shadow-inner"
+                          autoFocus
+                        />
+                      ) : (
+                        <select
+                          required
+                          value={formData.genre}
+                          onChange={(e) => {
+                            if (e.target.value === "__NEW_CUSTOM_GENRE__") {
+                              setIsCustomGenre(true);
+                              setFormData({ ...formData, genre: "" });
+                            } else {
+                              setFormData({ ...formData, genre: e.target.value });
+                            }
+                          }}
+                          className="w-full bg-[#131b2e] border border-slate-700/80 hover:border-slate-500 focus:border-[#e50914] focus:ring-2 focus:ring-[#e50914]/25 rounded-xl px-3.5 py-3 text-sm sm:text-base font-semibold text-white transition-all cursor-pointer"
+                        >
+                          {formData.genre && !genreCategories.some((c) => c.name.toLowerCase() === formData.genre.toLowerCase()) && (
+                            <option value={formData.genre} className="bg-[#0f172a] text-white">
+                              📁 {formData.genre}
+                            </option>
+                          )}
+                          {genreCategories.map((cat) => (
+                            <option key={cat.id} value={cat.name} className="bg-[#0f172a] text-white">
+                              {cat.icon} {cat.name}
+                            </option>
+                          ))}
+                          <option value="__NEW_CUSTOM_GENRE__" className="bg-[#1e1b4b] text-rose-300 font-bold">
+                            ✨ + Add Custom Category...
                           </option>
-                        )}
-                        {genreCategories.map((cat) => (
-                          <option key={cat.id} value={cat.name} className="bg-[#0f172a] text-white">
-                            {cat.icon} {cat.name}
-                          </option>
-                        ))}
-                      </select>
+                        </select>
+                      )}
                     </div>
 
                     <div>

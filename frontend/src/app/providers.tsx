@@ -11,3 +11,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
     </AuthProvider>
   );
 }
+
+
+// Providers ek wrapper chhe je app na badha pages ne Login/User data ane Watchlist data use karva de chhe.
+// Aa file browser ma run karavani chhe // Etle file ne ekdam top par lakhie 

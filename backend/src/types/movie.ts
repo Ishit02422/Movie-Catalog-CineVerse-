@@ -24,3 +24,8 @@ export interface MovieQueryParams {
   page?: string | number;
   limit?: string | number;
 }
+
+
+
+
+// 2 interface create kriya ch ke compile time par data type ni error handle thay stop thay 

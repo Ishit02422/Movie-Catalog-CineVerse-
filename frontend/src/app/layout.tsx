@@ -39,3 +39,4 @@ export default function RootLayout({
     </html>
   );
 }
+//  badha pages Providers ni andar render thay

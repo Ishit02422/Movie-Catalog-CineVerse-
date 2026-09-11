@@ -36,6 +36,10 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ movies }) => {
 
   return (
     <div className="relative w-full overflow-hidden rounded-3xl border border-slate-800/90 bg-[#090d16] shadow-2xl shadow-rose-950/20 mb-10 group">
+      
+      
+      
+      
       {/* Background Poster: Blurred Cinematic Ambient Glow (eliminates cropped half-faces) */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <img
@@ -48,6 +52,10 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ movies }) => {
         <div className="absolute inset-0 bg-gradient-to-t from-[#090d16] via-[#090d16]/75 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-r from-[#090d16] via-[#090d16]/80 to-transparent" />
       </div>
+
+
+
+
 
       {/* Main Content Layout: Left Details + Right Complete Full Poster */}
       <div className="relative z-10 grid grid-cols-1 md:grid-cols-12 gap-6 lg:gap-8 items-center p-6 sm:p-10 lg:p-12 min-h-[420px] sm:min-h-[460px]">
