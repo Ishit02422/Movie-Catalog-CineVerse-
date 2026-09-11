@@ -206,6 +206,19 @@ export default function AdminPage() {
   const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [isCustomGenre, setIsCustomGenre] = useState(false);
   const [customGenreInput, setCustomGenreInput] = useState("");
+  const [isAddCategoryOpen, setIsAddCategoryOpen] = useState(false);
+  const [newCategoryName, setNewCategoryName] = useState("");
+  const [customAdminCategories, setCustomAdminCategories] = useState<string[]>(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const saved = localStorage.getItem("cineverse_custom_categories");
+        return saved ? JSON.parse(saved) : [];
+      } catch {
+        return [];
+      }
+    }
+    return [];
+  });
 
   // Dynamic release years list: from current year down to 1950
   const releaseYearsList = useMemo(() => {
@@ -242,9 +255,18 @@ export default function AdminPage() {
     }
   }, [isAdmin]);
 
-  // Dynamic genre categories extracted strictly from current database movies
+  // Dynamic genre categories extracted from DB movies + custom admin categories
   const genreCategories = useMemo<GenreCategory[]>(() => {
     const dynamicGenreNames = new Set<string>();
+
+    // Include custom admin categories created in dashboard
+    customAdminCategories.forEach((cat) => {
+      const clean = cat.trim();
+      if (clean) {
+        const capitalized = clean.charAt(0).toUpperCase() + clean.slice(1);
+        dynamicGenreNames.add(capitalized);
+      }
+    });
 
     // Extract all genres present in current database movies
     movies.forEach((m) => {
@@ -274,7 +296,7 @@ export default function AdminPage() {
       const icon = matchingKey ? GENRE_ICONS[matchingKey] : "📁";
       return { id: name, name, icon };
     });
-  }, [movies]);
+  }, [movies, customAdminCategories]);
 
   // Compute genre movie counts for sidebar
   const genreCounts = useMemo(() => {
@@ -348,6 +370,28 @@ export default function AdminPage() {
     setTimeout(() => {
       setStatusMessage(null);
     }, 4500);
+  };
+
+  // Add new Category handler
+  const handleCreateCategory = () => {
+    const trimmed = newCategoryName.trim();
+    if (!trimmed) return;
+    const capitalized = trimmed.charAt(0).toUpperCase() + trimmed.slice(1);
+    if (!customAdminCategories.includes(capitalized)) {
+      const updated = [...customAdminCategories, capitalized];
+      setCustomAdminCategories(updated);
+      if (typeof window !== "undefined") {
+        try {
+          localStorage.setItem("cineverse_custom_categories", JSON.stringify(updated));
+        } catch (e) {
+          console.warn("Could not save custom category:", e);
+        }
+      }
+    }
+    setNewCategoryName("");
+    setIsAddCategoryOpen(false);
+    setSelectedNav(capitalized);
+    showToast("success", `✨ Category "${capitalized}" created! Click "+ Add New Movie" to add films to it.`);
   };
 
   // Admin Login Submit
@@ -967,10 +1011,51 @@ export default function AdminPage() {
 
           {/* Genre / Categories Group */}
           <div className="flex-1">
-            <p className="text-xs sm:text-sm font-black uppercase tracking-wider text-slate-400 mb-3 px-2 flex items-center justify-between">
-              <span>Categories (Genres)</span>
-              <Folder className="w-4.5 h-4.5 text-slate-400" />
-            </p>
+            <div className="flex items-center justify-between mb-3 px-2">
+              <p className="text-xs sm:text-sm font-black uppercase tracking-wider text-slate-400 flex items-center gap-2">
+                <span>Categories</span>
+                <Folder className="w-4 h-4 text-slate-400" />
+              </p>
+              <button
+                type="button"
+                onClick={() => setIsAddCategoryOpen(!isAddCategoryOpen)}
+                className="text-xs font-bold text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 px-2.5 py-1 rounded-xl border border-rose-500/25 transition-all flex items-center gap-1 cursor-pointer shadow-sm"
+                title="Create a new category tab"
+              >
+                <Plus className="w-3.5 h-3.5 stroke-[3]" />
+                <span>Add Category</span>
+              </button>
+            </div>
+
+            {/* Inline Category Creator Box */}
+            {isAddCategoryOpen && (
+              <div className="mb-3 p-3.5 rounded-2xl bg-[#0f1626] border border-rose-500/30 space-y-2.5 animate-fadeIn shadow-xl">
+                <p className="text-xs font-bold text-slate-200">Create New Category / Genre:</p>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    value={newCategoryName}
+                    onChange={(e) => setNewCategoryName(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault();
+                        handleCreateCategory();
+                      }
+                    }}
+                    placeholder="e.g. Anime, K-Drama, Documentary"
+                    className="flex-1 bg-[#090d16] border border-slate-700/80 focus:border-[#e50914] rounded-xl px-3 py-2 text-xs font-semibold text-white focus:outline-none placeholder:text-slate-500 shadow-inner"
+                    autoFocus
+                  />
+                  <button
+                    type="button"
+                    onClick={handleCreateCategory}
+                    className="px-3.5 py-2 bg-[#e50914] hover:bg-rose-600 text-white text-xs font-bold rounded-xl transition-all cursor-pointer shadow-md shrink-0"
+                  >
+                    Save
+                  </button>
+                </div>
+              </div>
+            )}
             <div className="space-y-2">
               {genreCategories.map((cat) => {
                 const count = genreCounts[cat.id] || 0;
