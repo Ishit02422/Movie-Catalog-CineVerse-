@@ -114,7 +114,7 @@ function cleanAndExtractImageUrl(url: string): string {
       if (urlParam) {
         return decodeURIComponent(urlParam);
       }
-    } catch {}
+    } catch { }
   }
 
   // Remove surrounding quotes if any
@@ -204,21 +204,6 @@ export default function AdminPage() {
   const [formError, setFormError] = useState("");
   const [imagePreviewStatus, setImagePreviewStatus] = useState<"idle" | "loading" | "valid" | "error">("idle");
   const [isUploadingImage, setIsUploadingImage] = useState(false);
-  const [isCustomGenre, setIsCustomGenre] = useState(false);
-  const [customGenreInput, setCustomGenreInput] = useState("");
-  const [isAddCategoryOpen, setIsAddCategoryOpen] = useState(false);
-  const [newCategoryName, setNewCategoryName] = useState("");
-  const [customAdminCategories, setCustomAdminCategories] = useState<string[]>(() => {
-    if (typeof window !== "undefined") {
-      try {
-        const saved = localStorage.getItem("cineverse_custom_categories");
-        return saved ? JSON.parse(saved) : [];
-      } catch {
-        return [];
-      }
-    }
-    return [];
-  });
 
   // Dynamic release years list: from current year down to 1950
   const releaseYearsList = useMemo(() => {
@@ -255,18 +240,9 @@ export default function AdminPage() {
     }
   }, [isAdmin]);
 
-  // Dynamic genre categories extracted from DB movies + custom admin categories
+  // Dynamic genre categories extracted strictly from current database movies
   const genreCategories = useMemo<GenreCategory[]>(() => {
     const dynamicGenreNames = new Set<string>();
-
-    // Include custom admin categories created in dashboard
-    customAdminCategories.forEach((cat) => {
-      const clean = cat.trim();
-      if (clean) {
-        const capitalized = clean.charAt(0).toUpperCase() + clean.slice(1);
-        dynamicGenreNames.add(capitalized);
-      }
-    });
 
     // Extract all genres present in current database movies
     movies.forEach((m) => {
@@ -296,7 +272,7 @@ export default function AdminPage() {
       const icon = matchingKey ? GENRE_ICONS[matchingKey] : "📁";
       return { id: name, name, icon };
     });
-  }, [movies, customAdminCategories]);
+  }, [movies]);
 
   // Compute genre movie counts for sidebar
   const genreCounts = useMemo(() => {
@@ -372,28 +348,6 @@ export default function AdminPage() {
     }, 4500);
   };
 
-  // Add new Category handler
-  const handleCreateCategory = () => {
-    const trimmed = newCategoryName.trim();
-    if (!trimmed) return;
-    const capitalized = trimmed.charAt(0).toUpperCase() + trimmed.slice(1);
-    if (!customAdminCategories.includes(capitalized)) {
-      const updated = [...customAdminCategories, capitalized];
-      setCustomAdminCategories(updated);
-      if (typeof window !== "undefined") {
-        try {
-          localStorage.setItem("cineverse_custom_categories", JSON.stringify(updated));
-        } catch (e) {
-          console.warn("Could not save custom category:", e);
-        }
-      }
-    }
-    setNewCategoryName("");
-    setIsAddCategoryOpen(false);
-    setSelectedNav(capitalized);
-    showToast("success", `✨ Category "${capitalized}" created! Click "+ Add New Movie" to add films to it.`);
-  };
-
   // Admin Login Submit
   const handleAdminLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -410,8 +364,6 @@ export default function AdminPage() {
 
   // Add Modal trigger
   const handleOpenAddModal = () => {
-    setIsCustomGenre(false);
-    setCustomGenreInput("");
     setFormData({
       title: "",
       genre: selectedNav !== "all" && selectedNav !== "featured" && genreCategories.some((c) => c.id === selectedNav) ? selectedNav : (genreCategories[0]?.name || "Action"),
@@ -430,9 +382,6 @@ export default function AdminPage() {
   // Edit Modal trigger
   const handleOpenEditModal = (movie: Movie) => {
     setActiveMovie(movie);
-    const isPredefined = genreCategories.some((c) => c.name.toLowerCase() === (movie.genre || "").toLowerCase());
-    setIsCustomGenre(!isPredefined && !!movie.genre);
-    setCustomGenreInput(!isPredefined && movie.genre ? movie.genre : "");
     setFormData({
       title: movie.title,
       genre: movie.genre || "Action",
@@ -808,16 +757,16 @@ export default function AdminPage() {
     selectedNav === "all"
       ? "All Movies Catalog"
       : selectedNav === "featured"
-      ? "Hero Banner Featured Movies"
-      : selectedNav === "status_active"
-      ? "🟢 Active & Published Movies"
-      : selectedNav === "status_hidden"
-      ? "👁️ Hidden Movies (Private)"
-      : selectedNav === "status_under_review"
-      ? "🟡 Under Review Movies"
-      : selectedNav === "status_removed"
-      ? "🔴 Removed / Archived Movies"
-      : `${selectedNav} Movies`;
+        ? "Hero Banner Featured Movies"
+        : selectedNav === "status_active"
+          ? "🟢 Active & Published Movies"
+          : selectedNav === "status_hidden"
+            ? "👁️ Hidden Movies (Private)"
+            : selectedNav === "status_under_review"
+              ? "🟡 Under Review Movies"
+              : selectedNav === "status_removed"
+                ? "🔴 Removed / Archived Movies"
+                : `${selectedNav} Movies`;
 
   return (
     <div className="h-screen bg-[#06080e] text-white flex flex-col font-sans overflow-hidden">
@@ -881,19 +830,17 @@ export default function AdminPage() {
               {/* All Movies */}
               <button
                 onClick={() => setSelectedNav("all")}
-                className={`w-full flex items-center justify-between px-4 py-3.5 rounded-2xl text-base font-extrabold transition-all cursor-pointer ${
-                  selectedNav === "all"
-                    ? "bg-[#e50914] text-white shadow-lg shadow-rose-950/60 scale-[1.02]"
-                    : "text-slate-300 hover:bg-white/[0.06] hover:text-white"
-                }`}
+                className={`w-full flex items-center justify-between px-4 py-3.5 rounded-2xl text-base font-extrabold transition-all cursor-pointer ${selectedNav === "all"
+                  ? "bg-[#e50914] text-white shadow-lg shadow-rose-950/60 scale-[1.02]"
+                  : "text-slate-300 hover:bg-white/[0.06] hover:text-white"
+                  }`}
               >
                 <div className="flex items-center gap-3">
                   <Clapperboard className="w-5 h-5 text-white" />
                   <span>All Movies</span>
                 </div>
-                <span className={`px-3 py-1 rounded-xl text-xs sm:text-sm font-black ${
-                  selectedNav === "all" ? "bg-black/40 text-white" : "bg-white/[0.08] text-slate-300"
-                }`}>
+                <span className={`px-3 py-1 rounded-xl text-xs sm:text-sm font-black ${selectedNav === "all" ? "bg-black/40 text-white" : "bg-white/[0.08] text-slate-300"
+                  }`}>
                   {movies.length}
                 </span>
               </button>
@@ -901,19 +848,17 @@ export default function AdminPage() {
               {/* Featured Hero Banner */}
               <button
                 onClick={() => setSelectedNav("featured")}
-                className={`w-full flex items-center justify-between px-4 py-3.5 rounded-2xl text-base font-extrabold transition-all cursor-pointer ${
-                  selectedNav === "featured"
-                    ? "bg-amber-500/20 text-amber-300 border border-amber-500/30 shadow-lg shadow-amber-950/40 scale-[1.02]"
-                    : "text-slate-300 hover:bg-white/[0.06] hover:text-white"
-                }`}
+                className={`w-full flex items-center justify-between px-4 py-3.5 rounded-2xl text-base font-extrabold transition-all cursor-pointer ${selectedNav === "featured"
+                  ? "bg-amber-500/20 text-amber-300 border border-amber-500/30 shadow-lg shadow-amber-950/40 scale-[1.02]"
+                  : "text-slate-300 hover:bg-white/[0.06] hover:text-white"
+                  }`}
               >
                 <div className="flex items-center gap-3">
                   <Star className={`w-5 h-5 ${selectedNav === "featured" ? "fill-amber-400 text-amber-400" : "text-amber-400"}`} />
                   <span>Hero Banner Featured</span>
                 </div>
-                <span className={`px-3 py-1 rounded-xl text-xs sm:text-sm font-black ${
-                  selectedNav === "featured" ? "bg-amber-500/20 text-amber-300 border border-amber-500/40" : "bg-amber-500/10 text-amber-400 border border-amber-500/20"
-                }`}>
+                <span className={`px-3 py-1 rounded-xl text-xs sm:text-sm font-black ${selectedNav === "featured" ? "bg-amber-500/20 text-amber-300 border border-amber-500/40" : "bg-amber-500/10 text-amber-400 border border-amber-500/20"
+                  }`}>
                   {featuredCount}
                 </span>
               </button>
@@ -930,19 +875,17 @@ export default function AdminPage() {
               {/* Active */}
               <button
                 onClick={() => setSelectedNav("status_active")}
-                className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl text-base font-bold transition-all cursor-pointer ${
-                  selectedNav === "status_active"
-                    ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/35 shadow-md scale-[1.01]"
-                    : "text-slate-300 hover:bg-white/[0.06] hover:text-white"
-                }`}
+                className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl text-base font-bold transition-all cursor-pointer ${selectedNav === "status_active"
+                  ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/35 shadow-md scale-[1.01]"
+                  : "text-slate-300 hover:bg-white/[0.06] hover:text-white"
+                  }`}
               >
                 <div className="flex items-center gap-3">
                   <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]"></span>
                   <span>Active (Live)</span>
                 </div>
-                <span className={`px-3 py-0.5 rounded-xl text-xs sm:text-sm font-black ${
-                  selectedNav === "status_active" ? "bg-emerald-500/25 text-emerald-200" : "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
-                }`}>
+                <span className={`px-3 py-0.5 rounded-xl text-xs sm:text-sm font-black ${selectedNav === "status_active" ? "bg-emerald-500/25 text-emerald-200" : "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+                  }`}>
                   {statusCounts.active}
                 </span>
               </button>
@@ -950,19 +893,17 @@ export default function AdminPage() {
               {/* Hidden */}
               <button
                 onClick={() => setSelectedNav("status_hidden")}
-                className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl text-base font-bold transition-all cursor-pointer ${
-                  selectedNav === "status_hidden"
-                    ? "bg-purple-500/20 text-purple-300 border border-purple-500/35 shadow-md scale-[1.01]"
-                    : "text-slate-300 hover:bg-white/[0.06] hover:text-white"
-                }`}
+                className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl text-base font-bold transition-all cursor-pointer ${selectedNav === "status_hidden"
+                  ? "bg-purple-500/20 text-purple-300 border border-purple-500/35 shadow-md scale-[1.01]"
+                  : "text-slate-300 hover:bg-white/[0.06] hover:text-white"
+                  }`}
               >
                 <div className="flex items-center gap-3">
                   <span className="w-2.5 h-2.5 rounded-full bg-purple-400 shadow-[0_0_8px_#c084fc]"></span>
                   <span>Hidden (Private)</span>
                 </div>
-                <span className={`px-3 py-0.5 rounded-xl text-xs sm:text-sm font-black ${
-                  selectedNav === "status_hidden" ? "bg-purple-500/25 text-purple-200" : "bg-purple-500/10 text-purple-300 border border-purple-500/20"
-                }`}>
+                <span className={`px-3 py-0.5 rounded-xl text-xs sm:text-sm font-black ${selectedNav === "status_hidden" ? "bg-purple-500/25 text-purple-200" : "bg-purple-500/10 text-purple-300 border border-purple-500/20"
+                  }`}>
                   {statusCounts.hidden}
                 </span>
               </button>
@@ -970,19 +911,17 @@ export default function AdminPage() {
               {/* Under Review */}
               <button
                 onClick={() => setSelectedNav("status_under_review")}
-                className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl text-base font-bold transition-all cursor-pointer ${
-                  selectedNav === "status_under_review"
-                    ? "bg-amber-500/20 text-amber-300 border border-amber-500/35 shadow-md scale-[1.01]"
-                    : "text-slate-300 hover:bg-white/[0.06] hover:text-white"
-                }`}
+                className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl text-base font-bold transition-all cursor-pointer ${selectedNav === "status_under_review"
+                  ? "bg-amber-500/20 text-amber-300 border border-amber-500/35 shadow-md scale-[1.01]"
+                  : "text-slate-300 hover:bg-white/[0.06] hover:text-white"
+                  }`}
               >
                 <div className="flex items-center gap-3">
                   <span className="w-2.5 h-2.5 rounded-full bg-amber-400 shadow-[0_0_8px_#fbbf24]"></span>
                   <span>Under Review</span>
                 </div>
-                <span className={`px-3 py-0.5 rounded-xl text-xs sm:text-sm font-black ${
-                  selectedNav === "status_under_review" ? "bg-amber-500/25 text-amber-200" : "bg-amber-500/10 text-amber-400 border border-amber-500/20"
-                }`}>
+                <span className={`px-3 py-0.5 rounded-xl text-xs sm:text-sm font-black ${selectedNav === "status_under_review" ? "bg-amber-500/25 text-amber-200" : "bg-amber-500/10 text-amber-400 border border-amber-500/20"
+                  }`}>
                   {statusCounts.under_review}
                 </span>
               </button>
@@ -990,19 +929,17 @@ export default function AdminPage() {
               {/* Removed */}
               <button
                 onClick={() => setSelectedNav("status_removed")}
-                className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl text-base font-bold transition-all cursor-pointer ${
-                  selectedNav === "status_removed"
-                    ? "bg-rose-500/20 text-rose-300 border border-rose-500/35 shadow-md scale-[1.01]"
-                    : "text-slate-300 hover:bg-white/[0.06] hover:text-white"
-                }`}
+                className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl text-base font-bold transition-all cursor-pointer ${selectedNav === "status_removed"
+                  ? "bg-rose-500/20 text-rose-300 border border-rose-500/35 shadow-md scale-[1.01]"
+                  : "text-slate-300 hover:bg-white/[0.06] hover:text-white"
+                  }`}
               >
                 <div className="flex items-center gap-3">
                   <span className="w-2.5 h-2.5 rounded-full bg-rose-400 shadow-[0_0_8px_#fb7185]"></span>
                   <span>Removed / Archived</span>
                 </div>
-                <span className={`px-3 py-0.5 rounded-xl text-xs sm:text-sm font-black ${
-                  selectedNav === "status_removed" ? "bg-rose-500/25 text-rose-200" : "bg-rose-500/10 text-rose-400 border border-rose-500/20"
-                }`}>
+                <span className={`px-3 py-0.5 rounded-xl text-xs sm:text-sm font-black ${selectedNav === "status_removed" ? "bg-rose-500/25 text-rose-200" : "bg-rose-500/10 text-rose-400 border border-rose-500/20"
+                  }`}>
                   {statusCounts.removed}
                 </span>
               </button>
@@ -1011,51 +948,10 @@ export default function AdminPage() {
 
           {/* Genre / Categories Group */}
           <div className="flex-1">
-            <div className="flex items-center justify-between mb-3 px-2">
-              <p className="text-xs sm:text-sm font-black uppercase tracking-wider text-slate-400 flex items-center gap-2">
-                <span>Categories</span>
-                <Folder className="w-4 h-4 text-slate-400" />
-              </p>
-              <button
-                type="button"
-                onClick={() => setIsAddCategoryOpen(!isAddCategoryOpen)}
-                className="text-xs font-bold text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 px-2.5 py-1 rounded-xl border border-rose-500/25 transition-all flex items-center gap-1 cursor-pointer shadow-sm"
-                title="Create a new category tab"
-              >
-                <Plus className="w-3.5 h-3.5 stroke-[3]" />
-                <span>Add Category</span>
-              </button>
-            </div>
-
-            {/* Inline Category Creator Box */}
-            {isAddCategoryOpen && (
-              <div className="mb-3 p-3.5 rounded-2xl bg-[#0f1626] border border-rose-500/30 space-y-2.5 animate-fadeIn shadow-xl">
-                <p className="text-xs font-bold text-slate-200">Create New Category / Genre:</p>
-                <div className="flex items-center gap-2">
-                  <input
-                    type="text"
-                    value={newCategoryName}
-                    onChange={(e) => setNewCategoryName(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") {
-                        e.preventDefault();
-                        handleCreateCategory();
-                      }
-                    }}
-                    placeholder="e.g. Anime, K-Drama, Documentary"
-                    className="flex-1 bg-[#090d16] border border-slate-700/80 focus:border-[#e50914] rounded-xl px-3 py-2 text-xs font-semibold text-white focus:outline-none placeholder:text-slate-500 shadow-inner"
-                    autoFocus
-                  />
-                  <button
-                    type="button"
-                    onClick={handleCreateCategory}
-                    className="px-3.5 py-2 bg-[#e50914] hover:bg-rose-600 text-white text-xs font-bold rounded-xl transition-all cursor-pointer shadow-md shrink-0"
-                  >
-                    Save
-                  </button>
-                </div>
-              </div>
-            )}
+            <p className="text-xs sm:text-sm font-black uppercase tracking-wider text-slate-400 mb-3 px-2 flex items-center justify-between">
+              <span>Categories (Genres)</span>
+              <Folder className="w-4.5 h-4.5 text-slate-400" />
+            </p>
             <div className="space-y-2">
               {genreCategories.map((cat) => {
                 const count = genreCounts[cat.id] || 0;
@@ -1064,23 +960,21 @@ export default function AdminPage() {
                   <button
                     key={cat.id}
                     onClick={() => setSelectedNav(cat.id)}
-                    className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl text-base font-bold transition-all cursor-pointer ${
-                      isSelected
-                        ? "bg-[#e50914] text-white shadow-lg shadow-rose-950/50 scale-[1.01]"
-                        : "text-slate-300 hover:bg-white/[0.06] hover:text-white"
-                    }`}
+                    className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl text-base font-bold transition-all cursor-pointer ${isSelected
+                      ? "bg-[#e50914] text-white shadow-lg shadow-rose-950/50 scale-[1.01]"
+                      : "text-slate-300 hover:bg-white/[0.06] hover:text-white"
+                      }`}
                   >
                     <div className="flex items-center gap-3.5">
                       <span className="text-lg">{cat.icon}</span>
                       <span>{cat.name}</span>
                     </div>
-                    <span className={`text-xs sm:text-sm font-black px-3 py-0.5 rounded-xl border ${
-                      isSelected
-                        ? "text-white bg-black/40 border-white/10"
-                        : count > 0 
-                        ? "text-slate-300 bg-white/[0.06] border-white/[0.06]" 
+                    <span className={`text-xs sm:text-sm font-black px-3 py-0.5 rounded-xl border ${isSelected
+                      ? "text-white bg-black/40 border-white/10"
+                      : count > 0
+                        ? "text-slate-300 bg-white/[0.06] border-white/[0.06]"
                         : "text-slate-500 bg-white/[0.02] border-transparent"
-                    }`}>
+                      }`}>
                       {count}
                     </span>
                   </button>
@@ -1101,11 +995,10 @@ export default function AdminPage() {
           {/* Toast Notification */}
           {statusMessage && (
             <div
-              className={`mb-6 p-4 rounded-2xl flex items-center justify-between shadow-xl transition-all animate-fadeIn ${
-                statusMessage.type === "success"
-                  ? "bg-emerald-950/90 border border-emerald-500/40 text-emerald-100"
-                  : "bg-rose-950/90 border border-rose-500/40 text-rose-100"
-              }`}
+              className={`mb-6 p-4 rounded-2xl flex items-center justify-between shadow-xl transition-all animate-fadeIn ${statusMessage.type === "success"
+                ? "bg-emerald-950/90 border border-emerald-500/40 text-emerald-100"
+                : "bg-rose-950/90 border border-rose-500/40 text-rose-100"
+                }`}
             >
               <div className="flex items-center gap-3">
                 {statusMessage.type === "success" ? (
@@ -1162,22 +1055,20 @@ export default function AdminPage() {
                 <button
                   onClick={() => setViewMode("list")}
                   title="Detailed List View"
-                  className={`p-2 rounded-xl transition-all cursor-pointer ${
-                    viewMode === "list"
-                      ? "bg-[#e50914] text-white shadow-md shadow-rose-950/60"
-                      : "text-slate-400 hover:text-white"
-                  }`}
+                  className={`p-2 rounded-xl transition-all cursor-pointer ${viewMode === "list"
+                    ? "bg-[#e50914] text-white shadow-md shadow-rose-950/60"
+                    : "text-slate-400 hover:text-white"
+                    }`}
                 >
                   <List className="w-5 h-5" />
                 </button>
                 <button
                   onClick={() => setViewMode("grid")}
                   title="Poster Cards Grid"
-                  className={`p-2 rounded-xl transition-all cursor-pointer ${
-                    viewMode === "grid"
-                      ? "bg-[#e50914] text-white shadow-md shadow-rose-950/60"
-                      : "text-slate-400 hover:text-white"
-                  }`}
+                  className={`p-2 rounded-xl transition-all cursor-pointer ${viewMode === "grid"
+                    ? "bg-[#e50914] text-white shadow-md shadow-rose-950/60"
+                    : "text-slate-400 hover:text-white"
+                    }`}
                 >
                   <LayoutGrid className="w-5 h-5" />
                 </button>
@@ -1276,23 +1167,22 @@ export default function AdminPage() {
                           </span>
                           {/* Harmonized Status Badge */}
                           <span
-                            className={`text-xs font-bold px-2.5 py-0.5 rounded-lg border shadow-sm ${
-                              movieStatus === "active"
-                                ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/25"
-                                : movieStatus === "hidden"
+                            className={`text-xs font-bold px-2.5 py-0.5 rounded-lg border shadow-sm ${movieStatus === "active"
+                              ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/25"
+                              : movieStatus === "hidden"
                                 ? "bg-purple-500/10 text-purple-300 border-purple-500/25"
                                 : movieStatus === "under_review"
-                                ? "bg-amber-500/10 text-amber-300 border-amber-500/25"
-                                : "bg-rose-500/10 text-rose-300 border-rose-500/25"
-                            }`}
+                                  ? "bg-amber-500/10 text-amber-300 border-amber-500/25"
+                                  : "bg-rose-500/10 text-rose-300 border-rose-500/25"
+                              }`}
                           >
                             {movieStatus === "active"
                               ? "🟢 Active"
                               : movieStatus === "hidden"
-                              ? "👁️ Hidden"
-                              : movieStatus === "under_review"
-                              ? "🟡 Under Review"
-                              : "🔴 Removed"}
+                                ? "👁️ Hidden"
+                                : movieStatus === "under_review"
+                                  ? "🟡 Under Review"
+                                  : "🔴 Removed"}
                           </span>
                         </div>
 
@@ -1349,11 +1239,10 @@ export default function AdminPage() {
                         type="button"
                         onClick={() => handleToggleFeatured(movie)}
                         title={movie.is_featured ? "Remove from Hero Banner" : "Feature on Hero Banner"}
-                        className={`flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer shadow-md ${
-                          movie.is_featured
-                            ? "bg-amber-500/15 text-amber-300 border border-amber-500/30 hover:bg-amber-500/25"
-                            : "bg-white/[0.04] text-slate-300 hover:text-amber-400 hover:bg-white/[0.08] border border-white/[0.08]"
-                        }`}
+                        className={`flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer shadow-md ${movie.is_featured
+                          ? "bg-amber-500/15 text-amber-300 border border-amber-500/30 hover:bg-amber-500/25"
+                          : "bg-white/[0.04] text-slate-300 hover:text-amber-400 hover:bg-white/[0.08] border border-white/[0.08]"
+                          }`}
                       >
                         <Star className={`w-4 h-4 ${movie.is_featured ? "fill-amber-400 text-amber-400" : ""}`} />
                         <span>{movie.is_featured ? "Featured" : "Feature"}</span>
@@ -1409,11 +1298,10 @@ export default function AdminPage() {
                         type="button"
                         onClick={() => handleToggleFeatured(movie)}
                         title={movie.is_featured ? "Remove from Hero Banner" : "Feature on Hero Banner"}
-                        className={`absolute top-2.5 right-2.5 p-2 rounded-xl backdrop-blur-md transition-all cursor-pointer ${
-                          movie.is_featured
-                            ? "bg-amber-500 text-slate-950 shadow-lg shadow-amber-500/30 scale-105"
-                            : "bg-black/60 text-slate-400 hover:text-amber-400"
-                        }`}
+                        className={`absolute top-2.5 right-2.5 p-2 rounded-xl backdrop-blur-md transition-all cursor-pointer ${movie.is_featured
+                          ? "bg-amber-500 text-slate-950 shadow-lg shadow-amber-500/30 scale-105"
+                          : "bg-black/60 text-slate-400 hover:text-amber-400"
+                          }`}
                       >
                         <Star className={`w-4 h-4 ${movie.is_featured ? "fill-slate-950" : ""}`} />
                       </button>
@@ -1426,23 +1314,22 @@ export default function AdminPage() {
                       {/* Status Tag on Poster */}
                       <div className="absolute bottom-2.5 left-2.5">
                         <span
-                          className={`text-[10px] sm:text-xs font-bold px-2.5 py-1 rounded-lg backdrop-blur-md border shadow-md ${
-                            movieStatus === "active"
-                              ? "bg-emerald-950/90 text-emerald-300 border-emerald-500/40"
-                              : movieStatus === "hidden"
+                          className={`text-[10px] sm:text-xs font-bold px-2.5 py-1 rounded-lg backdrop-blur-md border shadow-md ${movieStatus === "active"
+                            ? "bg-emerald-950/90 text-emerald-300 border-emerald-500/40"
+                            : movieStatus === "hidden"
                               ? "bg-purple-950/90 text-purple-200 border-purple-500/40"
                               : movieStatus === "under_review"
-                              ? "bg-amber-950/90 text-amber-200 border-amber-500/40"
-                              : "bg-rose-950/90 text-rose-200 border-rose-500/40"
-                          }`}
+                                ? "bg-amber-950/90 text-amber-200 border-amber-500/40"
+                                : "bg-rose-950/90 text-rose-200 border-rose-500/40"
+                            }`}
                         >
                           {movieStatus === "active"
                             ? "🟢 Active"
                             : movieStatus === "hidden"
-                            ? "👁️ Hidden"
-                            : movieStatus === "under_review"
-                            ? "🟡 Review"
-                            : "🔴 Removed"}
+                              ? "👁️ Hidden"
+                              : movieStatus === "under_review"
+                                ? "🟡 Review"
+                                : "🔴 Removed"}
                         </span>
                       </div>
 
@@ -1487,11 +1374,10 @@ export default function AdminPage() {
                         </select>
 
                         <div className="flex items-center justify-between text-xs font-semibold">
-                          <span className={`px-2.5 py-1 rounded-lg font-bold text-[11px] ${
-                            movie.is_featured
-                              ? "bg-amber-500/15 text-amber-400 border border-amber-500/30"
-                              : "bg-white/[0.05] text-slate-400 border border-white/[0.06]"
-                          }`}>
+                          <span className={`px-2.5 py-1 rounded-lg font-bold text-[11px] ${movie.is_featured
+                            ? "bg-amber-500/15 text-amber-400 border border-amber-500/30"
+                            : "bg-white/[0.05] text-slate-400 border border-white/[0.06]"
+                            }`}>
                             {movie.is_featured ? "⭐ Featured" : "Standard"}
                           </span>
                           <div className="flex items-center gap-1.5">
@@ -1581,92 +1467,23 @@ export default function AdminPage() {
                       <label className="block text-sm font-bold uppercase tracking-wider text-slate-200 mb-2">
                         Genre <span className="text-[#e50914]">*</span>
                       </label>
-
-                      {/* Prominent Switcher: Select List vs Custom Genre */}
-                      <div className="flex items-center gap-1.5 p-1 bg-[#090d16] rounded-xl border border-slate-700/80 mb-2.5">
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setIsCustomGenre(false);
-                            if (!formData.genre || isCustomGenre) {
-                              setFormData((prev) => ({ ...prev, genre: genreCategories[0]?.name || "Action" }));
-                            }
-                          }}
-                          className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-bold transition-all cursor-pointer text-center ${
-                            !isCustomGenre
-                              ? "bg-[#e50914] text-white shadow-md"
-                              : "text-slate-400 hover:text-white"
-                          }`}
-                        >
-                          📋 Select List
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setIsCustomGenre(true);
-                            setFormData((prev) => ({ ...prev, genre: customGenreInput.trim() || "" }));
-                          }}
-                          className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-bold transition-all cursor-pointer text-center ${
-                            isCustomGenre
-                              ? "bg-[#e50914] text-white shadow-md"
-                              : "text-slate-400 hover:text-white"
-                          }`}
-                        >
-                          ✍️ Custom Genre
-                        </button>
-                      </div>
-
-                      {isCustomGenre ? (
-                        <div className="space-y-1.5 animate-fadeIn">
-                          <input
-                            type="text"
-                            required
-                            value={formData.genre}
-                            onChange={(e) => {
-                              const val = e.target.value;
-                              setFormData({ ...formData, genre: val });
-                              setCustomGenreInput(val);
-                            }}
-                            placeholder="Type genre (e.g. Anime, K-Drama...)"
-                            className="w-full bg-[#131b2e] border-2 border-rose-500/80 focus:border-[#e50914] focus:ring-2 focus:ring-[#e50914]/30 rounded-xl px-3.5 py-2.5 text-sm font-semibold text-white placeholder:text-slate-500 transition-all shadow-inner"
-                            autoFocus
-                          />
-                          <p className="text-[11px] text-emerald-400 font-medium">
-                            Category: <b className="text-white font-bold">{formData.genre || "..."}</b>
-                          </p>
-                        </div>
-                      ) : (
-                        <select
-                          required
-                          value={formData.genre}
-                          onChange={(e) => {
-                            if (e.target.value === "__NEW_CUSTOM_GENRE__") {
-                              setIsCustomGenre(true);
-                              setFormData({ ...formData, genre: "" });
-                            } else {
-                              setFormData({ ...formData, genre: e.target.value });
-                            }
-                          }}
-                          className="w-full bg-[#131b2e] border border-slate-700/80 hover:border-slate-500 focus:border-[#e50914] focus:ring-2 focus:ring-[#e50914]/25 rounded-xl px-3.5 py-3 text-sm sm:text-base font-semibold text-white transition-all cursor-pointer"
-                        >
-                          <option value="__NEW_CUSTOM_GENRE__" className="bg-[#1e1b4b] text-rose-300 font-bold">
-                            ✨ + Type Custom Genre...
+                      <select
+                        required
+                        value={formData.genre}
+                        onChange={(e) => setFormData({ ...formData, genre: e.target.value })}
+                        className="w-full bg-[#131b2e] border border-slate-700/80 hover:border-slate-500 focus:border-[#e50914] focus:ring-2 focus:ring-[#e50914]/25 rounded-xl px-3.5 py-3 text-sm sm:text-base font-semibold text-white transition-all cursor-pointer"
+                      >
+                        {formData.genre && !genreCategories.some((c) => c.name.toLowerCase() === formData.genre.toLowerCase()) && (
+                          <option value={formData.genre} className="bg-[#0f172a] text-white">
+                            📁 {formData.genre}
                           </option>
-                          <option disabled className="bg-[#0f172a] text-slate-500">
-                            ──────────────
+                        )}
+                        {genreCategories.map((cat) => (
+                          <option key={cat.id} value={cat.name} className="bg-[#0f172a] text-white">
+                            {cat.icon} {cat.name}
                           </option>
-                          {formData.genre && !genreCategories.some((c) => c.name.toLowerCase() === formData.genre.toLowerCase()) && (
-                            <option value={formData.genre} className="bg-[#0f172a] text-white">
-                              📁 {formData.genre}
-                            </option>
-                          )}
-                          {genreCategories.map((cat) => (
-                            <option key={cat.id} value={cat.name} className="bg-[#0f172a] text-white">
-                              {cat.icon} {cat.name}
-                            </option>
-                          ))}
-                        </select>
-                      )}
+                        ))}
+                      </select>
                     </div>
 
                     <div>
@@ -1747,11 +1564,10 @@ export default function AdminPage() {
                     </div>
 
                     <label
-                      className={`group relative flex items-center gap-4 p-4 sm:p-5 rounded-xl border-2 border-dashed transition-all cursor-pointer ${
-                        formData.image_url
-                          ? "border-emerald-500/45 bg-emerald-950/20 hover:border-emerald-500/70"
-                          : "border-slate-600/80 bg-[#141e33]/70 hover:border-[#e50914] hover:bg-[#e50914]/[0.06]"
-                      }`}
+                      className={`group relative flex items-center gap-4 p-4 sm:p-5 rounded-xl border-2 border-dashed transition-all cursor-pointer ${formData.image_url
+                        ? "border-emerald-500/45 bg-emerald-950/20 hover:border-emerald-500/70"
+                        : "border-slate-600/80 bg-[#141e33]/70 hover:border-[#e50914] hover:bg-[#e50914]/[0.06]"
+                        }`}
                     >
                       <input
                         type="file"
@@ -1772,8 +1588,8 @@ export default function AdminPage() {
                           {isUploadingImage
                             ? "Optimizing & Processing Image..."
                             : formData.image_url
-                            ? "Click to Choose / Change Poster"
-                            : "Click to Upload Poster from Device"}
+                              ? "Click to Choose / Change Poster"
+                              : "Click to Upload Poster from Device"}
                         </p>
                         <p className="text-xs text-slate-400 mt-1">
                           Supports PNG, JPG, JPEG, WEBP (Auto-optimized)
@@ -1899,14 +1715,12 @@ export default function AdminPage() {
                       </div>
                     </div>
                     <div
-                      className={`w-10 h-6 rounded-full p-0.5 transition-colors relative flex items-center ${
-                        formData.is_featured ? "bg-[#e50914]" : "bg-slate-600"
-                      }`}
+                      className={`w-10 h-6 rounded-full p-0.5 transition-colors relative flex items-center ${formData.is_featured ? "bg-[#e50914]" : "bg-slate-600"
+                        }`}
                     >
                       <div
-                        className={`w-5 h-5 rounded-full bg-white shadow transition-transform ${
-                          formData.is_featured ? "translate-x-4" : "translate-x-0"
-                        }`}
+                        className={`w-5 h-5 rounded-full bg-white shadow transition-transform ${formData.is_featured ? "translate-x-4" : "translate-x-0"
+                          }`}
                       />
                     </div>
                   </div>
@@ -2002,92 +1816,23 @@ export default function AdminPage() {
                       <label className="block text-sm font-bold uppercase tracking-wider text-slate-200 mb-2">
                         Genre <span className="text-[#e50914]">*</span>
                       </label>
-
-                      {/* Prominent Switcher: Select List vs Custom Genre */}
-                      <div className="flex items-center gap-1.5 p-1 bg-[#090d16] rounded-xl border border-slate-700/80 mb-2.5">
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setIsCustomGenre(false);
-                            if (!formData.genre || isCustomGenre) {
-                              setFormData((prev) => ({ ...prev, genre: genreCategories[0]?.name || "Action" }));
-                            }
-                          }}
-                          className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-bold transition-all cursor-pointer text-center ${
-                            !isCustomGenre
-                              ? "bg-[#e50914] text-white shadow-md"
-                              : "text-slate-400 hover:text-white"
-                          }`}
-                        >
-                          📋 Select List
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setIsCustomGenre(true);
-                            setFormData((prev) => ({ ...prev, genre: customGenreInput.trim() || "" }));
-                          }}
-                          className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-bold transition-all cursor-pointer text-center ${
-                            isCustomGenre
-                              ? "bg-[#e50914] text-white shadow-md"
-                              : "text-slate-400 hover:text-white"
-                          }`}
-                        >
-                          ✍️ Custom Genre
-                        </button>
-                      </div>
-
-                      {isCustomGenre ? (
-                        <div className="space-y-1.5 animate-fadeIn">
-                          <input
-                            type="text"
-                            required
-                            value={formData.genre}
-                            onChange={(e) => {
-                              const val = e.target.value;
-                              setFormData({ ...formData, genre: val });
-                              setCustomGenreInput(val);
-                            }}
-                            placeholder="Type genre (e.g. Anime, K-Drama...)"
-                            className="w-full bg-[#131b2e] border-2 border-rose-500/80 focus:border-[#e50914] focus:ring-2 focus:ring-[#e50914]/30 rounded-xl px-3.5 py-2.5 text-sm font-semibold text-white placeholder:text-slate-500 transition-all shadow-inner"
-                            autoFocus
-                          />
-                          <p className="text-[11px] text-emerald-400 font-medium">
-                            Category: <b className="text-white font-bold">{formData.genre || "..."}</b>
-                          </p>
-                        </div>
-                      ) : (
-                        <select
-                          required
-                          value={formData.genre}
-                          onChange={(e) => {
-                            if (e.target.value === "__NEW_CUSTOM_GENRE__") {
-                              setIsCustomGenre(true);
-                              setFormData({ ...formData, genre: "" });
-                            } else {
-                              setFormData({ ...formData, genre: e.target.value });
-                            }
-                          }}
-                          className="w-full bg-[#131b2e] border border-slate-700/80 hover:border-slate-500 focus:border-[#e50914] focus:ring-2 focus:ring-[#e50914]/25 rounded-xl px-3.5 py-3 text-sm sm:text-base font-semibold text-white transition-all cursor-pointer"
-                        >
-                          <option value="__NEW_CUSTOM_GENRE__" className="bg-[#1e1b4b] text-rose-300 font-bold">
-                            ✨ + Type Custom Genre...
+                      <select
+                        required
+                        value={formData.genre}
+                        onChange={(e) => setFormData({ ...formData, genre: e.target.value })}
+                        className="w-full bg-[#131b2e] border border-slate-700/80 hover:border-slate-500 focus:border-[#e50914] focus:ring-2 focus:ring-[#e50914]/25 rounded-xl px-3.5 py-3 text-sm sm:text-base font-semibold text-white transition-all cursor-pointer"
+                      >
+                        {formData.genre && !genreCategories.some((c) => c.name.toLowerCase() === formData.genre.toLowerCase()) && (
+                          <option value={formData.genre} className="bg-[#0f172a] text-white">
+                            📁 {formData.genre}
                           </option>
-                          <option disabled className="bg-[#0f172a] text-slate-500">
-                            ──────────────
+                        )}
+                        {genreCategories.map((cat) => (
+                          <option key={cat.id} value={cat.name} className="bg-[#0f172a] text-white">
+                            {cat.icon} {cat.name}
                           </option>
-                          {formData.genre && !genreCategories.some((c) => c.name.toLowerCase() === formData.genre.toLowerCase()) && (
-                            <option value={formData.genre} className="bg-[#0f172a] text-white">
-                              📁 {formData.genre}
-                            </option>
-                          )}
-                          {genreCategories.map((cat) => (
-                            <option key={cat.id} value={cat.name} className="bg-[#0f172a] text-white">
-                              {cat.icon} {cat.name}
-                            </option>
-                          ))}
-                        </select>
-                      )}
+                        ))}
+                      </select>
                     </div>
 
                     <div>
@@ -2168,11 +1913,10 @@ export default function AdminPage() {
                     </div>
 
                     <label
-                      className={`group relative flex items-center gap-4 p-4 sm:p-5 rounded-xl border-2 border-dashed transition-all cursor-pointer ${
-                        formData.image_url
-                          ? "border-emerald-500/45 bg-emerald-950/20 hover:border-emerald-500/70"
-                          : "border-slate-600/80 bg-[#141e33]/70 hover:border-[#e50914] hover:bg-[#e50914]/[0.06]"
-                      }`}
+                      className={`group relative flex items-center gap-4 p-4 sm:p-5 rounded-xl border-2 border-dashed transition-all cursor-pointer ${formData.image_url
+                        ? "border-emerald-500/45 bg-emerald-950/20 hover:border-emerald-500/70"
+                        : "border-slate-600/80 bg-[#141e33]/70 hover:border-[#e50914] hover:bg-[#e50914]/[0.06]"
+                        }`}
                     >
                       <input
                         type="file"
@@ -2193,8 +1937,8 @@ export default function AdminPage() {
                           {isUploadingImage
                             ? "Optimizing & Processing Image..."
                             : formData.image_url
-                            ? "Click to Choose / Change Poster"
-                            : "Click to Upload Poster from Device"}
+                              ? "Click to Choose / Change Poster"
+                              : "Click to Upload Poster from Device"}
                         </p>
                         <p className="text-xs text-slate-400 mt-1">
                           Supports PNG, JPG, JPEG, WEBP (Auto-optimized)
@@ -2320,14 +2064,12 @@ export default function AdminPage() {
                       </div>
                     </div>
                     <div
-                      className={`w-10 h-6 rounded-full p-0.5 transition-colors relative flex items-center ${
-                        formData.is_featured ? "bg-[#e50914]" : "bg-slate-600"
-                      }`}
+                      className={`w-10 h-6 rounded-full p-0.5 transition-colors relative flex items-center ${formData.is_featured ? "bg-[#e50914]" : "bg-slate-600"
+                        }`}
                     >
                       <div
-                        className={`w-5 h-5 rounded-full bg-white shadow transition-transform ${
-                          formData.is_featured ? "translate-x-4" : "translate-x-0"
-                        }`}
+                        className={`w-5 h-5 rounded-full bg-white shadow transition-transform ${formData.is_featured ? "translate-x-4" : "translate-x-0"
+                          }`}
                       />
                     </div>
                   </div>
