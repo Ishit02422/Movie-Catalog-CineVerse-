@@ -1578,41 +1578,63 @@ export default function AdminPage() {
                   {/* 3 Columns: Genre, Year, Status */}
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
                     <div>
-                      <div className="flex items-center justify-between mb-2">
-                        <label className="text-sm font-bold uppercase tracking-wider text-slate-200">
-                          Genre <span className="text-[#e50914]">*</span>
-                        </label>
+                      <label className="block text-sm font-bold uppercase tracking-wider text-slate-200 mb-2">
+                        Genre <span className="text-[#e50914]">*</span>
+                      </label>
+
+                      {/* Prominent Switcher: Select List vs Custom Genre */}
+                      <div className="flex items-center gap-1.5 p-1 bg-[#090d16] rounded-xl border border-slate-700/80 mb-2.5">
                         <button
                           type="button"
                           onClick={() => {
-                            if (!isCustomGenre) {
-                              setIsCustomGenre(true);
-                              setFormData((prev) => ({ ...prev, genre: customGenreInput.trim() || "" }));
-                            } else {
-                              setIsCustomGenre(false);
+                            setIsCustomGenre(false);
+                            if (!formData.genre || isCustomGenre) {
                               setFormData((prev) => ({ ...prev, genre: genreCategories[0]?.name || "Action" }));
                             }
                           }}
-                          className="text-xs font-bold text-rose-400 hover:text-rose-300 hover:underline cursor-pointer flex items-center gap-1"
+                          className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-bold transition-all cursor-pointer text-center ${
+                            !isCustomGenre
+                              ? "bg-[#e50914] text-white shadow-md"
+                              : "text-slate-400 hover:text-white"
+                          }`}
                         >
-                          {isCustomGenre ? "← Select from List" : "+ Custom Category"}
+                          📋 Select List
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setIsCustomGenre(true);
+                            setFormData((prev) => ({ ...prev, genre: customGenreInput.trim() || "" }));
+                          }}
+                          className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-bold transition-all cursor-pointer text-center ${
+                            isCustomGenre
+                              ? "bg-[#e50914] text-white shadow-md"
+                              : "text-slate-400 hover:text-white"
+                          }`}
+                        >
+                          ✍️ Custom Genre
                         </button>
                       </div>
 
                       {isCustomGenre ? (
-                        <input
-                          type="text"
-                          required
-                          value={formData.genre}
-                          onChange={(e) => {
-                            const val = e.target.value;
-                            setFormData({ ...formData, genre: val });
-                            setCustomGenreInput(val);
-                          }}
-                          placeholder="e.g. Anime, Documentary, K-Drama"
-                          className="w-full bg-[#131b2e] border border-rose-500/60 focus:border-[#e50914] focus:ring-2 focus:ring-[#e50914]/25 rounded-xl px-3.5 py-3 text-sm sm:text-base font-semibold text-white placeholder:text-slate-500 transition-all shadow-inner"
-                          autoFocus
-                        />
+                        <div className="space-y-1.5 animate-fadeIn">
+                          <input
+                            type="text"
+                            required
+                            value={formData.genre}
+                            onChange={(e) => {
+                              const val = e.target.value;
+                              setFormData({ ...formData, genre: val });
+                              setCustomGenreInput(val);
+                            }}
+                            placeholder="Type genre (e.g. Anime, K-Drama...)"
+                            className="w-full bg-[#131b2e] border-2 border-rose-500/80 focus:border-[#e50914] focus:ring-2 focus:ring-[#e50914]/30 rounded-xl px-3.5 py-2.5 text-sm font-semibold text-white placeholder:text-slate-500 transition-all shadow-inner"
+                            autoFocus
+                          />
+                          <p className="text-[11px] text-emerald-400 font-medium">
+                            Category: <b className="text-white font-bold">{formData.genre || "..."}</b>
+                          </p>
+                        </div>
                       ) : (
                         <select
                           required
@@ -1627,6 +1649,12 @@ export default function AdminPage() {
                           }}
                           className="w-full bg-[#131b2e] border border-slate-700/80 hover:border-slate-500 focus:border-[#e50914] focus:ring-2 focus:ring-[#e50914]/25 rounded-xl px-3.5 py-3 text-sm sm:text-base font-semibold text-white transition-all cursor-pointer"
                         >
+                          <option value="__NEW_CUSTOM_GENRE__" className="bg-[#1e1b4b] text-rose-300 font-bold">
+                            ✨ + Type Custom Genre...
+                          </option>
+                          <option disabled className="bg-[#0f172a] text-slate-500">
+                            ──────────────
+                          </option>
                           {formData.genre && !genreCategories.some((c) => c.name.toLowerCase() === formData.genre.toLowerCase()) && (
                             <option value={formData.genre} className="bg-[#0f172a] text-white">
                               📁 {formData.genre}
@@ -1637,9 +1665,6 @@ export default function AdminPage() {
                               {cat.icon} {cat.name}
                             </option>
                           ))}
-                          <option value="__NEW_CUSTOM_GENRE__" className="bg-[#1e1b4b] text-rose-300 font-bold">
-                            ✨ + Add Custom Category...
-                          </option>
                         </select>
                       )}
                     </div>
@@ -1974,41 +1999,63 @@ export default function AdminPage() {
                   {/* 3 Columns: Genre, Year, Status */}
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
                     <div>
-                      <div className="flex items-center justify-between mb-2">
-                        <label className="text-sm font-bold uppercase tracking-wider text-slate-200">
-                          Genre <span className="text-[#e50914]">*</span>
-                        </label>
+                      <label className="block text-sm font-bold uppercase tracking-wider text-slate-200 mb-2">
+                        Genre <span className="text-[#e50914]">*</span>
+                      </label>
+
+                      {/* Prominent Switcher: Select List vs Custom Genre */}
+                      <div className="flex items-center gap-1.5 p-1 bg-[#090d16] rounded-xl border border-slate-700/80 mb-2.5">
                         <button
                           type="button"
                           onClick={() => {
-                            if (!isCustomGenre) {
-                              setIsCustomGenre(true);
-                              setFormData((prev) => ({ ...prev, genre: customGenreInput.trim() || "" }));
-                            } else {
-                              setIsCustomGenre(false);
+                            setIsCustomGenre(false);
+                            if (!formData.genre || isCustomGenre) {
                               setFormData((prev) => ({ ...prev, genre: genreCategories[0]?.name || "Action" }));
                             }
                           }}
-                          className="text-xs font-bold text-rose-400 hover:text-rose-300 hover:underline cursor-pointer flex items-center gap-1"
+                          className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-bold transition-all cursor-pointer text-center ${
+                            !isCustomGenre
+                              ? "bg-[#e50914] text-white shadow-md"
+                              : "text-slate-400 hover:text-white"
+                          }`}
                         >
-                          {isCustomGenre ? "← Select from List" : "+ Custom Category"}
+                          📋 Select List
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setIsCustomGenre(true);
+                            setFormData((prev) => ({ ...prev, genre: customGenreInput.trim() || "" }));
+                          }}
+                          className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-bold transition-all cursor-pointer text-center ${
+                            isCustomGenre
+                              ? "bg-[#e50914] text-white shadow-md"
+                              : "text-slate-400 hover:text-white"
+                          }`}
+                        >
+                          ✍️ Custom Genre
                         </button>
                       </div>
 
                       {isCustomGenre ? (
-                        <input
-                          type="text"
-                          required
-                          value={formData.genre}
-                          onChange={(e) => {
-                            const val = e.target.value;
-                            setFormData({ ...formData, genre: val });
-                            setCustomGenreInput(val);
-                          }}
-                          placeholder="e.g. Anime, Documentary, K-Drama"
-                          className="w-full bg-[#131b2e] border border-rose-500/60 focus:border-[#e50914] focus:ring-2 focus:ring-[#e50914]/25 rounded-xl px-3.5 py-3 text-sm sm:text-base font-semibold text-white placeholder:text-slate-500 transition-all shadow-inner"
-                          autoFocus
-                        />
+                        <div className="space-y-1.5 animate-fadeIn">
+                          <input
+                            type="text"
+                            required
+                            value={formData.genre}
+                            onChange={(e) => {
+                              const val = e.target.value;
+                              setFormData({ ...formData, genre: val });
+                              setCustomGenreInput(val);
+                            }}
+                            placeholder="Type genre (e.g. Anime, K-Drama...)"
+                            className="w-full bg-[#131b2e] border-2 border-rose-500/80 focus:border-[#e50914] focus:ring-2 focus:ring-[#e50914]/30 rounded-xl px-3.5 py-2.5 text-sm font-semibold text-white placeholder:text-slate-500 transition-all shadow-inner"
+                            autoFocus
+                          />
+                          <p className="text-[11px] text-emerald-400 font-medium">
+                            Category: <b className="text-white font-bold">{formData.genre || "..."}</b>
+                          </p>
+                        </div>
                       ) : (
                         <select
                           required
@@ -2023,6 +2070,12 @@ export default function AdminPage() {
                           }}
                           className="w-full bg-[#131b2e] border border-slate-700/80 hover:border-slate-500 focus:border-[#e50914] focus:ring-2 focus:ring-[#e50914]/25 rounded-xl px-3.5 py-3 text-sm sm:text-base font-semibold text-white transition-all cursor-pointer"
                         >
+                          <option value="__NEW_CUSTOM_GENRE__" className="bg-[#1e1b4b] text-rose-300 font-bold">
+                            ✨ + Type Custom Genre...
+                          </option>
+                          <option disabled className="bg-[#0f172a] text-slate-500">
+                            ──────────────
+                          </option>
                           {formData.genre && !genreCategories.some((c) => c.name.toLowerCase() === formData.genre.toLowerCase()) && (
                             <option value={formData.genre} className="bg-[#0f172a] text-white">
                               📁 {formData.genre}
@@ -2033,9 +2086,6 @@ export default function AdminPage() {
                               {cat.icon} {cat.name}
                             </option>
                           ))}
-                          <option value="__NEW_CUSTOM_GENRE__" className="bg-[#1e1b4b] text-rose-300 font-bold">
-                            ✨ + Add Custom Category...
-                          </option>
                         </select>
                       )}
                     </div>
