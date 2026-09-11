@@ -235,6 +235,11 @@ export default function AdminPage() {
   };
 
   useEffect(() => {
+    if (typeof window !== "undefined") {
+      try {
+        localStorage.removeItem("cineverse_custom_categories");
+      } catch {}
+    }
     if (isAdmin) {
       fetchAllMovies();
     }
