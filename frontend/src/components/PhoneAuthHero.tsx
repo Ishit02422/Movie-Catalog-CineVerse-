@@ -164,6 +164,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [resendCooldown, setResendCooldown] = useState<number>(60);
 
   // Filtered countries for search modal
   const filteredCountries = COUNTRIES.filter((c) => {
@@ -201,6 +202,15 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
     : FALLBACK_POSTERS;
 
   const [trendingOffset, setTrendingOffset] = useState<number>(0);
+
+  // Countdown timer for Resend OTP button (1 minute cooldown)
+  useEffect(() => {
+    if (screen !== "otp" || resendCooldown <= 0) return;
+    const timer = setInterval(() => {
+      setResendCooldown((prev) => (prev > 0 ? prev - 1 : 0));
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [screen, resendCooldown]);
 
   // Auto cycle trending movie posters rotation every 7 seconds
   useEffect(() => {
@@ -388,6 +398,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
           }
           setScreen("otp");
           setOtpCode("");
+          setResendCooldown(60);
         } else {
           // New User -> Open Sign Up Screen to collect name (NO OTP SENT YET - NO DUPLICATE OTP)
           setAuthMode("register");
@@ -411,6 +422,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
 
         setScreen("otp");
         setOtpCode("");
+        setResendCooldown(60);
       }
     } catch (err: any) {
       console.error("Auth flow notice:", err);
@@ -467,14 +479,16 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
     }
   };
 
-  // Resend OTP helper
+  // Resend OTP helper with 1-minute cooldown
   const handleResendOtp = async () => {
+    if (resendCooldown > 0 || isLoading) return;
     setIsLoading(true);
     setError(null);
     setSuccessMessage(null);
     try {
       await sendPhoneOtp(identifier.trim());
       setSuccessMessage(`A fresh verification code has been dispatched!`);
+      setResendCooldown(60);
     } catch (err: any) {
       setError(err.message || "Failed to resend code. Please try again.");
     } finally {
@@ -1434,16 +1448,20 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                     })}
                   </div>
 
-                  {/* Resend Code */}
+                  {/* Resend Code with 60s cooldown timer */}
                   <div className="flex items-center justify-between text-xs sm:text-sm px-1 text-slate-400 pt-1">
                     <span>Didn&apos;t receive code?</span>
                     <button
                       type="button"
                       onClick={handleResendOtp}
-                      disabled={isLoading}
-                      className="text-[#e50914] hover:underline font-bold cursor-pointer disabled:opacity-50"
+                      disabled={isLoading || resendCooldown > 0}
+                      className={`font-bold transition-all ${
+                        resendCooldown > 0 || isLoading
+                          ? "text-slate-500 cursor-not-allowed opacity-60"
+                          : "text-[#e50914] hover:underline cursor-pointer"
+                      }`}
                     >
-                      Resend Code
+                      {resendCooldown > 0 ? `Resend Code (${resendCooldown}s)` : "Resend Code"}
                     </button>
                   </div>
                 </div>
