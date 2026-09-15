@@ -228,9 +228,9 @@ export default function Home() {
             </div>
             <div>
               <h2 className="text-xl sm:text-2xl lg:text-3xl font-black text-white tracking-tight">
-                Welcome back, {user?.name
+                Welcome back <br /> {user?.name
                   || `Member +91-${user?.phone?.slice(-4)}`}
-                <br />
+
               </h2>
               <p className="text-sm sm:text-base text-slate-300 mt-1">
                 Your personalized movie catalog and entertainment streaming portal is active.
