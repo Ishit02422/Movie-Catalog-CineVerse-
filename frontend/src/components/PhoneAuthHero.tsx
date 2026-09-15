@@ -165,7 +165,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [resendCooldown, setResendCooldown] = useState<number>(60);
+  const [resendCooldown, setResendCooldown] = useState<number>(0);
 
   // Filtered countries for search modal
   const filteredCountries = COUNTRIES.filter((c) => {
@@ -399,7 +399,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
           }
           setScreen("otp");
           setOtpCode("");
-          setResendCooldown(60);
+          setResendCooldown(0);
         } else {
           // New User -> Open Sign Up Screen to collect name (NO OTP SENT YET - NO DUPLICATE OTP)
           setAuthMode("register");
@@ -423,7 +423,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
 
         setScreen("otp");
         setOtpCode("");
-        setResendCooldown(60);
+        setResendCooldown(0);
       }
     } catch (err: any) {
       console.error("Auth flow notice:", err);
