@@ -198,8 +198,8 @@ export default function Home() {
     }
   }, [search, selectedGenre, selectedYear, selectedSort]);
 
-  // Loading state while checking session
-  if (authLoading) {
+  // Loading state while checking session or initial metadata
+  if (authLoading || (isLoading && featuredMovies.length === 0 && movies.length === 0)) {
     return (
       <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center space-y-4">
         <div className="w-14 h-14 rounded-2xl bg-rose-500/15 border border-rose-500/30 text-[#e50914] flex items-center justify-center animate-pulse">
