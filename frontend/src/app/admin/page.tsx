@@ -696,37 +696,43 @@ export default function AdminPage() {
 
             <form onSubmit={handleAdminLogin} className="space-y-4">
               <div>
-                <label className="block text-xs font-bold text-slate-300 mb-1.5">
-                  Admin Email
+                <label className="flex items-center gap-1.5 text-xs font-bold text-slate-300 mb-1.5">
+                  <Mail className="w-3.5 h-3.5 text-rose-500" />
+                  <span>Admin Email</span>
                 </label>
-                <div className="flex items-center gap-2.5 bg-slate-950 border border-white/10 rounded-xl px-3.5 py-2.5 focus-within:border-[#e50914] focus-within:ring-1 focus-within:ring-[#e50914] transition-all">
-                  <Mail className="w-4 h-4 text-slate-500 shrink-0" />
-                  <input
-                    type="email"
-                    value={adminEmail}
-                    onChange={(e) => setAdminEmail(e.target.value.trim())}
-                    required
-                    placeholder="Enter administrator email..."
-                    className="w-full bg-transparent text-sm text-white placeholder:text-slate-500 focus:outline-none"
-                  />
-                </div>
+                <input
+                  type="email"
+                  value={adminEmail}
+                  onKeyDown={(e) => {
+                    if (e.key === " ") {
+                      e.preventDefault();
+                    }
+                  }}
+                  onChange={(e) => setAdminEmail(e.target.value.replace(/\s/g, ""))}
+                  required
+                  placeholder="admin@cineverse.com"
+                  className="w-full bg-slate-950 border border-white/10 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-[#e50914] focus:ring-1 focus:ring-[#e50914] transition-all"
+                />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-300 mb-1.5">
-                  Password
+                <label className="flex items-center gap-1.5 text-xs font-bold text-slate-300 mb-1.5">
+                  <Lock className="w-3.5 h-3.5 text-rose-500" />
+                  <span>Password</span>
                 </label>
-                <div className="flex items-center gap-2.5 bg-slate-950 border border-white/10 rounded-xl px-3.5 py-2.5 focus-within:border-[#e50914] focus-within:ring-1 focus-within:ring-[#e50914] transition-all">
-                  <Lock className="w-4 h-4 text-slate-500 shrink-0" />
-                  <input
-                    type="password"
-                    value={adminPassword}
-                    onChange={(e) => setAdminPassword(e.target.value)}
-                    required
-                    placeholder="Enter administrator password..."
-                    className="w-full bg-transparent text-sm text-white placeholder:text-slate-500 focus:outline-none"
-                  />
-                </div>
+                <input
+                  type="password"
+                  value={adminPassword}
+                  onKeyDown={(e) => {
+                    if (e.key === " " && (!e.currentTarget.value || e.currentTarget.selectionStart === 0)) {
+                      e.preventDefault();
+                    }
+                  }}
+                  onChange={(e) => setAdminPassword(e.target.value.trimStart())}
+                  required
+                  placeholder="Enter administrator password..."
+                  className="w-full bg-slate-950 border border-white/10 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-[#e50914] focus:ring-1 focus:ring-[#e50914] transition-all"
+                />
               </div>
 
               <button
