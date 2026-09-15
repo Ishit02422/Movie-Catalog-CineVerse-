@@ -231,7 +231,8 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
     return () => clearInterval(interval);
   }, [screen, posters.length]);
 
-  const visibleTrendingPosters = Array.from({ length: Math.min(6, posters.length) }, (_, i) => {
+  const countToShow = posters.length <= 6 ? posters.length : 6;
+  const visibleTrendingPosters = Array.from({ length: countToShow }, (_, i) => {
     const posterIndex = (trendingOffset + i) % posters.length;
     return {
       url: posters[posterIndex],
@@ -777,7 +778,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
             </div>
 
             {/* 6 High-Gloss Movie Cards */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 lg:grid-cols-6 gap-3 sm:gap-4">
               {visibleTrendingPosters.map((item, idx) => (
                 <div
                   key={`${item.url}-${idx}`}
