@@ -1335,7 +1335,6 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                 type="button"
                 onClick={() => {
                   setError(null);
-                  setAuthMode("signin");
                   setScreen("signin");
                 }}
                 className="p-2 -ml-2 rounded-full text-white/90 hover:text-white hover:bg-white/10 transition-all cursor-pointer"
