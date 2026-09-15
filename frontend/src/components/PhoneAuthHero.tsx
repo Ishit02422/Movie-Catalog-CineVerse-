@@ -988,18 +988,46 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
               </span>
             </div>
 
-            <button
-              type="button"
-              onClick={() => setIsPrivacyOpen(true)}
-              className="text-xs text-white/70 hover:text-white transition-colors uppercase cursor-pointer"
-            >
-              Privacy
-            </button>
+            <div className="flex items-center gap-3 sm:gap-4">
+              <button
+                type="button"
+                onClick={() => setIsPrivacyOpen(true)}
+                className="text-xs text-white/70 hover:text-white transition-colors uppercase cursor-pointer hidden sm:inline"
+              >
+                Privacy
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setError(null);
+                  setScreen("landing");
+                }}
+                className="p-2 -mr-2 rounded-full text-white/80 hover:text-white hover:bg-white/10 transition-all cursor-pointer"
+                title="Close"
+                aria-label="Close"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
           </header>
 
           {/* Centered Glassmorphic Auth Card (Spacious & Premium) */}
           <main className="relative z-10 flex-1 w-full max-w-[540px] mx-auto px-4 py-8 sm:py-12 flex flex-col justify-center">
             <div className="relative w-full p-8 sm:p-11 rounded-3xl bg-slate-950/92 backdrop-blur-2xl border border-white/10 shadow-[0_25px_80px_rgba(0,0,0,0.9)] space-y-6 animate-in zoom-in-95 duration-200 overflow-hidden">
+              {/* Close Cross (X) Button on Card */}
+              <button
+                type="button"
+                onClick={() => {
+                  setError(null);
+                  setScreen("landing");
+                }}
+                className="absolute top-4 right-4 sm:top-6 sm:right-6 p-2 rounded-full text-slate-400 hover:text-white hover:bg-slate-800/80 transition-all cursor-pointer z-20 group"
+                title="Close"
+                aria-label="Close"
+              >
+                <X className="w-5 h-5 group-hover:scale-110 transition-transform" />
+              </button>
+
               {/* Glowing Icon Badge */}
               <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-tr from-rose-600 via-red-600 to-rose-500 p-0.5 shadow-[0_0_30px_rgba(229,9,20,0.45)] mx-auto flex items-center justify-center">
                 <div className="w-full h-full rounded-[14px] bg-slate-950 flex items-center justify-center text-rose-400">
@@ -1322,11 +1350,38 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                 Cine<span className="text-[#e50914]">Verse</span>
               </span>
             </div>
+
+            <button
+              type="button"
+              onClick={() => {
+                setError(null);
+                setScreen("landing");
+              }}
+              className="p-2 -mr-2 rounded-full text-white/80 hover:text-white hover:bg-white/10 transition-all cursor-pointer"
+              title="Close"
+              aria-label="Close"
+            >
+              <X className="w-6 h-6" />
+            </button>
           </header>
 
           {/* Centered Glassmorphic OTP Card (Spacious & Premium) */}
           <main className="relative z-10 flex-1 w-full max-w-[540px] mx-auto px-4 py-8 sm:py-12 flex flex-col justify-center">
             <div className="relative w-full p-8 sm:p-11 rounded-3xl bg-slate-950/92 backdrop-blur-2xl border border-white/10 shadow-[0_25px_80px_rgba(0,0,0,0.9)] space-y-6 sm:space-y-7 animate-in zoom-in-95 duration-200 overflow-hidden">
+              {/* Close Cross (X) Button on Card */}
+              <button
+                type="button"
+                onClick={() => {
+                  setError(null);
+                  setScreen("landing");
+                }}
+                className="absolute top-4 right-4 sm:top-6 sm:right-6 p-2 rounded-full text-slate-400 hover:text-white hover:bg-slate-800/80 transition-all cursor-pointer z-20 group"
+                title="Close"
+                aria-label="Close"
+              >
+                <X className="w-5 h-5 group-hover:scale-110 transition-transform" />
+              </button>
+
               {/* Top Accent Line */}
               <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-rose-500 to-transparent" />
 
