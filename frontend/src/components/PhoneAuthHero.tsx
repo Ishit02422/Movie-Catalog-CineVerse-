@@ -1224,7 +1224,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
               <div className="text-center text-xs sm:text-sm text-slate-400 pt-1">
                 {authMode === "signin" ? (
                   <p>
-                    New to CineVerse?{" "}
+                    Don&apos;t have an account?{" "}
                     <button
                       type="button"
                       onClick={() => {
@@ -1233,7 +1233,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                       }}
                       className="text-white hover:underline font-bold cursor-pointer ml-1"
                     >
-                      Sign up now.
+                      Sign up here.
                     </button>
                   </p>
                 ) : (
@@ -1247,7 +1247,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                       }}
                       className="text-white hover:underline font-bold cursor-pointer ml-1"
                     >
-                      Sign in now.
+                      Sign in here.
                     </button>
                   </p>
                 )}
