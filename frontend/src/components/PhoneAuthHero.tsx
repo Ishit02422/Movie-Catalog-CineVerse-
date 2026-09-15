@@ -32,8 +32,6 @@ import {
   Globe,
   Play,
   Clock,
-  Eye,
-  EyeOff,
 } from "lucide-react";
 
 export interface Country {
@@ -168,7 +166,6 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [resendCooldown, setResendCooldown] = useState<number>(0);
-  const [showOtp, setShowOtp] = useState<boolean>(false);
 
   // Filtered countries for search modal
   const filteredCountries = COUNTRIES.filter((c) => {
@@ -1454,29 +1451,9 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
               <form onSubmit={handleVerifyOtp} className="space-y-5">
                 {/* 6-Digit OTP Interactive Boxes */}
                 <div className="space-y-3">
-                  <div className="flex items-center justify-between px-1">
-                    <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">
-                      Enter 6-Digit Passcode
-                    </label>
-                    <button
-                      type="button"
-                      onClick={() => setShowOtp((prev) => !prev)}
-                      className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-white transition-colors cursor-pointer py-0.5 px-2 rounded-md hover:bg-slate-900 border border-transparent hover:border-slate-800"
-                      title={showOtp ? "Hide passcode" : "Show passcode"}
-                    >
-                      {showOtp ? (
-                        <>
-                          <EyeOff className="w-3.5 h-3.5 text-rose-400" />
-                          <span className="font-medium text-rose-400">Hide</span>
-                        </>
-                      ) : (
-                        <>
-                          <Eye className="w-3.5 h-3.5 text-slate-400" />
-                          <span className="font-medium">Show</span>
-                        </>
-                      )}
-                    </button>
-                  </div>
+                  <label className="block text-center text-xs font-bold text-slate-400 uppercase tracking-widest">
+                    Enter 6-Digit Passcode
+                  </label>
                   <div className="relative flex items-center justify-center gap-2.5 sm:gap-3.5 my-2">
                     {/* Synchronized hidden input */}
                     <input
@@ -1509,11 +1486,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                           }`}
                         >
                           {digit ? (
-                            showOtp ? (
-                              <span className="animate-in zoom-in-75 duration-150">{digit}</span>
-                            ) : (
-                              <span className="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.8)] animate-in zoom-in-75 duration-150" />
-                            )
+                            <span className="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.8)] animate-in zoom-in-75 duration-150" />
                           ) : isCurrent ? (
                             <span className="w-1 h-6 bg-rose-500 rounded-full animate-pulse" />
                           ) : (
