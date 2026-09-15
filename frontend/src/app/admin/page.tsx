@@ -234,32 +234,6 @@ export default function AdminPage() {
     }
   };
 
-  const [isSyncingPopularity, setIsSyncingPopularity] = useState(false);
-
-  const handleSyncLivePopularity = async () => {
-    setIsSyncingPopularity(true);
-    try {
-      const res = await fetch(`${API_BASE_URL}/movies/sync-popularity`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
-      const data = await res.json();
-      if (res.ok) {
-        showToast("success", `⚡ ${data.message || "All movies synced with live IMDb popularity!"}`);
-        await fetchAllMovies();
-      } else {
-        showToast("error", data.message || "Sync failed.");
-      }
-    } catch (err) {
-      showToast("error", "Failed to sync live popularity.");
-    } finally {
-      setIsSyncingPopularity(false);
-    }
-  };
-
   useEffect(() => {
     if (typeof window !== "undefined") {
       try {
@@ -823,20 +797,7 @@ export default function AdminPage() {
           </span>
         </div>
 
-        <div className="flex items-center gap-3 sm:gap-5">
-          <button
-            type="button"
-            onClick={handleSyncLivePopularity}
-            disabled={isSyncingPopularity}
-            title="Sync all catalog movies with live IMDb ratings & dynamic popularity"
-            className="flex items-center gap-2.5 text-base sm:text-lg font-black text-amber-300 hover:text-white px-5 sm:px-6 py-3.5 rounded-2xl border-2 border-amber-500/40 bg-amber-500/15 hover:bg-amber-500/30 shadow-lg transition-all cursor-pointer disabled:opacity-50"
-          >
-            <Sparkles className={`w-5 h-5 text-amber-400 ${isSyncingPopularity ? "animate-spin" : ""}`} />
-            <span className="hidden sm:inline">
-              {isSyncingPopularity ? "Syncing Live..." : "Sync Live Popularity"}
-            </span>
-          </button>
-
+        <div className="flex items-center gap-5">
           <Link
             href="/"
             target="_blank"
