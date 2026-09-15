@@ -699,15 +699,15 @@ export default function AdminPage() {
                 <label className="block text-xs font-bold text-slate-300 mb-1.5">
                   Admin Email
                 </label>
-                <div className="relative">
-                  <Mail className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                <div className="flex items-center gap-2.5 bg-slate-950 border border-white/10 rounded-xl px-3.5 py-2.5 focus-within:border-[#e50914] focus-within:ring-1 focus-within:ring-[#e50914] transition-all">
+                  <Mail className="w-4 h-4 text-slate-500 shrink-0" />
                   <input
                     type="email"
                     value={adminEmail}
-                    onChange={(e) => setAdminEmail(e.target.value)}
+                    onChange={(e) => setAdminEmail(e.target.value.trim())}
                     required
                     placeholder="Enter administrator email..."
-                    className="w-full bg-slate-950 border border-white/10 rounded-xl pl-10 pr-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#e50914]"
+                    className="w-full bg-transparent text-sm text-white placeholder:text-slate-500 focus:outline-none"
                   />
                 </div>
               </div>
@@ -716,15 +716,15 @@ export default function AdminPage() {
                 <label className="block text-xs font-bold text-slate-300 mb-1.5">
                   Password
                 </label>
-                <div className="relative">
-                  <Lock className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                <div className="flex items-center gap-2.5 bg-slate-950 border border-white/10 rounded-xl px-3.5 py-2.5 focus-within:border-[#e50914] focus-within:ring-1 focus-within:ring-[#e50914] transition-all">
+                  <Lock className="w-4 h-4 text-slate-500 shrink-0" />
                   <input
                     type="password"
                     value={adminPassword}
                     onChange={(e) => setAdminPassword(e.target.value)}
                     required
                     placeholder="Enter administrator password..."
-                    className="w-full bg-slate-950 border border-white/10 rounded-xl pl-10 pr-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#e50914]"
+                    className="w-full bg-transparent text-sm text-white placeholder:text-slate-500 focus:outline-none"
                   />
                 </div>
               </div>
