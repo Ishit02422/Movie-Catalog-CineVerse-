@@ -31,6 +31,7 @@ import {
   Search,
   Globe,
   Play,
+  Clock,
 } from "lucide-react";
 
 export interface Country {
@@ -479,12 +480,13 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
     }
   };
 
-  // Resend OTP helper with 1-minute cooldown
+  // Resend OTP helper with 1-minute cooldown & clearing old code
   const handleResendOtp = async () => {
     if (resendCooldown > 0 || isLoading) return;
     setIsLoading(true);
     setError(null);
     setSuccessMessage(null);
+    setOtpCode(""); // Clear out any previously entered old OTP digits
     try {
       await sendPhoneOtp(identifier.trim());
       setSuccessMessage(`A fresh verification code has been dispatched!`);
@@ -1365,6 +1367,14 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                 </div>
               </div>
 
+              {/* Success Notification */}
+              {successMessage && (
+                <div className="p-3.5 sm:p-4 rounded-xl bg-emerald-950/50 border border-emerald-500/40 text-emerald-200 text-xs sm:text-sm flex items-start gap-2.5 animate-in fade-in">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                  <span className="leading-snug">{successMessage}</span>
+                </div>
+              )}
+
               {/* Error Notification */}
               {error && (
                 <div className="p-3.5 sm:p-4 rounded-xl bg-red-950/50 border border-red-500/40 text-red-200 text-xs sm:text-sm flex items-start gap-2.5 animate-in fade-in">
@@ -1450,19 +1460,29 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
 
                   {/* Resend Code with 60s cooldown timer */}
                   <div className="flex items-center justify-between text-xs sm:text-sm px-1 text-slate-400 pt-1">
-                    <span>Didn&apos;t receive code?</span>
-                    <button
-                      type="button"
-                      onClick={handleResendOtp}
-                      disabled={isLoading || resendCooldown > 0}
-                      className={`font-bold transition-all ${
-                        resendCooldown > 0 || isLoading
-                          ? "text-slate-500 cursor-not-allowed opacity-60"
-                          : "text-[#e50914] hover:underline cursor-pointer"
-                      }`}
-                    >
-                      {resendCooldown > 0 ? `Resend Code (${resendCooldown}s)` : "Resend Code"}
-                    </button>
+                    {resendCooldown > 0 ? (
+                      <>
+                        <span className="flex items-center gap-1.5 text-slate-400 font-medium">
+                          <Clock className="w-3.5 h-3.5 text-rose-400 animate-pulse" />
+                          <span>Resend code in</span>
+                        </span>
+                        <span className="font-mono font-bold text-rose-400 bg-rose-950/60 px-3 py-0.5 rounded-full border border-rose-800/40 text-xs shadow-sm tracking-wider">
+                          00:{resendCooldown.toString().padStart(2, "0")}
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        <span>Didn&apos;t receive code?</span>
+                        <button
+                          type="button"
+                          onClick={handleResendOtp}
+                          disabled={isLoading}
+                          className="text-[#e50914] hover:underline font-bold cursor-pointer transition-colors"
+                        >
+                          Resend Code
+                        </button>
+                      </>
+                    )}
                   </div>
                 </div>
 
