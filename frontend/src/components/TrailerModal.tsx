@@ -101,8 +101,8 @@ export const TrailerModal: React.FC<TrailerModalProps> = ({
           </div>
         </div>
 
-        {/* Embedded 16:9 Video Player */}
-        <div className="relative w-full aspect-video bg-black flex items-center justify-center">
+        {/* Embedded 16:9 Video Player or Cinema Showcase Card */}
+        <div className="relative w-full aspect-video bg-black flex items-center justify-center overflow-hidden">
           {embedUrl ? (
             <iframe
               src={embedUrl}
@@ -113,9 +113,35 @@ export const TrailerModal: React.FC<TrailerModalProps> = ({
               className="w-full h-full border-0"
             />
           ) : (
-            <div className="text-center p-8 space-y-3">
-              <Film className="w-12 h-12 mx-auto text-slate-600" />
-              <p className="text-slate-300 font-bold">Trailer playback ready</p>
+            <div className="relative w-full h-full flex items-center justify-center group">
+              {movie.image_url && (
+                <img
+                  src={movie.image_url}
+                  alt={movie.title}
+                  className="w-full h-full object-cover object-center brightness-25 scale-105 group-hover:scale-110 transition-transform duration-700"
+                />
+              )}
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-slate-900/60" />
+
+              <div className="relative z-10 flex flex-col items-center justify-center p-6 sm:p-10 text-center max-w-xl mx-auto space-y-4">
+                <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-rose-500/20 text-rose-300 border border-rose-500/30">
+                  <Sparkles className="w-3.5 h-3.5" />
+                  Official Cinema Trailer • Full HD
+                </span>
+                <h4 className="text-2xl sm:text-3xl font-black text-white tracking-tight leading-tight">
+                  {movie.title}
+                </h4>
+                <a
+                  href={externalYouTubeUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2.5 px-8 py-3.5 rounded-2xl bg-gradient-to-r from-[#e50914] to-rose-600 hover:from-rose-600 hover:to-rose-700 text-white font-black text-sm sm:text-base shadow-xl shadow-rose-600/50 hover:scale-105 active:scale-95 transition-all cursor-pointer border border-rose-400/40"
+                >
+                  <Play className="w-5 h-5 fill-white" />
+                  <span>Play Trailer on YouTube</span>
+                  <ExternalLink className="w-4 h-4 ml-1" />
+                </a>
+              </div>
             </div>
           )}
         </div>

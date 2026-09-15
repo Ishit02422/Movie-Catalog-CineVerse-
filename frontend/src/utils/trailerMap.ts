@@ -36,11 +36,13 @@ export const TRAILER_MAP: Record<string, string> = {
   "top gun: maverick": "qSqVVqua4Pb",
 
   // Indian Blockbusters & Bollywood Classics
+  "sachin a billion dreams": "b1vV_w71G2g",
+  "sachin": "b1vV_w71G2g",
   "3 idiots": "K0u_kAWLJOA",
   "dangal": "x_7YlGv9u1g",
   "dilwale dulhania le jayenge": "u6p9P0K-o1s",
   "ddlj": "u6p9P0K-o1s",
-  "rrr": "f_vbCHIoYSA",
+  "rrr": "ZnhsLpvXneM",
   "baahubali 2: the conclusion": "qD20G2sZg1w",
   "baahubali 2": "qD20G2sZg1w",
   "baahubali": "qD20G2sZg1w",
@@ -70,6 +72,21 @@ export const TRAILER_MAP: Record<string, string> = {
   "brahmastra": "V5Zzboaz33o",
   "drishyam 2": "cxA2y9TglY4",
   "pathaan": "vqu4z34wENw",
+  "tiger 3": "vM60_s4Ld6Q",
+  "dunki": "2v8o-B_4jA4",
+  "fighter": "6amIq_mP4xM",
+  "kabir singh": "RiANSSgCuJk",
+  "sanju": "rrrpt4u2G60",
+  "gangs of wasseypur": "j-XfL34V9jM",
+  "lagaan": "oSIGhnSZzI8",
+  "swades": "wZ7LytxXW0s",
+  "chak de india": "6a0-dSmOtVo",
+  "zindagi na milegi dobara": "FJrtc2zS130",
+  "znmd": "FJrtc2zS130",
+  "queen": "KGC6vl3Arf0",
+  "andhadhun": "2iVYI99VGaw",
+  "tumbbad": "sN75MPxgvX8",
+  "drishyam": "AuuX2j14NBg",
 };
 
 /**
@@ -101,16 +118,16 @@ export function getYouTubeEmbedUrl(title: string): string | null {
     return `https://www.youtube.com/embed/${TRAILER_MAP[cleanTitle]}?autoplay=1&rel=0&playsinline=1`;
   }
 
-  // 2. Partial / Substring match
+  // 2. Partial / Substring match (e.g. "Sachin: A Billion Dreams" matches "sachin")
   for (const [key, id] of Object.entries(TRAILER_MAP)) {
     const cleanKey = normalizeTitle(key);
-    if (cleanTitle === cleanKey || cleanTitle.includes(cleanKey) || cleanKey.includes(cleanTitle)) {
+    if (cleanKey.length >= 3 && (cleanTitle.includes(cleanKey) || cleanKey.includes(cleanTitle))) {
       return `https://www.youtube.com/embed/${id}?autoplay=1&rel=0&playsinline=1`;
     }
   }
 
-  // 3. Fallback to default featured trailer (Inception)
-  return `https://www.youtube.com/embed/YoHD9XEInc0?autoplay=1&rel=0&playsinline=1`;
+  // No arbitrary wrong fallback - return null so modal shows dedicated search & launch player!
+  return null;
 }
 
 /**
