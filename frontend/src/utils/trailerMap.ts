@@ -42,7 +42,7 @@ export const TRAILER_MAP: Record<string, string> = {
   "dangal": "x_7YlGv9u1g",
   "dilwale dulhania le jayenge": "u6p9P0K-o1s",
   "ddlj": "u6p9P0K-o1s",
-  "rrr": "ZnhsLpvXneM",
+  "rrr": "NgOq9f-y7sQ",
   "baahubali 2: the conclusion": "qD20G2sZg1w",
   "baahubali 2": "qD20G2sZg1w",
   "baahubali": "qD20G2sZg1w",
