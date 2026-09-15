@@ -5,24 +5,29 @@ export const TRAILER_MAP: Record<string, string> = {
   // Hollywood Masterpieces
   "inception": "YoHD9XEInc0",
   "the dark knight": "EXeTwQWrcwY",
+  "dark knight": "EXeTwQWrcwY",
   "interstellar": "zSWdZVtXT7E",
   "pulp fiction": "s7EdQ4FqbhY",
   "spider-man: into the spider-verse": "g4Hbz2jLxvQ",
   "spider man into the spider verse": "g4Hbz2jLxvQ",
+  "spider-man": "g4Hbz2jLxvQ",
   "oppenheimer": "uYPbbksJxIg",
   "parasite": "isOGD_7hNIY",
   "dune: part two": "Way9Dexny3w",
   "dune part two": "Way9Dexny3w",
   "dune": "Way9Dexny3w",
   "the shawshank redemption": "PLl99DlL6b4",
-  "spirited away": "ByXuk9QqQkk",
+  "shawshank redemption": "PLl99DlL6b4",
+  "spirited away": "J01O93p1_0Q",
   "the godfather": "UaVTIH8mujA",
+  "godfather": "UaVTIH8mujA",
   "fight club": "qtRKDV93JU8",
   "the matrix": "vKQi3bBA1y8",
-  "gladiator": "owK1qxDselE",
+  "matrix": "vKQi3bBA1y8",
+  "gladiator": "P5ieIbInFpg",
   "whiplash": "7d_jQycdQGo",
-  "grand budapest hotel": "1Fg5iWmQjwk",
-  "the grand budapest hotel": "1Fg5iWmQjwk",
+  "grand budapest hotel": "z4aIU-TOA6w",
+  "the grand budapest hotel": "z4aIU-TOA6w",
   "the conjuring": "k10ETZ41q5o",
   "avatar: the way of water": "d9MyW72ELq0",
   "avatar": "5PSNL1qE6VY",
@@ -31,19 +36,25 @@ export const TRAILER_MAP: Record<string, string> = {
   "top gun: maverick": "qSqVVqua4Pb",
 
   // Indian Blockbusters & Bollywood Classics
-  "3 idiots": "K0eDlFX9GMc",
+  "3 idiots": "K0u_kAWLJOA",
   "dangal": "x_7YlGv9u1g",
-  "dilwale dulhania le jayenge": "c25GKl5VNeY",
-  "ddlj": "c25GKl5VNeY",
-  "rrr": "f_vbAtFSEc0",
-  "baahubali 2: the conclusion": "qD-6d8Wo3do",
-  "baahubali 2": "qD-6d8Wo3do",
+  "dilwale dulhania le jayenge": "u6p9P0K-o1s",
+  "ddlj": "u6p9P0K-o1s",
+  "rrr": "f_vbCHIoYSA",
+  "baahubali 2: the conclusion": "qD20G2sZg1w",
+  "baahubali 2": "qD20G2sZg1w",
+  "baahubali": "qD20G2sZg1w",
   "jab we met": "yMeqkP40-3g",
-  "yeh jawaani hai deewani": "Rbp2XUSeUNE",
-  "kal ho naa ho": "PrM7XnC_p8s",
-  "aashiqui 2": "FyXXgpPqe6w",
+  "yeh jawaani hai deewani": "Rbp2PojU_n4",
+  "yjhd": "Rbp2PojU_n4",
+  "kal ho naa ho": "tVMAQAsjsOU",
+  "khnh": "tVMAQAsjsOU",
+  "aashiqui 2": "_2cZmmDk0og",
   "shershaah": "uSoEiNwVUkQ",
-  "rockstar": "F0mS0R9J78E",
+  "rockstar": "7-q_2w74VfA",
+  "barfi": "qM955lXgq-g",
+  "barfi!": "qM955lXgq-g",
+  "pk": "SOXWc32k4zA",
   "stree 2": "JmC-S36u66s",
   "stree 2: sarkate ka aatank": "JmC-S36u66s",
   "kalki 2898 ad": "kQDd1AhGIHk",
@@ -57,28 +68,43 @@ export const TRAILER_MAP: Record<string, string> = {
   "kantara": "6oEF3knvfMs",
   "sholay": "6U0eM59Z35U",
   "brahmastra": "V5Zzboaz33o",
-  "pk": "SOXWc32k4zA",
-  "barfi": "yGQ-N0c7E_g",
-  "barfi!": "yGQ-N0c7E_g",
   "drishyam 2": "cxA2y9TglY4",
   "pathaan": "vqu4z34wENw",
 };
+
+/**
+ * Normalizes movie title for reliable dictionary lookup
+ */
+function normalizeTitle(title: string): string {
+  return title
+    .trim()
+    .toLowerCase()
+    .replace(/[!.,:;'"?/\-_()[\]]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
 
 /**
  * Get YouTube Embed URL for direct embedded iframe playback
  */
 export function getYouTubeEmbedUrl(title: string): string | null {
   if (!title) return null;
-  const cleanTitle = title.trim().toLowerCase();
 
-  // 1. Direct match in dictionary
+  const rawLower = title.trim().toLowerCase();
+  const cleanTitle = normalizeTitle(title);
+
+  // 1. Direct match on raw lower or cleaned title
+  if (TRAILER_MAP[rawLower]) {
+    return `https://www.youtube.com/embed/${TRAILER_MAP[rawLower]}?autoplay=1&rel=0&playsinline=1`;
+  }
   if (TRAILER_MAP[cleanTitle]) {
     return `https://www.youtube.com/embed/${TRAILER_MAP[cleanTitle]}?autoplay=1&rel=0&playsinline=1`;
   }
 
-  // 2. Partial match (e.g. "Dune: Part Two" vs "dune")
+  // 2. Partial / Substring match
   for (const [key, id] of Object.entries(TRAILER_MAP)) {
-    if (cleanTitle.includes(key) || key.includes(cleanTitle)) {
+    const cleanKey = normalizeTitle(key);
+    if (cleanTitle === cleanKey || cleanTitle.includes(cleanKey) || cleanKey.includes(cleanTitle)) {
       return `https://www.youtube.com/embed/${id}?autoplay=1&rel=0&playsinline=1`;
     }
   }
