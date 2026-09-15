@@ -216,6 +216,15 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
     return () => clearInterval(timer);
   }, [screen, resendCooldown]);
 
+  // Auto-dismiss success message after 4 seconds
+  useEffect(() => {
+    if (!successMessage) return;
+    const timer = setTimeout(() => {
+      setSuccessMessage(null);
+    }, 4000);
+    return () => clearTimeout(timer);
+  }, [successMessage]);
+
   // Auto cycle trending movie posters rotation every 7 seconds
   useEffect(() => {
     if (screen !== "landing" || posters.length === 0) return;

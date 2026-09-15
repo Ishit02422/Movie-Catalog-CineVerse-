@@ -415,7 +415,7 @@ export const verifyPhoneOtp = async (
       }
 
       if (!isDbOtpValid && !isTwilioValid) {
-        throw new ApiError("Invalid verification code. Please enter the correct 6-digit code.", 400);
+        throw new ApiError("Invalid verification code. If you requested a new code, please enter the latest 6-digit OTP.", 400);
       }
     }
 
