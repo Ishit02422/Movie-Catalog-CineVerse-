@@ -1406,19 +1406,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                       {identifier.includes("@")
                         ? identifier.toLowerCase()
                         : `+91 ${identifier.replace(/\D/g, "").slice(-10)}`}
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setError(null);
-                        setAuthMode("signin");
-                        setScreen("signin");
-                      }}
-                      className="text-rose-400 hover:text-rose-300 font-bold ml-1.5 hover:underline cursor-pointer text-xs"
-                    >
-                      Change
-                    </button>
-                  </div>
+                    </span>                  </div>
                 </div>
               </div>
 
