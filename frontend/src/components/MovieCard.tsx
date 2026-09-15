@@ -108,10 +108,12 @@ export const MovieCard: React.FC<MovieCardProps> = ({ movie, onPlayTrailer }) =>
             <span>{movie.release_year}</span>
           </div>
           {movie.views_count !== undefined && (
-            <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-slate-800/80 border border-slate-700/60 text-emerald-400 font-semibold text-xs shadow-sm">
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-slate-800/80 border border-slate-700/60 text-emerald-400 font-bold text-xs shadow-sm">
               <Eye className="w-3.5 h-3.5" />
               <span>
-                {movie.views_count >= 1000
+                {movie.views_count >= 1000000
+                  ? `${(movie.views_count / 1000000).toFixed(1)}M views`
+                  : movie.views_count >= 1000
                   ? `${(movie.views_count / 1000).toFixed(1)}k views`
                   : `${movie.views_count || 0} views`}
               </span>

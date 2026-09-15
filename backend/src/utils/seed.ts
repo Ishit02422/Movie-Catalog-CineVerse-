@@ -14,7 +14,7 @@ const sampleMovies = [
     status: "active",
     is_featured: true,
     rating: 8.8,
-    views_count: 1420,
+    views_count: 4230000,
   },
   {
     title: "The Dark Knight",
@@ -25,7 +25,7 @@ const sampleMovies = [
     status: "active",
     is_featured: true,
     rating: 9.0,
-    views_count: 1850,
+    views_count: 4890000,
   },
   {
     title: "Interstellar",
@@ -36,7 +36,7 @@ const sampleMovies = [
     status: "active",
     is_featured: true,
     rating: 8.7,
-    views_count: 1620,
+    views_count: 3980000,
   },
   {
     title: "Pulp Fiction",
@@ -47,7 +47,7 @@ const sampleMovies = [
     status: "active",
     is_featured: false,
     rating: 8.9,
-    views_count: 980,
+    views_count: 3860000,
   },
   {
     title: "Spider-Man: Into the Spider-Verse",
@@ -58,7 +58,7 @@ const sampleMovies = [
     status: "active",
     is_featured: true,
     rating: 8.4,
-    views_count: 1100,
+    views_count: 2880000,
   },
   {
     title: "Oppenheimer",
@@ -69,7 +69,7 @@ const sampleMovies = [
     status: "active",
     is_featured: true,
     rating: 8.9,
-    views_count: 2100,
+    views_count: 3820000,
   },
   {
     title: "Parasite",
@@ -80,7 +80,7 @@ const sampleMovies = [
     status: "active",
     is_featured: false,
     rating: 8.5,
-    views_count: 890,
+    views_count: 2760000,
   },
   {
     title: "Dune: Part Two",
@@ -91,7 +91,7 @@ const sampleMovies = [
     status: "active",
     is_featured: true,
     rating: 8.6,
-    views_count: 1950,
+    views_count: 3240000,
   },
   {
     title: "The Shawshank Redemption",
@@ -102,7 +102,7 @@ const sampleMovies = [
     status: "active",
     is_featured: false,
     rating: 9.3,
-    views_count: 2400,
+    views_count: 4420000,
   },
   {
     title: "Spirited Away",
@@ -113,7 +113,7 @@ const sampleMovies = [
     status: "active",
     is_featured: false,
     rating: 8.6,
-    views_count: 760,
+    views_count: 2430000,
   },
   {
     title: "The Godfather",
@@ -124,7 +124,7 @@ const sampleMovies = [
     status: "active",
     is_featured: false,
     rating: 9.2,
-    views_count: 1300,
+    views_count: 3710000,
   },
   {
     title: "Fight Club",
@@ -135,7 +135,7 @@ const sampleMovies = [
     status: "active",
     is_featured: false,
     rating: 8.8,
-    views_count: 1150,
+    views_count: 3620000,
   },
   {
     title: "The Matrix",
@@ -146,7 +146,7 @@ const sampleMovies = [
     status: "active",
     is_featured: false,
     rating: 8.7,
-    views_count: 1550,
+    views_count: 3540000,
   },
   {
     title: "Gladiator",
@@ -157,7 +157,7 @@ const sampleMovies = [
     status: "active",
     is_featured: false,
     rating: 8.5,
-    views_count: 940,
+    views_count: 3120000,
   },
   {
     title: "Whiplash",
@@ -168,7 +168,7 @@ const sampleMovies = [
     status: "active",
     is_featured: false,
     rating: 8.5,
-    views_count: 670,
+    views_count: 2210000,
   },
   {
     title: "Grand Budapest Hotel",
@@ -179,7 +179,7 @@ const sampleMovies = [
     status: "active",
     is_featured: false,
     rating: 8.1,
-    views_count: 530,
+    views_count: 1960000,
   },
   {
     title: "3 Idiots",
@@ -190,7 +190,7 @@ const sampleMovies = [
     status: "active",
     is_featured: true,
     rating: 8.4,
-    views_count: 2750,
+    views_count: 5410000,
   },
   {
     title: "Dangal",
@@ -201,7 +201,7 @@ const sampleMovies = [
     status: "active",
     is_featured: true,
     rating: 8.3,
-    views_count: 2600,
+    views_count: 5820000,
   },
   {
     title: "Dilwale Dulhania Le Jayenge",
@@ -212,7 +212,7 @@ const sampleMovies = [
     status: "active",
     is_featured: true,
     rating: 8.0,
-    views_count: 3100,
+    views_count: 4610000,
   },
   {
     title: "PK",
@@ -223,7 +223,7 @@ const sampleMovies = [
     status: "active",
     is_featured: false,
     rating: 8.1,
-    views_count: 2200,
+    views_count: 4460000,
   },
   {
     title: "RRR",
@@ -234,7 +234,7 @@ const sampleMovies = [
     status: "active",
     is_featured: true,
     rating: 8.0,
-    views_count: 2900,
+    views_count: 5120000,
   },
   {
     title: "Baahubali 2: The Conclusion",
@@ -245,7 +245,7 @@ const sampleMovies = [
     status: "active",
     is_featured: false,
     rating: 8.2,
-    views_count: 2450,
+    views_count: 5260000,
   },
   {
     title: "Jab We Met",
@@ -256,7 +256,7 @@ const sampleMovies = [
     status: "active",
     is_featured: true,
     rating: 7.9,
-    views_count: 2850,
+    views_count: 4350000,
   },
   {
     title: "Yeh Jawaani Hai Deewani",
@@ -267,7 +267,7 @@ const sampleMovies = [
     status: "active",
     is_featured: true,
     rating: 7.2,
-    views_count: 3100,
+    views_count: 4780000,
   },
   {
     title: "Kal Ho Naa Ho",
@@ -278,7 +278,7 @@ const sampleMovies = [
     status: "active",
     is_featured: false,
     rating: 7.9,
-    views_count: 2600,
+    views_count: 3910000,
   },
   {
     title: "Aashiqui 2",
@@ -289,7 +289,7 @@ const sampleMovies = [
     status: "active",
     is_featured: false,
     rating: 7.1,
-    views_count: 2400,
+    views_count: 3320000,
   },
   {
     title: "Barfi!",
@@ -300,7 +300,7 @@ const sampleMovies = [
     status: "active",
     is_featured: false,
     rating: 8.1,
-    views_count: 2150,
+    views_count: 2970000,
   },
   {
     title: "Shershaah",
@@ -311,7 +311,7 @@ const sampleMovies = [
     status: "active",
     is_featured: true,
     rating: 8.3,
-    views_count: 2950,
+    views_count: 4680000,
   },
   {
     title: "Rockstar",
@@ -322,7 +322,7 @@ const sampleMovies = [
     status: "active",
     is_featured: false,
     rating: 7.7,
-    views_count: 2300,
+    views_count: 3480000,
   },
 ];
 
@@ -338,13 +338,13 @@ const seedDatabase = async () => {
     console.log("🧹 Clearing existing movies...");
     await Movie.deleteMany({});
 
-    console.log("🌱 Seeding sample movies...");
+    console.log("🌱 Seeding sample movies with real popularity stats...");
     const createdMovies = await Movie.insertMany(sampleMovies);
 
     console.log(`🎉 Successfully seeded ${createdMovies.length} movies into the database!`);
     console.log("-----------------------------------------");
     createdMovies.slice(0, 5).forEach((m, idx) => {
-      console.log(`${idx + 1}. [${m.genre}] ${m.title} (${m.release_year}) - ID: ${m._id}`);
+      console.log(`${idx + 1}. [${m.genre}] ${m.title} (${m.release_year}) - Rating: ${m.rating} - Views: ${m.views_count.toLocaleString()}`);
     });
     console.log(`... and ${createdMovies.length - 5} more.`);
     console.log("-----------------------------------------");
@@ -353,7 +353,7 @@ const seedDatabase = async () => {
     console.log("👋 Disconnected from database cleanly.");
     process.exit(0);
   } catch (error: any) {
-    console.error(" Seeding Error:", error.message);
+    console.error("❌ Seeding Error:", error.message);
     process.exit(1);
   }
 };
