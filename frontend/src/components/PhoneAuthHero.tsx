@@ -1462,7 +1462,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                     <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                   ) : (
                     <span>
-                      {authMode === "signin" ? "Sign In & Start Watching" : "Complete Registration & Start Watching"}
+                      {authMode === "signin" ? "Send OTP & Start Watching" : "Complete Registration & Start Watching"}
                     </span>
                   )}
                 </button>
