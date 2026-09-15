@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
@@ -125,8 +125,12 @@ export default function MovieDetailsPage() {
     }
   }, []);
 
+  const fetchedIdRef = useRef<string | null>(null);
+
   useEffect(() => {
     if (!id) return;
+    if (fetchedIdRef.current === id) return;
+    fetchedIdRef.current = id;
 
     async function loadMovieDetails() {
       setIsLoading(true);
