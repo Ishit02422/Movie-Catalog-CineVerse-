@@ -10,6 +10,7 @@ import {
   deleteMovie,
   toggleFeaturedMovie,
   updateMovieStatus,
+  syncLivePopularity,
 } from "../controllers/movieController.js";
 import { protect, requireAdmin } from "../middleware/authMiddleware.js";
 
@@ -23,6 +24,7 @@ router.get("/:id", getMovieById);
 router.get("/:id/similar", getSimilarMovies);
 
 // Admin-Protected Routes
+router.post("/sync-popularity", protect, requireAdmin, syncLivePopularity);
 router.post("/", protect, requireAdmin, createMovie);
 router.put("/:id", protect, requireAdmin, updateMovie);
 router.delete("/:id", protect, requireAdmin, deleteMovie);

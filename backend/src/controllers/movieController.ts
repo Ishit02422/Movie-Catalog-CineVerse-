@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import mongoose from "mongoose";
 import { Movie } from "../models/Movie.js";
 import { ApiError } from "../middleware/errorHandler.js";
+import { fetchLiveMoviePopularity } from "../utils/dynamicPopularityService.js";
 
 /**
  * @desc    Get all movies with search & multi-filter support
@@ -297,21 +298,68 @@ export const createMovie = async (
       throw new ApiError("Rating must be a number between 0 and 10.", 400);
     }
 
+    // Dynamically query live IMDb / TMDB / Popularity Engine for real-world stats
+    let finalRating = ratingNum;
+    let finalViews = req.body.views_count ? Number(req.body.views_count) : undefined;
+
+    if (rating === undefined || rating === 8.0 || !finalViews) {
+      const liveMeta = await fetchLiveMoviePopularity(title.trim(), yearNum);
+      if (rating === undefined || rating === 8.0) {
+        finalRating = liveMeta.rating;
+      }
+      if (!finalViews) {
+        finalViews = liveMeta.views_count;
+      }
+    }
+
     const movie = await Movie.create({
       title: title.trim(),
       genre: genre.trim(),
       release_year: yearNum,
       description: description.trim(),
       image_url: image_url.trim(),
-      rating: ratingNum,
+      rating: finalRating,
+      views_count: finalViews || 2500000,
       is_featured: Boolean(is_featured),
       status: status || "active",
     });
 
     res.status(201).json({
       success: true,
-      message: "Movie created successfully!",
+      message: "Movie created successfully with dynamic popularity!",
       data: movie,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * @desc    Synchronize all catalog movies with live IMDb ratings & dynamic popularity
+ * @route   POST /api/movies/sync-popularity
+ * @access  Private/Admin
+ */
+export const syncLivePopularity = async (
+  _req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const movies = await Movie.find({});
+    let updatedCount = 0;
+
+    for (const movie of movies) {
+      const liveMeta = await fetchLiveMoviePopularity(movie.title, movie.release_year);
+      movie.rating = liveMeta.rating;
+      movie.views_count = liveMeta.views_count;
+      await movie.save();
+      updatedCount++;
+    }
+
+    res.status(200).json({
+      success: true,
+      message: `Successfully synchronized ${updatedCount} movies with live IMDb ratings and dynamic popularity!`,
+      count: updatedCount,
     });
   } catch (error) {
     next(error);
