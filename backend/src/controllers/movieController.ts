@@ -191,9 +191,7 @@ export const getFeaturedMovies = async (
     const featuredMovies = await Movie.find({
       is_featured: true,
       status: "active",
-    })
-      .sort({ rating: -1, release_year: -1 })
-      .limit(6);
+    }).sort({ rating: -1, release_year: -1 });
 
     res.status(200).json({
       success: true,
