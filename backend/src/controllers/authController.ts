@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
 import { User } from "../models/User.js";
 import { Otp } from "../models/Otp.js";
 import { ApiError } from "../middleware/errorHandler.js";
@@ -252,6 +253,8 @@ export const sendPhoneOtp = async (
     // Always generate a fresh, new random 6-digit OTP on every single request
     const generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
     const expiresAt = new Date(Date.now() + 5 * 60 * 1000);
+    // Securely hash OTP with bcrypt before persisting to database
+    const hashedOtp = await bcrypt.hash(generatedOtp, 10);
 
     const mode = req.body.mode; // "signin" | "register" | "signup" | undefined
 
@@ -273,16 +276,16 @@ export const sendPhoneOtp = async (
         );
       }
 
-      // Save/Refresh OTP in database
+      // Save/Refresh encrypted OTP in database
       await Otp.deleteMany({ $or: [{ identifier: cleanEmail }, { email: cleanEmail }] });
       await Otp.create({
         identifier: cleanEmail,
         email: cleanEmail,
-        otp: generatedOtp,
+        otp: hashedOtp,
         expires_at: expiresAt,
       });
 
-      console.log(`📧 [Email OTP] Verified/Sent code ${generatedOtp} to ${cleanEmail}`);
+      console.log(`📧 [Email OTP] Securely generated and dispatched code to ${cleanEmail}`);
 
       // Dispatch real email via Nodemailer asynchronously in background (instant 50ms HTTP response)
       sendOtpEmail({
@@ -321,16 +324,16 @@ export const sendPhoneOtp = async (
       );
     }
 
-    // Save/Refresh OTP in database
+    // Save/Refresh encrypted OTP in database
     await Otp.deleteMany({ $or: [{ identifier: cleanPhone }, { phone: cleanPhone }] });
     await Otp.create({
       identifier: cleanPhone,
       phone: cleanPhone,
-      otp: generatedOtp,
+      otp: hashedOtp,
       expires_at: expiresAt,
     });
 
-    console.log(`📱 [SMS Gateway] OTP sent to ${countryCode}-${cleanPhone}: Your CineVerse verification code is ${generatedOtp}`);
+    console.log(`📱 [SMS Gateway] Securely dispatched OTP to ${countryCode}-${cleanPhone}`);
 
     // Dispatch live SMS via Twilio & Fast2SMS
     const smsResult = await sendRealSms(cleanPhone, generatedOtp, countryCode);
@@ -374,21 +377,25 @@ export const verifyPhoneOtp = async (
     const isEmail = inputStr.includes("@");
     const cleanIdentifier = isEmail ? inputStr.toLowerCase() : inputStr.replace(/\D/g, "");
 
-    // 1. Verify in MongoDB
+    // 1. Verify in MongoDB against bcrypt-hashed OTP
     const validOtpDoc = await Otp.findOne({
       $or: [
         { identifier: cleanIdentifier },
         { phone: cleanIdentifier },
         { email: cleanIdentifier },
       ],
-      otp: cleanOtp,
       expires_at: { $gt: new Date() },
     });
 
-    // 2. Or verify with Twilio
-    const isTwilioValid = !isEmail && !validOtpDoc ? await verifyTwilioOtp(cleanIdentifier, cleanOtp) : false;
+    let isDbOtpValid = false;
+    if (validOtpDoc && validOtpDoc.otp) {
+      isDbOtpValid = (await bcrypt.compare(cleanOtp, validOtpDoc.otp)) || (validOtpDoc.otp === cleanOtp);
+    }
 
-    if (!validOtpDoc && !isTwilioValid) {
+    // 2. Or verify with Twilio
+    const isTwilioValid = !isEmail && !isDbOtpValid ? await verifyTwilioOtp(cleanIdentifier, cleanOtp) : false;
+
+    if (!isDbOtpValid && !isTwilioValid) {
       throw new ApiError("Invalid or expired OTP code. Please enter the valid 6-digit code.", 400);
     }
 
