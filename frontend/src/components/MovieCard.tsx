@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Movie } from "../types/movie";
 import { Star, Calendar, Bookmark, Check, Play, Eye } from "lucide-react";
 import { useWatchlist } from "../context/WatchlistContext";
+import { getYouTubeTrailerUrl } from "../utils/trailerMap";
 
 interface MovieCardProps {
   movie: Movie;
@@ -31,6 +32,8 @@ export const MovieCard: React.FC<MovieCardProps> = ({ movie, onPlayTrailer }) =>
     e.stopPropagation();
     if (onPlayTrailer) {
       onPlayTrailer(movie);
+    } else {
+      window.open(getYouTubeTrailerUrl(movie.title), "_blank", "noopener,noreferrer");
     }
   };
 
@@ -69,11 +72,10 @@ export const MovieCard: React.FC<MovieCardProps> = ({ movie, onPlayTrailer }) =>
               type="button"
               onClick={handleWatchlistClick}
               title={isSaved ? "Saved in My List (Click to remove)" : "Add to My List"}
-              className={`w-9 h-9 rounded-full flex items-center justify-center transition-all cursor-pointer shadow-lg active:scale-90 ${
-                isSaved
+              className={`w-9 h-9 rounded-full flex items-center justify-center transition-all cursor-pointer shadow-lg active:scale-90 ${isSaved
                   ? "bg-[#e50914] text-white border-2 border-white shadow-rose-950 scale-105"
                   : "bg-black/80 hover:bg-[#e50914] text-white border border-white/30 hover:border-white backdrop-blur-md"
-              }`}
+                }`}
             >
               {isSaved ? (
                 <Check className="w-4 h-4 stroke-[3]" />
@@ -85,18 +87,16 @@ export const MovieCard: React.FC<MovieCardProps> = ({ movie, onPlayTrailer }) =>
         </div>
 
         {/* Center Hover Play Trailer Button */}
-        {onPlayTrailer && (
-          <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-90 group-hover:scale-100">
-            <button
-              type="button"
-              onClick={handleTrailerClick}
-              className="pointer-events-auto flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-[#e50914] hover:bg-rose-600 text-white font-bold text-xs shadow-2xl shadow-rose-600/60 border border-rose-400/40 cursor-pointer active:scale-95 transition-all"
-            >
-              <Play className="w-4 h-4 fill-white" />
-              <span>Watch Trailer</span>
-            </button>
-          </div>
-        )}
+        <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-90 group-hover:scale-100">
+          <button
+            type="button"
+            onClick={handleTrailerClick}
+            className="pointer-events-auto flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-[#e50914] hover:bg-rose-600 text-white font-bold text-xs shadow-2xl shadow-rose-600/60 border border-rose-400/40 cursor-pointer active:scale-95 transition-all"
+          >
+            <Play className="w-4 h-4 fill-white" />
+            <span>Watch Trailer</span>
+          </button>
+        </div>
       </div>
 
       {/* Card Content Details */}

@@ -8,7 +8,6 @@ import { Movie } from "../../../types/movie";
 import { fetchMovieById } from "../../../lib/api";
 import { Navbar } from "../../../components/Navbar";
 import { MovieCard } from "../../../components/MovieCard";
-import { TrailerModal } from "../../../components/TrailerModal";
 import { useWatchlist } from "../../../context/WatchlistContext";
 import { useAuth } from "../../../context/AuthContext";
 import {
@@ -27,9 +26,9 @@ import {
   Send,
   Sparkles,
   Play,
-  X,
   ExternalLink,
 } from "lucide-react";
+import { getYouTubeTrailerUrl } from "../../../utils/trailerMap";
 
 interface ReviewItem {
   id: string;
@@ -70,13 +69,16 @@ export default function MovieDetailsPage() {
   const [isSubmittingReview, setIsSubmittingReview] = useState<boolean>(false);
   const [reviewMessage, setReviewMessage] = useState<string | null>(null);
 
-  // Trailer Modal state
-  const [trailerModalMovie, setTrailerModalMovie] = useState<Movie | null>(null);
-
   const fallbackImage =
     "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1200&q=80";
 
   const isSaved = movie ? isInWatchlist(movie.id || (movie as any)._id) : false;
+
+  const handleOpenTrailer = () => {
+    if (movie) {
+      window.open(getYouTubeTrailerUrl(movie.title), "_blank", "noopener,noreferrer");
+    }
+  };
 
   // Track recently viewed in localStorage (keyed by active user)
   const trackRecentlyViewed = useCallback((m: Movie) => {
@@ -353,8 +355,9 @@ export default function MovieDetailsPage() {
                   {/* Play Trailer Overlay Button */}
                   <button
                     type="button"
-                    onClick={() => setTrailerModalMovie(movie)}
+                    onClick={handleOpenTrailer}
                     className="absolute inset-0 m-auto w-16 h-16 rounded-full bg-rose-600/90 hover:bg-rose-600 text-white flex items-center justify-center shadow-2xl shadow-rose-600/50 backdrop-blur-sm transition-all hover:scale-110 active:scale-95 cursor-pointer"
+                    title="Watch Official Trailer on YouTube"
                   >
                     <Play className="w-7 h-7 fill-white translate-x-0.5" />
                   </button>
@@ -416,7 +419,7 @@ export default function MovieDetailsPage() {
                 <div className="flex flex-wrap items-center gap-3 pt-2">
                   <button
                     type="button"
-                    onClick={() => setTrailerModalMovie(movie)}
+                    onClick={handleOpenTrailer}
                     className="px-6 py-3 rounded-xl bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-600 text-white font-bold text-sm shadow-xl shadow-rose-600/30 flex items-center gap-2 cursor-pointer transition-all active:scale-95"
                   >
                     <Play className="w-4 h-4 fill-white" />
@@ -498,12 +501,12 @@ export default function MovieDetailsPage() {
                     <MovieCard
                       key={simMovie.id || (simMovie as any)._id}
                       movie={simMovie}
-                      onPlayTrailer={setTrailerModalMovie}
                     />
                   ))}
                 </div>
               </section>
             )}
+
 
             {/* ========================================================================= */}
             {/* SECTION: RATINGS & REVIEWS                                                */}
@@ -649,7 +652,7 @@ export default function MovieDetailsPage() {
                     {/* Real-time character guide */}
                     {isAuthenticated && reviewComment.length > 0 && reviewComment.trim().length < 10 && (
                       <p className="text-[11px] text-amber-400/90 font-medium flex items-center gap-1">
-                        <span> i Minimum 10 characters required</span>
+                        <span>ℹ️ Minimum 10 characters required</span>
                         <span>({10 - reviewComment.trim().length} more needed)</span>
                       </p>
                     )}
@@ -746,13 +749,6 @@ export default function MovieDetailsPage() {
         )}
       </main>
 
-      {/* Cinema Trailer Video Player Modal */}
-      <TrailerModal
-        isOpen={!!trailerModalMovie}
-        movie={trailerModalMovie}
-        onClose={() => setTrailerModalMovie(null)}
-      />
-
       {/* Footer */}
       <footer className="border-t border-slate-900 bg-slate-950/80 py-8 text-center text-xs text-slate-500 mt-12">
         <div className="max-w-7xl mx-auto px-4 space-y-2">
@@ -765,3 +761,4 @@ export default function MovieDetailsPage() {
     </div>
   );
 }
+

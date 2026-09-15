@@ -12,7 +12,6 @@ interface MovieGridProps {
   error?: string | null;
   onRetry?: () => void;
   title?: string;
-  onPlayTrailer?: (movie: Movie) => void;
 }
 
 export const MovieGrid: React.FC<MovieGridProps> = ({
@@ -21,7 +20,6 @@ export const MovieGrid: React.FC<MovieGridProps> = ({
   error,
   onRetry,
   title = "Explore Movies",
-  onPlayTrailer,
 }) => {
   return (
     <section className="w-full space-y-8">
@@ -91,7 +89,6 @@ export const MovieGrid: React.FC<MovieGridProps> = ({
             <MovieCard
               key={movie.id || movie._id}
               movie={movie}
-              onPlayTrailer={onPlayTrailer}
             />
           ))}
         </div>

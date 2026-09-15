@@ -13,7 +13,6 @@ import { FilterBar } from "../components/FilterBar";
 import { MovieGrid } from "../components/MovieGrid";
 import { MovieCard } from "../components/MovieCard";
 import { ProfileModal } from "../components/ProfileModal";
-import { TrailerModal } from "../components/TrailerModal";
 import { Film, Sparkles, Settings, Bookmark, Clock, Flame, ArrowRight, CheckCircle2, RotateCcw } from "lucide-react";
 
 export default function Home() {
@@ -28,7 +27,6 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const [isProfileOpen, setIsProfileOpen] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<string>("all"); // "all" | "watchlist"
-  const [trailerMovie, setTrailerMovie] = useState<Movie | null>(null);
 
   // Filter & Search states
   const [search, setSearch] = useState<string>("");
@@ -245,8 +243,8 @@ export default function Home() {
                 type="button"
                 onClick={() => setActiveTab("all")}
                 className={`px-5 py-2.5 rounded-xl transition-all cursor-pointer ${activeTab === "all"
-                    ? "bg-[#e50914] text-white shadow-md shadow-rose-600/30"
-                    : "text-slate-400 hover:text-white"
+                  ? "bg-[#e50914] text-white shadow-md shadow-rose-600/30"
+                  : "text-slate-400 hover:text-white"
                   }`}
               >
                 🍿 All Movies
@@ -255,8 +253,8 @@ export default function Home() {
                 type="button"
                 onClick={() => setActiveTab("watchlist")}
                 className={`flex items-center gap-2 px-5 py-2.5 rounded-xl transition-all cursor-pointer ${activeTab === "watchlist"
-                    ? "bg-[#e50914] text-white shadow-md shadow-rose-600/30"
-                    : "text-slate-400 hover:text-white"
+                  ? "bg-[#e50914] text-white shadow-md shadow-rose-600/30"
+                  : "text-slate-400 hover:text-white"
                   }`}
               >
                 <Bookmark className="w-4 h-4" />
@@ -334,7 +332,6 @@ export default function Home() {
                   <MovieCard
                     key={movie.id || (movie as any)._id}
                     movie={movie}
-                    onPlayTrailer={setTrailerMovie}
                   />
                 ))}
               </div>
@@ -351,7 +348,6 @@ export default function Home() {
             {!isFiltering && featuredMovies.length > 0 && (
               <HeroBanner
                 movies={featuredMovies}
-                onPlayTrailer={setTrailerMovie}
               />
             )}
 
@@ -426,7 +422,6 @@ export default function Home() {
               error={error}
               onRetry={loadFilteredMovies}
               title={catalogTitle}
-              onPlayTrailer={setTrailerMovie}
             />
 
             {/* ========================================================================= */}
@@ -455,7 +450,6 @@ export default function Home() {
                     <MovieCard
                       key={movie.id || (movie as any)._id}
                       movie={movie}
-                      onPlayTrailer={setTrailerMovie}
                     />
                   ))}
                 </div>
@@ -502,7 +496,6 @@ export default function Home() {
                     <MovieCard
                       key={movie.id || (movie as any)._id}
                       movie={movie}
-                      onPlayTrailer={setTrailerMovie}
                     />
                   ))}
                 </div>
@@ -510,13 +503,6 @@ export default function Home() {
             )}
           </>
         )}
-
-        {/* Global Cinema Trailer Video Player Modal */}
-        <TrailerModal
-          isOpen={!!trailerMovie}
-          movie={trailerMovie}
-          onClose={() => setTrailerMovie(null)}
-        />
       </main>
 
       {/* Footer */}

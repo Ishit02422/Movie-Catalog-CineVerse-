@@ -4,13 +4,13 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Movie } from "../types/movie";
 import { Star, Calendar, Film, ArrowRight, ChevronLeft, ChevronRight, Play, Sparkles } from "lucide-react";
+import { getYouTubeTrailerUrl } from "../utils/trailerMap";
 
 interface HeroBannerProps {
   movies: Movie[];
-  onPlayTrailer?: (movie: Movie) => void;
 }
 
-export const HeroBanner: React.FC<HeroBannerProps> = ({ movies, onPlayTrailer }) => {
+export const HeroBanner: React.FC<HeroBannerProps> = ({ movies }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   // Auto slide every 7 seconds
@@ -33,6 +33,10 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ movies, onPlayTrailer })
 
   const prevSlide = () => {
     setCurrentIndex((prev) => (prev - 1 + movies.length) % movies.length);
+  };
+
+  const handleOpenTrailer = () => {
+    window.open(getYouTubeTrailerUrl(currentMovie.title), "_blank", "noopener,noreferrer");
   };
 
   return (
@@ -87,16 +91,14 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ movies, onPlayTrailer })
 
           {/* CTA Buttons */}
           <div className="flex flex-wrap items-center gap-4 pt-3">
-            {onPlayTrailer && (
-              <button
-                type="button"
-                onClick={() => onPlayTrailer(currentMovie)}
-                className="inline-flex items-center gap-3 px-8 py-4 rounded-2xl bg-gradient-to-r from-[#e50914] to-rose-600 hover:from-rose-600 hover:to-rose-700 text-white font-black text-base shadow-2xl shadow-rose-600/50 hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer border border-rose-400/40"
-              >
-                <Play className="w-5 h-5 fill-white" />
-                <span>Watch Trailer</span>
-              </button>
-            )}
+            <button
+              type="button"
+              onClick={handleOpenTrailer}
+              className="inline-flex items-center gap-3 px-8 py-4 rounded-2xl bg-gradient-to-r from-[#e50914] to-rose-600 hover:from-rose-600 hover:to-rose-700 text-white font-black text-base shadow-2xl shadow-rose-600/50 hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer border border-rose-400/40"
+            >
+              <Play className="w-5 h-5 fill-white" />
+              <span>Watch Trailer</span>
+            </button>
 
             <Link
               href={`/movies/${movieId}`}
