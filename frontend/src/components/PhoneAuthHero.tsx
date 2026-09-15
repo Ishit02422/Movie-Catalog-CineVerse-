@@ -1438,17 +1438,6 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                       </span>
                     </strong>
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setError(null);
-                      setAuthMode("signin");
-                      setScreen("signin");
-                    }}
-                    className="text-[#e50914] hover:underline text-xs sm:text-sm font-semibold cursor-pointer"
-                  >
-                    Edit
-                  </button>
                 </div>
               )}
 
