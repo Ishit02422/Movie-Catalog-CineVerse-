@@ -83,8 +83,8 @@ export const TrailerModal: React.FC<TrailerModalProps> = ({
               href={externalYouTubeUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-[#e50914] text-slate-200 hover:text-white text-xs font-bold transition-all border border-slate-700 cursor-pointer shadow-sm"
-              title="Open full video on YouTube"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold transition-all border border-red-500/50 cursor-pointer shadow-md shadow-red-900/40 hover:scale-105"
+              title="Open video directly on YouTube"
             >
               <span>YouTube</span>
               <ExternalLink className="w-3.5 h-3.5" />
@@ -108,6 +108,7 @@ export const TrailerModal: React.FC<TrailerModalProps> = ({
               src={embedUrl}
               title={`${movie.title} Official Trailer`}
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerPolicy="strict-origin-when-cross-origin"
               allowFullScreen
               className="w-full h-full border-0"
             />

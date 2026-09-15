@@ -34,13 +34,15 @@ export const TRAILER_MAP: Record<string, string> = {
   "3 idiots": "K0eDlFX9GMc",
   "dangal": "x_7YlGv9u1g",
   "dilwale dulhania le jayenge": "c25GKl5VNeY",
+  "ddlj": "c25GKl5VNeY",
   "rrr": "f_vbAtFSEc0",
   "baahubali 2: the conclusion": "qD-6d8Wo3do",
   "baahubali 2": "qD-6d8Wo3do",
+  "jab we met": "yMeqkP40-3g",
   "yeh jawaani hai deewani": "Rbp2XUSeUNE",
   "kal ho naa ho": "PrM7XnC_p8s",
   "aashiqui 2": "FyXXgpPqe6w",
-  "shershaah": "Q0PvKe35SGI",
+  "shershaah": "uSoEiNwVUkQ",
   "rockstar": "F0mS0R9J78E",
   "stree 2": "JmC-S36u66s",
   "stree 2: sarkate ka aatank": "JmC-S36u66s",
@@ -71,18 +73,18 @@ export function getYouTubeEmbedUrl(title: string): string | null {
 
   // 1. Direct match in dictionary
   if (TRAILER_MAP[cleanTitle]) {
-    return `https://www.youtube-nocookie.com/embed/${TRAILER_MAP[cleanTitle]}?autoplay=1&rel=0&modestbranding=1&playsinline=1`;
+    return `https://www.youtube.com/embed/${TRAILER_MAP[cleanTitle]}?autoplay=1&rel=0&playsinline=1`;
   }
 
   // 2. Partial match (e.g. "Dune: Part Two" vs "dune")
   for (const [key, id] of Object.entries(TRAILER_MAP)) {
     if (cleanTitle.includes(key) || key.includes(cleanTitle)) {
-      return `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&modestbranding=1&playsinline=1`;
+      return `https://www.youtube.com/embed/${id}?autoplay=1&rel=0&playsinline=1`;
     }
   }
 
-  // 3. Fallback to default featured trailer (Inception or Dark Knight)
-  return `https://www.youtube-nocookie.com/embed/YoHD9XEInc0?autoplay=1&rel=0&modestbranding=1&playsinline=1`;
+  // 3. Fallback to default featured trailer (Inception)
+  return `https://www.youtube.com/embed/YoHD9XEInc0?autoplay=1&rel=0&playsinline=1`;
 }
 
 /**
