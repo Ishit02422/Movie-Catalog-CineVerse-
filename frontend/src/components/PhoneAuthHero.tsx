@@ -164,7 +164,6 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [receivedDevOtp, setReceivedDevOtp] = useState<string | null>(null);
 
   // Filtered countries for search modal
   const filteredCountries = COUNTRIES.filter((c) => {
@@ -371,8 +370,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
         if (checkRes.exists) {
           // Existing User -> Send Sign In OTP & go to OTP Screen
           setAuthMode("signin");
-          const sendRes = await sendPhoneOtp(val, "signin", isNum ? selectedCountry.dialCode : undefined);
-          setReceivedDevOtp(sendRes.dev_otp || null);
+          await sendPhoneOtp(val, "signin", isNum ? selectedCountry.dialCode : undefined);
 
           if (checkRes.data?.first_name || checkRes.data?.name) {
             setExistingUser({
@@ -404,7 +402,6 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
         } else {
           setExistingUser(null);
         }
-        setReceivedDevOtp(sendRes.dev_otp || null);
 
         if (isNum) {
           setSuccessMessage(`Verification code sent via SMS to ${selectedCountry.dialCode}-${cleanPhone}`);
@@ -476,8 +473,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
     setError(null);
     setSuccessMessage(null);
     try {
-      const res = await sendPhoneOtp(identifier.trim());
-      setReceivedDevOtp(res.dev_otp || null);
+      await sendPhoneOtp(identifier.trim());
       setSuccessMessage(`A fresh verification code has been dispatched!`);
     } catch (err: any) {
       setError(err.message || "Failed to resend code. Please try again.");

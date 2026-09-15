@@ -300,7 +300,6 @@ export const sendPhoneOtp = async (
         message: `Verification code sent to ${cleanEmail}! Please check your Inbox.`,
         identifier: cleanEmail,
         email: cleanEmail,
-        dev_otp: generatedOtp,
       });
       return;
     }
@@ -346,7 +345,6 @@ export const sendPhoneOtp = async (
       identifier: cleanPhone,
       phone: cleanPhone,
       country_code: countryCode,
-      dev_otp: generatedOtp,
     });
   } catch (error) {
     next(error);

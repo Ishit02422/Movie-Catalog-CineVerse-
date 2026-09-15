@@ -21,8 +21,6 @@ interface AuthContextType {
     exists?: boolean;
     isNewUser?: boolean;
     user_name?: string;
-    otp_preview?: string;
-    dev_otp?: string;
     message: string;
   }>;
   verifyPhoneOtp: (
@@ -172,8 +170,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     exists?: boolean;
     isNewUser?: boolean;
     user_name?: string;
-    otp_preview?: string;
-    dev_otp?: string;
     message: string;
   }> => {
     const res = await fetch(`${API_BASE_URL}/auth/phone/send-otp`, {
