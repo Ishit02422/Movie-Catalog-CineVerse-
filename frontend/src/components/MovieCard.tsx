@@ -3,14 +3,15 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { Movie } from "../types/movie";
-import { Star, Calendar, Bookmark, Check, ArrowUpRight, Eye } from "lucide-react";
+import { Star, Calendar, Bookmark, Check, Play, Eye } from "lucide-react";
 import { useWatchlist } from "../context/WatchlistContext";
 
 interface MovieCardProps {
   movie: Movie;
+  onPlayTrailer?: (movie: Movie) => void;
 }
 
-export const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
+export const MovieCard: React.FC<MovieCardProps> = ({ movie, onPlayTrailer }) => {
   const [imageError, setImageError] = useState(false);
   const { isInWatchlist, toggleWatchlist } = useWatchlist();
   const movieId = movie.id || movie._id || "";
@@ -23,6 +24,14 @@ export const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
     e.preventDefault();
     e.stopPropagation();
     await toggleWatchlist(movie);
+  };
+
+  const handleTrailerClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (onPlayTrailer) {
+      onPlayTrailer(movie);
+    }
   };
 
   return (
@@ -75,10 +84,19 @@ export const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
           </div>
         </div>
 
-        {/* Hover Action Indicator */}
-        <div className="absolute bottom-3.5 right-3.5 w-9 h-9 rounded-full bg-rose-600 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0 shadow-lg shadow-rose-600/50">
-          <ArrowUpRight className="w-5 h-5" />
-        </div>
+        {/* Center Hover Play Trailer Button */}
+        {onPlayTrailer && (
+          <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-90 group-hover:scale-100">
+            <button
+              type="button"
+              onClick={handleTrailerClick}
+              className="pointer-events-auto flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-[#e50914] hover:bg-rose-600 text-white font-bold text-xs shadow-2xl shadow-rose-600/60 border border-rose-400/40 cursor-pointer active:scale-95 transition-all"
+            >
+              <Play className="w-4 h-4 fill-white" />
+              <span>Watch Trailer</span>
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Card Content Details */}

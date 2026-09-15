@@ -8,6 +8,7 @@ import { Movie } from "../../../types/movie";
 import { fetchMovieById } from "../../../lib/api";
 import { Navbar } from "../../../components/Navbar";
 import { MovieCard } from "../../../components/MovieCard";
+import { TrailerModal } from "../../../components/TrailerModal";
 import { useWatchlist } from "../../../context/WatchlistContext";
 import { useAuth } from "../../../context/AuthContext";
 import {
@@ -29,7 +30,6 @@ import {
   X,
   ExternalLink,
 } from "lucide-react";
-import { getYouTubeTrailerUrl } from "../../../utils/trailerMap";
 
 interface ReviewItem {
   id: string;
@@ -71,7 +71,7 @@ export default function MovieDetailsPage() {
   const [reviewMessage, setReviewMessage] = useState<string | null>(null);
 
   // Trailer Modal state
-  const [isTrailerOpen, setIsTrailerOpen] = useState<boolean>(false);
+  const [trailerModalMovie, setTrailerModalMovie] = useState<Movie | null>(null);
 
   const fallbackImage =
     "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1200&q=80";
@@ -353,7 +353,7 @@ export default function MovieDetailsPage() {
                   {/* Play Trailer Overlay Button */}
                   <button
                     type="button"
-                    onClick={() => setIsTrailerOpen(true)}
+                    onClick={() => setTrailerModalMovie(movie)}
                     className="absolute inset-0 m-auto w-16 h-16 rounded-full bg-rose-600/90 hover:bg-rose-600 text-white flex items-center justify-center shadow-2xl shadow-rose-600/50 backdrop-blur-sm transition-all hover:scale-110 active:scale-95 cursor-pointer"
                   >
                     <Play className="w-7 h-7 fill-white translate-x-0.5" />
@@ -416,7 +416,7 @@ export default function MovieDetailsPage() {
                 <div className="flex flex-wrap items-center gap-3 pt-2">
                   <button
                     type="button"
-                    onClick={() => setIsTrailerOpen(true)}
+                    onClick={() => setTrailerModalMovie(movie)}
                     className="px-6 py-3 rounded-xl bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-600 text-white font-bold text-sm shadow-xl shadow-rose-600/30 flex items-center gap-2 cursor-pointer transition-all active:scale-95"
                   >
                     <Play className="w-4 h-4 fill-white" />
@@ -495,7 +495,11 @@ export default function MovieDetailsPage() {
 
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4 sm:gap-6">
                   {similarMovies.slice(0, 4).map((simMovie) => (
-                    <MovieCard key={simMovie.id || (simMovie as any)._id} movie={simMovie} />
+                    <MovieCard
+                      key={simMovie.id || (simMovie as any)._id}
+                      movie={simMovie}
+                      onPlayTrailer={setTrailerModalMovie}
+                    />
                   ))}
                 </div>
               </section>
@@ -645,7 +649,7 @@ export default function MovieDetailsPage() {
                     {/* Real-time character guide */}
                     {isAuthenticated && reviewComment.length > 0 && reviewComment.trim().length < 10 && (
                       <p className="text-[11px] text-amber-400/90 font-medium flex items-center gap-1">
-                        <span>ℹ️ Minimum 10 characters required</span>
+                        <span> i Minimum 10 characters required</span>
                         <span>({10 - reviewComment.trim().length} more needed)</span>
                       </p>
                     )}
@@ -742,117 +746,12 @@ export default function MovieDetailsPage() {
         )}
       </main>
 
-      {/* Enhanced Cinema Trailer Video Player Modal */}
-      {isTrailerOpen && movie && (() => {
-        const youtubeTrailerUrl = getYouTubeTrailerUrl(movie.title);
-        return (
-          <div className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 animate-in fade-in">
-            <div className="relative w-full max-w-4xl bg-slate-950 rounded-3xl overflow-hidden border border-white/15 shadow-2xl shadow-rose-950/60 flex flex-col">
-              {/* Modal Header */}
-              <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-slate-900/90">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#e50914] to-rose-700 flex items-center justify-center text-white shadow-md">
-                    <Play className="w-4 h-4 fill-white" />
-                  </div>
-                  <div>
-                    <h3 className="text-base font-extrabold text-white tracking-tight leading-tight line-clamp-1">
-                      {movie.title}
-                    </h3>
-                    <p className="text-[11px] text-slate-400 font-medium">Official Cinema Trailer • Full HD</p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <a
-                    href={youtubeTrailerUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 hover:bg-[#e50914] text-slate-300 hover:text-white text-xs font-bold transition-all border border-white/10 cursor-pointer"
-                    title="Open on YouTube in new tab"
-                  >
-                    <span>Watch on YouTube</span>
-                    <ExternalLink className="w-3.5 h-3.5" />
-                  </a>
-
-                  <button
-                    type="button"
-                    onClick={() => setIsTrailerOpen(false)}
-                    className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
-                    title="Close"
-                  >
-                    <X className="w-5 h-5" />
-                  </button>
-                </div>
-              </div>
-
-              {/* Video Player & Cinema Showcase Card */}
-              <div className="relative w-full aspect-video bg-black flex items-center justify-center overflow-hidden group">
-                {/* Background Movie Backdrop with Cinematic Overlays */}
-                <img
-                  src={movie.image_url || fallbackImage}
-                  alt={movie.title}
-                  className="w-full h-full object-cover object-center brightness-30 scale-105 group-hover:scale-110 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-slate-900/60" />
-                <div className="absolute inset-0 bg-gradient-to-r from-slate-950/80 via-transparent to-slate-950/80" />
-
-                {/* Central Cinema Interactive Launch Card */}
-                <div className="relative z-10 flex flex-col items-center justify-center p-6 sm:p-10 text-center max-w-xl mx-auto space-y-5">
-                  <div className="space-y-2">
-                    <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-rose-500/20 text-rose-400 border border-rose-500/30">
-                      <Sparkles className="w-3.5 h-3.5" />
-                      Official Studio Trailer • 1080p Full HD
-                    </span>
-                    <h4 className="text-2xl sm:text-3xl font-black text-white tracking-tight leading-tight">
-                      {movie.title}
-                    </h4>
-                    <p className="text-xs sm:text-sm text-slate-300 max-w-md mx-auto leading-relaxed line-clamp-2">
-                      {movie.description || "Experience the official cinema trailer with original soundtrack on YouTube."}
-                    </p>
-                  </div>
-
-                  {/* Single Big Primary Action Launch Button */}
-                  <a
-                    href={youtubeTrailerUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2.5 px-8 py-4 rounded-2xl bg-gradient-to-r from-[#e50914] via-rose-600 to-rose-700 hover:from-rose-600 hover:to-rose-800 text-white font-black text-sm sm:text-base shadow-xl shadow-rose-600/50 hover:shadow-rose-600/80 transition-all hover:scale-105 active:scale-95 cursor-pointer border border-rose-400/30"
-                  >
-                    <Play className="w-5 h-5 fill-white translate-x-0.5" />
-                    <span>Play Official Trailer on YouTube</span>
-                    <ExternalLink className="w-4 h-4 ml-1" />
-                  </a>
-                </div>
-              </div>
-
-              {/* Modal Footer */}
-              <div className="px-6 py-3.5 bg-slate-900 border-t border-white/10 flex items-center justify-between text-xs text-slate-400">
-                <span className="flex items-center gap-2">
-                  <Film className="w-3.5 h-3.5 text-rose-400" />
-                  <span className="font-semibold text-slate-300">{movie.genre}</span>
-                  <span>•</span>
-                  <span>{movie.release_year}</span>
-                  {movie.rating !== undefined && movie.rating >= 5 && movie.rating <= 10 && (
-                    <>
-                      <span>•</span>
-                      <span className="text-amber-400 font-bold">{movie.rating.toFixed(1)} ★</span>
-                    </>
-                  )}
-                </span>
-                <a
-                  href={youtubeTrailerUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-rose-400 hover:text-rose-300 font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
-                >
-                  <span>Open Full Screen in YouTube</span>
-                  <ExternalLink className="w-3.5 h-3.5" />
-                </a>
-              </div>
-            </div>
-          </div>
-        );
-      })()}
+      {/* Cinema Trailer Video Player Modal */}
+      <TrailerModal
+        isOpen={!!trailerModalMovie}
+        movie={trailerModalMovie}
+        onClose={() => setTrailerModalMovie(null)}
+      />
 
       {/* Footer */}
       <footer className="border-t border-slate-900 bg-slate-950/80 py-8 text-center text-xs text-slate-500 mt-12">

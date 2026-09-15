@@ -7,9 +7,10 @@ import { Star, Calendar, Film, ArrowRight, ChevronLeft, ChevronRight, Play, Spar
 
 interface HeroBannerProps {
   movies: Movie[];
+  onPlayTrailer?: (movie: Movie) => void;
 }
 
-export const HeroBanner: React.FC<HeroBannerProps> = ({ movies }) => {
+export const HeroBanner: React.FC<HeroBannerProps> = ({ movies, onPlayTrailer }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   // Auto slide every 7 seconds
@@ -85,13 +86,23 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ movies }) => {
           </p>
 
           {/* CTA Buttons */}
-          <div className="flex items-center gap-4 pt-3">
+          <div className="flex flex-wrap items-center gap-4 pt-3">
+            {onPlayTrailer && (
+              <button
+                type="button"
+                onClick={() => onPlayTrailer(currentMovie)}
+                className="inline-flex items-center gap-3 px-8 py-4 rounded-2xl bg-gradient-to-r from-[#e50914] to-rose-600 hover:from-rose-600 hover:to-rose-700 text-white font-black text-base shadow-2xl shadow-rose-600/50 hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer border border-rose-400/40"
+              >
+                <Play className="w-5 h-5 fill-white" />
+                <span>Watch Trailer</span>
+              </button>
+            )}
+
             <Link
               href={`/movies/${movieId}`}
-              className="inline-flex items-center gap-3 px-8 py-4 rounded-2xl bg-gradient-to-r from-[#e50914] to-rose-600 hover:from-rose-600 hover:to-rose-700 text-white font-bold text-base shadow-2xl shadow-rose-600/40 hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer"
+              className="inline-flex items-center gap-2.5 px-7 py-4 rounded-2xl bg-slate-900/90 hover:bg-slate-800 text-white font-bold text-base border border-slate-700 hover:border-slate-500 shadow-xl transition-all duration-200 cursor-pointer"
             >
-              <Play className="w-5 h-5 fill-white" />
-              <span>View Movie Details</span>
+              <span>View Details</span>
               <ArrowRight className="w-5 h-5" />
             </Link>
           </div>

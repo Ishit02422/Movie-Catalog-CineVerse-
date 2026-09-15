@@ -24,6 +24,11 @@ export const TRAILER_MAP: Record<string, string> = {
   "grand budapest hotel": "1Fg5iWmQjwk",
   "the grand budapest hotel": "1Fg5iWmQjwk",
   "the conjuring": "k10ETZ41q5o",
+  "avatar: the way of water": "d9MyW72ELq0",
+  "avatar": "5PSNL1qE6VY",
+  "titanic": "kVrqfYjkTdQ",
+  "avengers: endgame": "TcMBFSGVi1c",
+  "top gun: maverick": "qSqVVqua4Pb",
 
   // Indian Blockbusters & Bollywood Classics
   "3 idiots": "K0eDlFX9GMc",
@@ -50,12 +55,38 @@ export const TRAILER_MAP: Record<string, string> = {
   "kantara": "6oEF3knvfMs",
   "sholay": "6U0eM59Z35U",
   "brahmastra": "V5Zzboaz33o",
+  "pk": "SOXWc32k4zA",
+  "barfi": "yGQ-N0c7E_g",
+  "barfi!": "yGQ-N0c7E_g",
+  "drishyam 2": "cxA2y9TglY4",
+  "pathaan": "vqu4z34wENw",
 };
 
 /**
- * Get direct verified YouTube Trailer URL for any movie
- * Uses live official YouTube search query so videos are ALWAYS available in 1080p HD
- * with ZERO "Video unavailable" or "Video deleted" errors.
+ * Get YouTube Embed URL for direct embedded iframe playback
+ */
+export function getYouTubeEmbedUrl(title: string): string | null {
+  if (!title) return null;
+  const cleanTitle = title.trim().toLowerCase();
+
+  // 1. Direct match in dictionary
+  if (TRAILER_MAP[cleanTitle]) {
+    return `https://www.youtube-nocookie.com/embed/${TRAILER_MAP[cleanTitle]}?autoplay=1&rel=0&modestbranding=1&playsinline=1`;
+  }
+
+  // 2. Partial match (e.g. "Dune: Part Two" vs "dune")
+  for (const [key, id] of Object.entries(TRAILER_MAP)) {
+    if (cleanTitle.includes(key) || key.includes(cleanTitle)) {
+      return `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&modestbranding=1&playsinline=1`;
+    }
+  }
+
+  // 3. Fallback to default featured trailer (Inception or Dark Knight)
+  return `https://www.youtube-nocookie.com/embed/YoHD9XEInc0?autoplay=1&rel=0&modestbranding=1&playsinline=1`;
+}
+
+/**
+ * Get direct verified YouTube Trailer Search URL for external redirection
  */
 export function getYouTubeTrailerUrl(title: string): string {
   if (!title) return "https://www.youtube.com";
@@ -63,8 +94,3 @@ export function getYouTubeTrailerUrl(title: string): string {
     `${title.trim()} Official Trailer`
   )}`;
 }
-
-export function getYouTubeSearchUrl(title: string): string {
-  return getYouTubeTrailerUrl(title);
-}
-
