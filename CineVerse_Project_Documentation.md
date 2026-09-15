@@ -1,112 +1,114 @@
-# 🎬 CineVerse - Full-Stack Movie Catalog Application
+# 🎬 CineVerse - Full-Stack Movie Catalog & Streaming Platform
 ## Comprehensive Technical Documentation & Architecture Guide
 
 ---
 
-## 📌 ૧. પ્રોજેક્ટ પરિચય (Project Overview)
+## 📌 1. Project Overview
 
-**CineVerse** એ એક આધુનિક, એન્ટરપ્રાઇઝ-ગ્રેડ મૂવી કેટલોગ અને એન્ટરટેઇનમેન્ટ સ્ટ્રીમિંગ પોર્ટલ છે. આ પ્રોજેક્ટ **Next.js 16 (App Router), TypeScript, Tailwind CSS, Node.js, Express અને MongoDB** ના લેટેસ્ટ ટેકનોલોજી સ્ટેક પર આધારિત છે.
+**CineVerse** is a modern, enterprise-grade movie catalog, streaming discovery, and management platform built with high performance, security, and responsive UI aesthetics in mind. The platform provides passwordless OTP authentication (via Email & SMS), real-time search and multi-filtering, dynamic real-world IMDb popularity tracking, YouTube trailer streaming, personalized user watchlists, and an administrative control studio.
 
 ---
 
-## 🛠️ ૨. ટેકનોલોજી સ્ટેક (Technology Stack)
+## 🛠️ 2. Technology Stack
 
 ```
-┌───────────────────────────────────────────────────────────┐
-│                     CineVerse Platform                    │
-├─────────────────────────────┬─────────────────────────────┤
-│ Frontend Architecture       │ Backend Architecture        │
-├─────────────────────────────┼─────────────────────────────┤
-│ • Next.js 16 (App Router)   │ • Node.js & Express.js      │
-│ • TypeScript 5              │ • TypeScript 5              │
-│ • Tailwind CSS (Glassmorphic)│ • MongoDB & Mongoose ODM    │
-│ • Lucide React Icons        │ • JWT & BcryptJS Hashing    │
-│ • Context API (Auth/Watchlist) • Nodemailer (Gmail Relay)   │
-└─────────────────────────────┴─────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────────────┐
+│                           CineVerse Platform                             │
+├────────────────────────────────────┬─────────────────────────────────────┤
+│ Frontend Architecture              │ Backend Architecture                │
+├────────────────────────────────────┼─────────────────────────────────────┤
+│ • Next.js 16 (Turbopack, App Router)│ • Node.js & Express.js              │
+│ • TypeScript 5                     │ • TypeScript 5                      │
+│ • Tailwind CSS (Glassmorphism)     │ • MongoDB & Mongoose ODM            │
+│ • Lucide React Icons               │ • JWT & BcryptJS Password Hashing   │
+│ • Context API (Auth / Watchlist)   │ • Nodemailer (Gmail HTTPS Relay)    │
+│ • Responsive Netflix-Style UI      │ • Live IMDb & OMDb Engine           │
+└────────────────────────────────────┴─────────────────────────────────────┘
 ```
 
 ---
 
-## 🚀 ૩. મુખ્ય મોડ્યુલ્સ અને કાર્યપ્રણાલી (Core Modules & Functionalities)
+## 🚀 3. Core Modules & Functionality Breakdown
 
-### 🔐 મોડ્યુલ ૧: Secure Passwordless Authentication (Email & Phone OTP)
-- **Email & SMS ડિલિવરી**: યુઝર પોતાનો ઈમેલ અથવા 10-અંકનો મોબાઈલ નંબર નાખીને 6-ડિજિટનો વેરિફિકેશન કોડ મેળવી શકે છે.
-- **Bcrypt Hashing**: જનરેટ થયેલો OTP ડેટાબેઝમાં સાદા અક્ષરોમાં ક્યારેય સ્ટોર થતો નથી, તે **Bcrypt Salt Hashing** વડે સુરક્ષિત થાય છે.
-- **Zero-Leak Payload**: બ્રાઉઝરના નેટવર્ક ટેબ (DevTools) માં OTP ક્યારેય લીક થતો નથી.
-- **Smart User Detection**: સાઇન-ઇન વખતે યુઝર પહેલેથી રજીસ્ટર્ડ છે કે નવો છે તે આપમેળે ઓળખીને તે મુજબ સાઇન-અપ ફોર્મ અથવા ડાયરેક્ટ OTP સ્ક્રીન બતાવે છે.
-- **Google 1-Click Login**: ગૂગલ વેરિફિકેશન દ્વારા ત્વરિત લોગિન.
-
----
-
-### 🎬 મોડ્યુલ ૨: Dynamic Movie Catalog, Multi-Filter & Search
-- **Instant Search**: ટાઇટલ દ્વારા રિયલ-ટાઇમ ડેબાઉન્સ્ડ સર્ચ (Search as you type).
-- **Multi-Level Filters**: 
-  - **Genre Filter**: Action, Sci-Fi, Drama, Romance, Comedy, વગેરે.
-  - **Release Year Filter**: 1950 થી લઈને ચાલુ વર્ષ સુધીના ફિલ્ટર્સ.
-- **સ્માર્ટ સોર્ટિંગ (Smart Sort)**:
-  - 🔥 **Most Popular / Highest Views** (સૌથી વધુ જોવાયેલી ફિલ્મો)
-  - ★ **Top Rated (High to Low)** (સૌથી ઊંચા IMDb રેટિંગ્સ)
-  - 📅 **Latest Releases** (નવી રિલીઝ થયેલી ફિલ્મો)
-  - 🔤 **Alphabetical (A → Z, Z → A)**
-- **૧-ક્લિક ફિલ્ટર રીસેટ**: એક ક્લિકમાં બધા ફિલ્ટર્સ સાફ કરવાની સુવિધા.
+### 🔐 Module 1: Passwordless Multi-Channel Authentication (Email & Phone OTP)
+- **Multi-Identifier Delivery**: Users can log in or register seamlessly using either their **Email address** (via Nodemailer Gmail SMTP) or their **10-Digit Mobile Number** (via Twilio/Fast2SMS).
+- **Cryptographic Bcrypt Hashing**: Generated 6-digit verification codes are hashed using `bcryptjs` with auto-salted rounds before persisting in MongoDB. Plaintext OTPs are never stored in the database.
+- **Zero-Leak API Payloads**: API response payloads strictly omit raw OTPs (`dev_otp`), ensuring complete protection against Network tab inspection and man-in-the-middle attacks.
+- **Smart User Presence Detection**: Instant pre-check API determines whether the identifier belongs to an existing user or a new registrant, dynamically tailoring the UI flow.
+- **1-Click Google OAuth**: Integrated one-click Google authentication with persistent JWT session handling.
 
 ---
 
-### 🎥 મોડ્યુલ ૩: YouTube Trailer Integration & Smart Fallback
-- **ડાયરેક્ટ ટ્રેલર પ્લેયર**: દરેક મૂવી કાર્ડ અને ડિટેઇલ પેજ પર **"▶ Watch Trailer"** બટન.
-- **Smart Lookup Dictionary ([trailerMap.ts](file:///d:/Movie%20Catalog%20Application/frontend/src/utils/trailerMap.ts))**: પ્રખ્યાત બોલિવૂડ અને હોલીવુડ બ્લોકબસ્ટર્સના સાચા યુટ્યુબ વિડિયો ID સાથે મેપિંગ.
-- **ડાયનેમિક સર્ચ ફોલબેક**: જો કોઈ નવી મૂવી લિસ્ટમાં ન હોય, તો ખોટો વિડિયો બતાવવાને બદલે સિસ્ટમ આપમેળે YouTube પર તે જ મૂવીનું ઓફિશિયલ ટ્રેલર સર્ચ કરીને ખોલી આપે છે.
+### 🎬 Module 2: Dynamic Movie Catalog, Multi-Filtering & Instant Search
+- **Debounced Real-Time Search**: Instant search-as-you-type mechanism with automatic query sanitization and debouncing to minimize unnecessary network calls.
+- **Multi-Level Taxonomy Filters**:
+  - **Genre Filtering**: Dynamic pills and dropdowns (Action, Sci-Fi, Drama, Romance, Comedy, Crime, Horror, Animation).
+  - **Release Year Filtering**: Dynamic historical range from 1950 down to the current year.
+- **Dynamic Sorting Algorithms**:
+  - 🔥 **Most Popular / Highest Views** (Ranked by million-scale live viewer counts)
+  - ★ **Top Rated** (Ranked by verified IMDb ratings, High to Low)
+  - 📅 **Latest Releases** (Newest release years first)
+  - 🔤 **Alphabetical Ordering** (A → Z, Z → A)
+- **1-Click Active Tag Reset**: Visible filter tags with 1-click removal and global reset buttons.
 
 ---
 
-### 📊 મોડ્યુલ ૪: Real-World Popularity & Live Viewer Counter
-- **લાખોમાં વ્યૂઝ (Million-Scale Views)**: `Dangal (5.8M views)`, `3 Idiots (5.4M views)`, `RRR (5.1M views)`, `The Conjuring (4.9M views)` જેવા સાચા ગ્લોબલ સ્ટ્રીમિંગ આંકડા.
-- **રીયલ-ટાઇમ ઓટો-ઇન્ક્રીમેન્ટ**: જ્યારે પણ કોઈ યુઝર મૂવી ડિટેઇલ પેજ ઓપન કરે છે, ડેટાબેઝમાં તેનો View Count આપમેળે **+1** વધી જાય છે (વિથ React StrictMode Lifecycle Guard).
-- **Dynamic Popularity Engine ([dynamicPopularityService.ts](file:///d:/Movie%20Catalog%20Application/backend/src/utils/dynamicPopularityService.ts))**: લાઇવ OMDb/IMDb API દ્વારા નવી મૂવીઝના સાચા રેટિંગ્સ અને પોપ્યુલારિટી આપમેળે ફેચ થાય છે.
-- **🔥 Trending & Most Popular સેક્શન**: હોમ પેજ પર લાઈવ વ્યૂઝના આધારે આપમેળે ટ્રેન્ડિંગ મૂવીઝ આગળ આવે છે.
+### 🎥 Module 3: YouTube Trailer Engine & Smart Fallback
+- **Direct Trailer Player**: Every movie card and details page includes a prominent **"▶ Watch Trailer"** CTA button.
+- **Verified Trailer Dictionary ([trailerMap.ts](file:///d:/Movie%20Catalog%20Application/frontend/src/utils/trailerMap.ts))**: Pre-indexed dictionary mapping Hollywood & Bollywood blockbusters to their verified official YouTube IDs.
+- **Smart Dynamic Search Fallback**: For movies not pre-indexed in the dictionary, the system automatically redirects to YouTube with an exact search query (`[Movie Title] Official Trailer`), ensuring zero playback of incorrect or mismatched videos.
 
 ---
 
-### 🔖 મોડ્યુલ ૫: Personalized Watchlist & User Engagement
-- **My List (Watchlist)**: યુઝર પોતાની મનપસંદ ફિલ્મો ૧-ક્લિકમાં સેવ કરી શકે છે.
-- **Recently Viewed**: યુઝરે તાજેતરમાં જોયેલી ફિલ્મોનો હિસ્ટ્રી સેક્શન.
-- **Audience Reviews & 5-Star Rating**: યુઝર્સ પોતાનો રિવ્યૂ અને ૧ થી ૫ સ્ટાર રેટિંગ સબમિટ કરી શકે છે.
-- **પ્રોફાઇલ મેનેજમેન્ટ**: નામ, સરનેમ, જેન્ડર, ઈમેલ અપડેટ કરવાની તેમજ એકાઉન્ટ ડિલીટ કરવાની સુવિધા.
+### 📊 Module 4: Real-World Popularity & Dynamic Live Viewer Counter
+- **Realistic Million-Scale View Counts**: Pre-seeded and live-synced with authentic global streaming figures (e.g., *Dangal*: 5.8M views, *3 Idiots*: 5.4M views, *RRR*: 5.1M views, *The Dark Knight*: 4.8M views, *The Conjuring*: 4.9M views).
+- **Real-Time Atomic Auto-Increment**: Opening any movie details page triggers an atomic `$inc: { views_count: 1 }` database update.
+- **React StrictMode Guard**: Client-side `useRef` lifecycle guard ensures exactly **1 view per unique user visit**, eliminating artificial duplicate view counts during development mode.
+- **Dynamic Popularity Engine ([dynamicPopularityService.ts](file:///d:/Movie%20Catalog%20Application/backend/src/utils/dynamicPopularityService.ts))**: Live OMDb / IMDb integration to dynamically fetch authentic ratings and popularity metrics for any newly added movie.
+- **Dedicated Homepage Live Trending Row**: Dynamic row sorting top-performing blockbusters by live viewer engagement.
 
 ---
 
-### ⚙️ મોડ્યુલ ૬: Admin Studio (એડમિન કંટ્રોલ પેનલ)
-- **સુરક્ષિત એડમિન લોગિન**: `role: "admin"` પ્રોટેક્શન.
-- **CRUD Operations**: નવી મૂવી ઉમેરવી, એડિટ કરવી, ડિલીટ કરવી.
-- **સ્ટેટસ મેનેજમેન્ટ**: મૂવીને `Active`, `Hidden`, `Under Review`, અથવા `Removed` માર્ક કરવી.
-- **Hero Banner Toggle**: ૧-ક્લિકમાં મૂવીને હોમપેજ હીરો બેનર પર ફીચર્ડ બનાવવી.
-- **⚡ 1-Click Live Sync**: આખા કેટલોગને લાઈવ IMDb API સાથે સિંક કરવાનું બટન.
+### 🔖 Module 5: Personalized Watchlist & User Profile Experience
+- **My List (Watchlist)**: Instant bookmarking system persisted across sessions and synchronized with MongoDB for authenticated profiles.
+- **Recently Viewed History**: Real-time localStorage tracking of the last 12 visited movies per active user.
+- **Interactive 5-Star Reviews**: Audience rating and review system with interactive hover feedback, review lists, and deletion controls.
+- **Profile Management**: Full account profile updating (First Name, Surname, Gender, Phone, Email) with anti-spam realistic human name validation.
 
 ---
 
-## 🗄️ ૪. ડેટાબેઝ આર્કિટેક્ચર (Database Schema Models)
+### ⚙️ Module 6: Admin Studio (Content Management System)
+- **Role-Based Access Control**: Secure administrator portal protected by `requireAdmin` middleware.
+- **Full Movie CRUD Operations**: Add, Edit, and Delete movies with automatic metadata enrichment.
+- **Status Workflow**: Manage distribution state with `Active`, `Hidden`, `Under Review`, and `Removed` flags.
+- **1-Click Hero Banner Feature Toggle**: Instantly promote or demote movies to the homepage Hero Carousel.
+- **⚡ 1-Click Live Popularity Sync**: Admin button to synchronize the entire database catalog with live IMDb ratings and real-world view metrics.
+
+---
+
+## 🗄️ 4. Database Architecture & ER Diagram
 
 ```mermaid
 erDiagram
-    USER ||--o{ REVIEW : writes
-    USER ||--o{ MOVIE : bookmarks_in_watchlist
-    MOVIE ||--o{ REVIEW : has_reviews
+    USER ||--o{ REVIEW : "writes"
+    USER ||--o{ MOVIE : "bookmarks in watchlist"
+    MOVIE ||--o{ REVIEW : "receives"
 
     USER {
-        ObjectId _id
+        ObjectId _id PK
         string name
         string first_name
         string surname
-        string gender
-        string email
-        string phone
+        string gender "Male | Female | Other"
+        string email UK
+        string phone UK
         string role "user | admin"
-        ObjectId[] watchlist
+        ObjectId[] watchlist FK
         date created_at
     }
 
     MOVIE {
-        ObjectId _id
+        ObjectId _id PK
         string title
         string genre
         number release_year
@@ -116,19 +118,21 @@ erDiagram
         string status "active | hidden | under_review | removed"
         string image_url
         string description
+        date created_at
+        date updated_at
     }
 
     OTP {
-        ObjectId _id
+        ObjectId _id PK
         string identifier
-        string otp "bcrypt hashed"
-        date expires_at "TTL auto-delete"
+        string otp "Bcrypt Hashed"
+        date expires_at "TTL auto-delete index"
     }
 
     REVIEW {
-        ObjectId _id
-        ObjectId user_id
-        ObjectId movie_id
+        ObjectId _id PK
+        ObjectId user_id FK
+        ObjectId movie_id FK
         number rating
         string comment
         date created_at
@@ -137,21 +141,56 @@ erDiagram
 
 ---
 
-## 📡 ૫. API Endpoints Reference Table
+## 📡 5. REST API Endpoints Reference
 
-| મેથડ | એન્ડપોઇન્ટ | વર્ણન | એક્સેસ |
+### 🔑 Authentication Endpoints (`/api/auth`)
+| Method | Endpoint | Description | Access |
 | :--- | :--- | :--- | :--- |
-| `POST` | `/api/auth/phone/send-otp` | ઈમેલ/ફોન પર સુરક્ષિત OTP મોકલે છે | Public |
-| `POST` | `/api/auth/phone/verify-otp` | OTP વેરિફાઈ કરી JWT ટોકન આપે છે | Public |
-| `GET` | `/api/auth/profile` | લૉગિન થયેલા યુઝરની પ્રોફાઇલ લાવે છે | Private |
-| `PUT` | `/api/auth/profile` | યુઝર પ્રોફાઇલ અપડેટ કરે છે | Private |
-| `GET` | `/api/movies` | ફિલ્ટર/સર્ચ સાથે મૂવી લિસ્ટ આપે છે | Public |
-| `GET` | `/api/movies/:id` | મૂવી ડિટેઇલ + Views +1 ઇન્ક્રીમેન્ટ | Public |
-| `GET` | `/api/movies/featured` | હીરો બેનર મૂવીઝ આપે છે | Public |
-| `GET` | `/api/movies/:id/similar` | સમાન Genre ની મૂવીઝ આપે છે | Public |
-| `POST` | `/api/movies` | નવી મૂવી ઉમેરે છે (વિથ Auto IMDb Sync) | Admin Only |
-| `PUT` | `/api/movies/:id` | મૂવી એડિટ કરે છે | Admin Only |
-| `DELETE`| `/api/movies/:id` | મૂવી ડિલીટ કરે છે | Admin Only |
-| `POST` | `/api/movies/sync-popularity`| લાઇવ IMDb પોપ્યુલારિટી સિંક કરે છે | Admin Only |
-| `GET` | `/api/movies/:id/reviews`| મૂવીના તમામ રિવ્યૂઝ લાવે છે | Public |
-| `POST` | `/api/movies/:id/reviews`| નવો રિવ્યૂ સબમિટ કરે છે | Private |
+| `POST` | `/api/auth/phone/send-otp` | Generates & sends secure 6-digit OTP via Email/SMS | Public |
+| `POST` | `/api/auth/phone/verify-otp` | Validates bcrypt-hashed OTP & issues JWT token | Public |
+| `POST` | `/api/auth/login` | Traditional email & password authentication | Public |
+| `POST` | `/api/auth/register` | Traditional registration with credentials | Public |
+| `GET` | `/api/auth/profile` | Fetches active authenticated user profile | Private |
+| `PUT` | `/api/auth/profile` | Updates user details with name validation | Private |
+| `DELETE`| `/api/auth/profile` | Deletes user account and associated session | Private |
+
+---
+
+### 🎥 Movie Endpoints (`/api/movies`)
+| Method | Endpoint | Description | Access |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/api/movies` | Fetches movies with search, filter, and sort queries | Public |
+| `GET` | `/api/movies/:id` | Fetches movie details & increments view count atomically | Public |
+| `GET` | `/api/movies/featured` | Fetches Hero Carousel featured movies | Public |
+| `GET` | `/api/movies/genres` | Returns distinct genres in the current catalog | Public |
+| `GET` | `/api/movies/:id/similar` | Fetches related movies based on genre matching | Public |
+| `POST` | `/api/movies` | Creates new movie with auto IMDb popularity sync | Admin Only |
+| `PUT` | `/api/movies/:id` | Updates movie details | Admin Only |
+| `DELETE`| `/api/movies/:id` | Deletes movie from catalog | Admin Only |
+| `PATCH` | `/api/movies/:id/feature` | Toggles Hero Banner featured status | Admin Only |
+| `PATCH` | `/api/movies/:id/status` | Updates distribution status (active/hidden/etc.) | Admin Only |
+| `POST` | `/api/movies/sync-popularity`| Synchronizes all movies with live IMDb ratings & views | Admin Only |
+
+---
+
+### 💬 Review Endpoints (`/api/reviews`)
+| Method | Endpoint | Description | Access |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/api/movies/:id/reviews` | Fetches all community reviews for a movie | Public |
+| `POST` | `/api/movies/:id/reviews` | Submits a new star rating and comment | Private |
+| `DELETE`| `/api/reviews/:id` | Deletes a review | Admin / Author |
+
+---
+
+## 🔒 6. Security & Performance Highlights
+
+1. **Defense-in-Depth OTP Security**:
+   - OTP codes are hashed via `bcryptjs` with unique cryptographic salts.
+   - Database documents auto-expire and delete automatically after 5 minutes using MongoDB TTL indexes.
+   - Network API response payloads never expose plaintext verification passcodes.
+2. **Atomic MongoDB Operations**:
+   - View increments use `$inc: { views_count: 1 }` to prevent race conditions during high concurrent traffic.
+3. **Optimized Frontend Rendering**:
+   - Next.js Turbopack compiler.
+   - Debounced search inputs to eliminate query thrashing.
+   - Memoized filter computations for zero-lag client-side responsiveness.
