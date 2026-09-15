@@ -257,12 +257,6 @@ export const sendPhoneOtp = async (
     // Securely hash OTP with bcrypt before persisting to database
     const hashedOtp = await bcrypt.hash(generatedOtp, 10);
 
-    // Generate cryptographically signed encrypted token for the session
-    const encryptedToken = crypto
-      .createHmac("sha256", process.env.JWT_SECRET || "cineverse_super_secret_jwt_key_2024_secure")
-      .update(`${cleanIdentifier}:${Date.now()}:${hashedOtp}`)
-      .digest("hex");
-
     const mode = req.body.mode; // "signin" | "register" | "signup" | undefined
 
     if (isEmail) {
@@ -283,7 +277,7 @@ export const sendPhoneOtp = async (
         );
       }
 
-      // Save/Refresh encrypted OTP in database
+      // Save/Refresh encrypted OTP in database (Bcrypt Hashing)
       await Otp.deleteMany({ $or: [{ identifier: cleanEmail }, { email: cleanEmail }] });
       await Otp.create({
         identifier: cleanEmail,
@@ -310,8 +304,6 @@ export const sendPhoneOtp = async (
         message: `Verification code sent to ${cleanEmail}! Please check your Inbox.`,
         identifier: cleanEmail,
         email: cleanEmail,
-        encrypted_token: `enc_${encryptedToken}`,
-        security_hash: hashedOtp,
       });
       return;
     }
@@ -333,7 +325,7 @@ export const sendPhoneOtp = async (
       );
     }
 
-    // Save/Refresh encrypted OTP in database
+    // Save/Refresh encrypted OTP in database (Bcrypt Hashing)
     await Otp.deleteMany({ $or: [{ identifier: cleanPhone }, { phone: cleanPhone }] });
     await Otp.create({
       identifier: cleanPhone,
@@ -357,8 +349,6 @@ export const sendPhoneOtp = async (
       identifier: cleanPhone,
       phone: cleanPhone,
       country_code: countryCode,
-      encrypted_token: `enc_${encryptedToken}`,
-      security_hash: hashedOtp,
     });
   } catch (error) {
     next(error);

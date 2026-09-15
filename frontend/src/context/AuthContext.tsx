@@ -22,8 +22,6 @@ interface AuthContextType {
     isNewUser?: boolean;
     user_name?: string;
     message: string;
-    encrypted_token?: string;
-    security_hash?: string;
   }>;
   verifyPhoneOtp: (
     identifier: string,
