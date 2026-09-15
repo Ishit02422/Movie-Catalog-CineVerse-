@@ -17,6 +17,17 @@ const sampleMovies = [
     views_count: 4230000,
   },
   {
+    title: "The Conjuring",
+    genre: "Horror",
+    release_year: 2013,
+    description: "Paranormal investigators Ed and Lorraine Warren work to help a family terrorized by a dark presence in their farmhouse.",
+    image_url: "https://image.tmdb.org/t/p/original/wVYREutTvI2tmxr6ujrHT704wGF.jpg",
+    status: "active",
+    is_featured: true,
+    rating: 7.5,
+    views_count: 4950000,
+  },
+  {
     title: "The Dark Knight",
     genre: "Action",
     release_year: 2008,

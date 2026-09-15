@@ -34,6 +34,7 @@ const realPopularityMap: Record<string, { views: number; rating: number }> = {
   "Spirited Away": { views: 2430000, rating: 8.6 },
   "Whiplash": { views: 2210000, rating: 8.5 },
   "Grand Budapest Hotel": { views: 1960000, rating: 8.1 },
+  "The Conjuring": { views: 4950000, rating: 7.5 },
 };
 
 async function updatePopularity() {
