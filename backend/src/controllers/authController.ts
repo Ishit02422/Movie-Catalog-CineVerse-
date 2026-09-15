@@ -378,26 +378,45 @@ export const verifyPhoneOtp = async (
     const isEmail = inputStr.includes("@");
     const cleanIdentifier = isEmail ? inputStr.toLowerCase() : inputStr.replace(/\D/g, "");
 
-    // 1. Verify in MongoDB against bcrypt-hashed OTP
-    const validOtpDoc = await Otp.findOne({
+    // 1. Find OTP document in database for this identifier
+    const existingOtpDoc = await Otp.findOne({
       $or: [
         { identifier: cleanIdentifier },
         { phone: cleanIdentifier },
         { email: cleanIdentifier },
       ],
-      expires_at: { $gt: new Date() },
-    });
+    }).sort({ created_at: -1 });
 
-    let isDbOtpValid = false;
-    if (validOtpDoc && validOtpDoc.otp) {
-      isDbOtpValid = (await bcrypt.compare(cleanOtp, validOtpDoc.otp)) || (validOtpDoc.otp === cleanOtp);
-    }
+    if (!existingOtpDoc) {
+      // If no document is in DB, check Twilio if phone, else report expired/not requested
+      const isTwilioValid = !isEmail ? await verifyTwilioOtp(cleanIdentifier, cleanOtp) : false;
+      if (!isTwilioValid) {
+        throw new ApiError("Your verification code has expired. Please click 'Resend Code' to request a new code.", 400);
+      }
+    } else {
+      // 2. Check if the OTP record has expired
+      const now = new Date();
+      if (now > new Date(existingOtpDoc.expires_at)) {
+        await Otp.deleteMany({
+          $or: [
+            { identifier: cleanIdentifier },
+            { phone: cleanIdentifier },
+            { email: cleanIdentifier },
+          ],
+        });
+        throw new ApiError("Your verification code has expired. Please click 'Resend Code' to request a new code.", 400);
+      }
 
-    // 2. Or verify with Twilio
-    const isTwilioValid = !isEmail && !isDbOtpValid ? await verifyTwilioOtp(cleanIdentifier, cleanOtp) : false;
+      // 3. Verify OTP code against bcrypt hash (or fallback plaintext)
+      const isDbOtpValid = (await bcrypt.compare(cleanOtp, existingOtpDoc.otp)) || (existingOtpDoc.otp === cleanOtp);
+      let isTwilioValid = false;
+      if (!isDbOtpValid && !isEmail) {
+        isTwilioValid = await verifyTwilioOtp(cleanIdentifier, cleanOtp);
+      }
 
-    if (!isDbOtpValid && !isTwilioValid) {
-      throw new ApiError("Invalid or expired OTP code. Please enter the valid 6-digit code.", 400);
+      if (!isDbOtpValid && !isTwilioValid) {
+        throw new ApiError("Invalid verification code. Please enter the correct 6-digit code.", 400);
+      }
     }
 
     // OTP is valid - delete it so it cannot be reused
