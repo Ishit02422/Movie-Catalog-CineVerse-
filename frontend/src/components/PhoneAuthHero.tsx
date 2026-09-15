@@ -440,6 +440,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
   const handleVerifyOtp = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     setError(null);
+    setSuccessMessage(null);
 
     const isNum = /^[0-9+ -]+$/.test(identifier.trim());
     const cleanVal = isNum ? identifier.trim().replace(/\D/g, "") : identifier.trim().toLowerCase();
@@ -1412,21 +1413,18 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                 </div>
               </div>
 
-              {/* Success Notification */}
-              {successMessage && (
-                <div className="p-3.5 sm:p-4 rounded-xl bg-emerald-950/50 border border-emerald-500/40 text-emerald-200 text-xs sm:text-sm flex items-start gap-2.5 animate-in fade-in">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-                  <span className="leading-snug">{successMessage}</span>
-                </div>
-              )}
-
-              {/* Error Notification */}
-              {error && (
+              {/* Notification Banner: Render Error OR Success (Never Both Together) */}
+              {error ? (
                 <div className="p-3.5 sm:p-4 rounded-xl bg-red-950/50 border border-red-500/40 text-red-200 text-xs sm:text-sm flex items-start gap-2.5 animate-in fade-in">
                   <AlertCircle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
                   <span className="leading-snug">{error}</span>
                 </div>
-              )}
+              ) : successMessage ? (
+                <div className="p-3.5 sm:p-4 rounded-xl bg-emerald-950/50 border border-emerald-500/40 text-emerald-200 text-xs sm:text-sm flex items-start gap-2.5 animate-in fade-in">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                  <span className="leading-snug">{successMessage}</span>
+                </div>
+              ) : null}
 
               {/* Registration User Summary Badge */}
               {authMode === "register" && firstName && surname && (
@@ -1481,6 +1479,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                       onChange={(e) => {
                         setOtpCode(e.target.value.replace(/\D/g, ""));
                         if (error) setError(null);
+                        if (successMessage) setSuccessMessage(null);
                       }}
                       className="absolute inset-0 opacity-0 w-full h-full cursor-pointer z-10"
                       autoFocus
