@@ -1460,39 +1460,32 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
 
                   {/* Resend Code with 60s cooldown timer */}
                   <div className="flex items-center justify-between text-xs sm:text-sm px-1 text-slate-400 pt-1">
+                    <span>Didn&apos;t receive code?</span>
                     {resendCooldown > 0 ? (
-                      <>
-                        <span className="flex items-center gap-1.5 text-slate-400 font-medium">
-                          <Clock className="w-3.5 h-3.5 text-rose-400 animate-pulse" />
-                          <span>Resend code in</span>
-                        </span>
-                        <span className="font-mono font-bold text-rose-400 bg-rose-950/60 px-3 py-0.5 rounded-full border border-rose-800/40 text-xs shadow-sm tracking-wider">
-                          00:{resendCooldown.toString().padStart(2, "0")}
-                        </span>
-                      </>
+                      <span className="flex items-center gap-1.5 text-slate-400 font-medium select-none">
+                        <Clock className="w-3.5 h-3.5 text-rose-400 animate-pulse" />
+                        <span>Resend in <strong className="font-mono text-rose-400 font-bold">{resendCooldown}s</strong></span>
+                      </span>
                     ) : (
-                      <>
-                        <span>Didn&apos;t receive code?</span>
-                        <button
-                          type="button"
-                          onClick={handleResendOtp}
-                          disabled={isLoading}
-                          className="text-[#e50914] hover:underline font-bold cursor-pointer transition-colors"
-                        >
-                          Resend Code
-                        </button>
-                      </>
+                      <button
+                        type="button"
+                        onClick={handleResendOtp}
+                        disabled={isLoading}
+                        className="text-[#e50914] hover:underline font-bold cursor-pointer transition-colors"
+                      >
+                        Resend Code
+                      </button>
                     )}
                   </div>
                 </div>
 
-                {/* Big Red Button */}
+                {/* Big Red Submit Button - Strictly disabled until 6 digits entered */}
                 <button
                   type="submit"
                   disabled={isLoading || !isOtpValid}
                   className={`w-full py-4 rounded-xl font-black text-base sm:text-lg tracking-wide transition-all duration-300 flex items-center justify-center gap-2 mt-2 ${
                     !isOtpValid || isLoading
-                      ? "bg-red-950/40 text-white/40 border border-white/5 cursor-not-allowed shadow-none"
+                      ? "bg-slate-900/80 text-slate-500 border border-slate-800 cursor-not-allowed shadow-none opacity-60 select-none"
                       : "bg-[#e50914] hover:bg-[#b80710] text-white shadow-2xl shadow-red-950/60 active:scale-[0.98] cursor-pointer"
                   }`}
                 >
