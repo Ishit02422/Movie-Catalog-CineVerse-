@@ -247,7 +247,7 @@ export default function MovieDetailsPage() {
       {/* Sticky Header */}
       <Navbar />
 
-      <main className="flex-1 max-w-[1500px] w-full mx-auto px-4 sm:px-6 lg:px-10 py-6 sm:py-8 space-y-10 animate-in fade-in duration-500">
+      <main className="flex-1 w-full px-4 sm:px-8 lg:px-12 py-6 sm:py-8 space-y-8 sm:space-y-10 animate-in fade-in duration-500">
         {/* Top Back Navigation Bar */}
         <div className="flex items-center justify-between">
           <Link
@@ -513,8 +513,8 @@ export default function MovieDetailsPage() {
                   <span className="text-xs text-slate-400">Based on {movie.genre}</span>
                 </div>
 
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6">
-                  {similarMovies.slice(0, 5).map((simMovie) => (
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-5 sm:gap-6">
+                  {similarMovies.slice(0, 7).map((simMovie) => (
                     <MovieCard
                       key={simMovie.id || (simMovie as any)._id}
                       movie={simMovie}
@@ -768,7 +768,7 @@ export default function MovieDetailsPage() {
 
       {/* Footer */}
       <footer className="border-t border-slate-900 bg-slate-950/80 py-8 text-center text-xs text-slate-500 mt-12">
-        <div className="max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-10 space-y-2">
+        <div className="w-full px-4 sm:px-8 lg:px-12 space-y-2">
           <p className="font-medium text-slate-400">
             CineVerse Movie Catalog Application &copy; {new Date().getFullYear()}
           </p>

@@ -2,8 +2,8 @@ import React from "react";
 
 export const LoadingSkeleton: React.FC = () => {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-      {Array.from({ length: 8 }).map((_, idx) => (
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-5 sm:gap-6">
+      {Array.from({ length: 14 }).map((_, idx) => (
         <div
           key={idx}
           className="flex flex-col rounded-2xl bg-slate-900/40 border border-slate-800/60 overflow-hidden animate-pulse"

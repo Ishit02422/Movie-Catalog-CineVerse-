@@ -146,7 +146,7 @@ export default function Home() {
           m.genre.toLowerCase().includes(topGenre)
         );
       })
-      .slice(0, 5);
+      .slice(0, 7);
   }, [watchlist, recentlyViewed, movies]);
 
 
@@ -221,7 +221,7 @@ export default function Home() {
         onSelectTab={setActiveTab}
       />
 
-      <main className="flex-1 max-w-[1500px] w-full mx-auto px-4 sm:px-6 lg:px-10 py-6 sm:py-8 space-y-6 sm:space-y-8 animate-in fade-in duration-500">
+      <main className="flex-1 w-full px-4 sm:px-8 lg:px-12 py-6 sm:py-8 space-y-6 sm:space-y-8 animate-in fade-in duration-500">
         {/* Welcome User Banner with sleek, compact modern styling */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 sm:gap-6 bg-gradient-to-r from-slate-900/90 via-[#0a0f1d] to-slate-950 border border-slate-800/80 p-5 sm:p-6 rounded-2xl shadow-xl backdrop-blur-xl">
           <div className="flex items-center gap-3.5 sm:gap-4">
@@ -329,7 +329,7 @@ export default function Home() {
                 </button>
               </div>
             ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5 sm:gap-6">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-5 sm:gap-6">
                 {watchlist.map((movie) => (
                   <MovieCard
                     key={movie.id || (movie as any)._id}
@@ -448,7 +448,7 @@ export default function Home() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5 sm:gap-6">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-5 sm:gap-6">
                   {recommendedMovies.map((movie) => (
                     <MovieCard
                       key={movie.id || (movie as any)._id}
@@ -494,8 +494,8 @@ export default function Home() {
                   </button>
                 </div>
 
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5 sm:gap-6">
-                  {recentlyViewed.slice(0, 5).map((movie) => (
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-5 sm:gap-6">
+                  {recentlyViewed.slice(0, 7).map((movie) => (
                     <MovieCard
                       key={movie.id || (movie as any)._id}
                       movie={movie}
@@ -510,7 +510,7 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="border-t border-slate-900 bg-slate-950/90 py-10 text-center text-sm text-slate-400 mt-16">
-        <div className="max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-10 space-y-2">
+        <div className="w-full px-4 sm:px-8 lg:px-12 space-y-2">
           <p className="font-bold text-white text-base">
             CineVerse Movie Catalog Application &copy; {new Date().getFullYear()}
           </p>
