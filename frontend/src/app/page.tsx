@@ -212,7 +212,8 @@ export default function Home() {
 
   // 1. GUEST STATE: Full-screen Netflix-style Landing & Sign-in screens
   if (!isAuthenticated) {
-    return <PhoneAuthHero sampleMovies={featuredMovies.length > 0 ? featuredMovies : movies} />;
+    const featuredList = featuredMovies.length > 0 ? featuredMovies : movies.filter((m) => m.is_featured);
+    return <PhoneAuthHero sampleMovies={featuredList} />;
   }
 
   // 2. AUTHENTICATED STATE: Full Movie Catalog Dashboard

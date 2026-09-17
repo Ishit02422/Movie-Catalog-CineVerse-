@@ -121,7 +121,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
               className="w-full appearance-none px-4 py-3.5 pr-9 rounded-2xl bg-slate-950 border border-slate-800 text-slate-100 text-sm font-semibold focus:outline-none focus:border-rose-500 transition-all cursor-pointer shadow-sm hover:border-slate-700"
             >
               <option value="year_desc">Latest Releases ({new Date().getFullYear()} → 1950)</option>
-              <option value="views_desc">🔥 Most Popular / Highest Views</option>
+              <option value="views_desc">🔥  Most Popular / Highest Views</option>
               <option value="rating_desc">★ Top Rated (High to Low)</option>
               <option value="year_asc">Oldest Classics (1950 → {new Date().getFullYear()})</option>
               <option value="title_asc">Title (A → Z)</option>
