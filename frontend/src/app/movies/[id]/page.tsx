@@ -247,36 +247,36 @@ export default function MovieDetailsPage() {
       {/* Sticky Header */}
       <Navbar />
 
-      <main className="flex-1 w-full mx-auto px-4 sm:px-6 lg:px-10 py-6 sm:py-8 space-y-10 animate-in fade-in duration-500">
+      <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-8 animate-in fade-in duration-500">
         {/* Top Back Navigation Bar */}
         <div className="flex items-center justify-between">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800 transition-all active:scale-95 group text-sm font-medium"
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800 transition-all active:scale-95 group text-xs sm:text-sm font-semibold cursor-pointer"
           >
             <ArrowLeft className="w-4 h-4 text-rose-400 group-hover:-translate-x-1 transition-transform" />
             <span>Back to Movies</span>
           </Link>
 
           {movie && (
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2.5">
               {/* Add to Watchlist Button */}
               <button
                 type="button"
                 onClick={handleWatchlistToggle}
-                className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl border text-sm font-semibold transition-all cursor-pointer shadow-md active:scale-95 ${isSaved
+                className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl border text-xs sm:text-sm font-semibold transition-all cursor-pointer shadow-md active:scale-95 ${isSaved
                   ? "bg-[#e50914] text-white border-[#e50914] shadow-red-950/50"
                   : "bg-slate-900/80 hover:bg-[#e50914] text-slate-200 hover:text-white border-slate-800 hover:border-[#e50914]"
                   }`}
               >
                 {isSaved ? (
                   <>
-                    <Check className="w-4 h-4 stroke-[3]" />
+                    <Check className="w-3.5 h-3.5 stroke-[3]" />
                     <span>In My List</span>
                   </>
                 ) : (
                   <>
-                    <Bookmark className="w-4 h-4" />
+                    <Bookmark className="w-3.5 h-3.5" />
                     <span>+ My List</span>
                   </>
                 )}
@@ -286,16 +286,16 @@ export default function MovieDetailsPage() {
               <button
                 type="button"
                 onClick={handleShare}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800 text-sm font-medium transition-all cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800 text-xs sm:text-sm font-semibold transition-all cursor-pointer"
               >
                 {copied ? (
                   <>
-                    <Check className="w-4 h-4 text-emerald-400" />
+                    <Check className="w-3.5 h-3.5 text-emerald-400" />
                     <span className="text-emerald-400">Link Copied!</span>
                   </>
                 ) : (
                   <>
-                    <Share2 className="w-4 h-4 text-slate-400" />
+                    <Share2 className="w-3.5 h-3.5 text-slate-400" />
                     <span>Share</span>
                   </>
                 )}
@@ -306,33 +306,33 @@ export default function MovieDetailsPage() {
 
         {/* Loading State Skeleton */}
         {isLoading && (
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 animate-pulse">
-            <div className="md:col-span-4 lg:col-span-3 aspect-[2/3] rounded-3xl bg-slate-900 border border-slate-800/80" />
-            <div className="md:col-span-8 lg:col-span-9 space-y-6 pt-4">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-8 animate-pulse bg-slate-900/60 border border-slate-800/80 rounded-2xl p-6 sm:p-8">
+            <div className="md:col-span-5 lg:col-span-4 aspect-[2/3] max-w-[280px] rounded-xl bg-slate-800" />
+            <div className="md:col-span-7 lg:col-span-8 space-y-4 pt-2">
               <div className="h-6 w-28 bg-slate-800 rounded-full" />
-              <div className="h-10 w-3/4 bg-slate-800 rounded-xl" />
-              <div className="h-4 w-full bg-slate-900 rounded" />
-              <div className="h-4 w-5/6 bg-slate-900 rounded" />
-              <div className="h-4 w-2/3 bg-slate-900 rounded" />
+              <div className="h-9 w-3/4 bg-slate-800 rounded-xl" />
+              <div className="h-4 w-full bg-slate-800/60 rounded" />
+              <div className="h-4 w-5/6 bg-slate-800/60 rounded" />
+              <div className="h-4 w-2/3 bg-slate-800/60 rounded" />
             </div>
           </div>
         )}
 
         {/* Error / 404 Not Found State */}
         {!isLoading && (error || !movie) && (
-          <div className="w-full rounded-3xl border border-slate-800/80 bg-slate-900/40 p-12 text-center space-y-6 max-w-xl mx-auto my-12 backdrop-blur-xl">
-            <div className="w-20 h-20 rounded-3xl bg-rose-500/10 text-rose-400 flex items-center justify-center mx-auto border border-rose-500/20 shadow-lg shadow-rose-500/10">
-              <AlertCircle className="w-10 h-10" />
+          <div className="w-full rounded-2xl border border-slate-800/80 bg-slate-900/40 p-10 text-center space-y-4 max-w-lg mx-auto my-8 backdrop-blur-xl">
+            <div className="w-14 h-14 rounded-2xl bg-rose-500/10 text-rose-400 flex items-center justify-center mx-auto border border-rose-500/20 shadow-lg shadow-rose-500/10">
+              <AlertCircle className="w-7 h-7" />
             </div>
-            <div className="space-y-2">
-              <h2 className="text-2xl font-bold text-white">Movie Not Found</h2>
-              <p className="text-sm text-slate-400 leading-relaxed">
+            <div className="space-y-1">
+              <h2 className="text-xl font-bold text-white">Movie Not Found</h2>
+              <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
                 {error || "The movie you are looking for does not exist or has been removed."}
               </p>
             </div>
             <Link
               href="/"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-600 text-white font-semibold text-sm shadow-lg shadow-rose-600/30 transition-all hover:scale-105 active:scale-95"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-600 text-white font-semibold text-xs sm:text-sm shadow-lg shadow-rose-600/30 transition-all hover:scale-105 active:scale-95"
             >
               <Home className="w-4 h-4" />
               <span>Explore All Movies</span>
@@ -342,10 +342,10 @@ export default function MovieDetailsPage() {
 
         {/* Main Movie Content */}
         {!isLoading && movie && (
-          <div className="space-y-12">
-            {/* Main Header / Banner Grid with subtle backdrop glow */}
-            <div className="relative rounded-3xl border border-slate-800/80 bg-gradient-to-br from-slate-900/90 via-[#0a0f1d] to-slate-950 p-6 sm:p-8 lg:p-10 shadow-2xl overflow-hidden">
-              {/* Ambient Glow */}
+          <div className="space-y-10">
+            {/* Main Header / Showcase Card */}
+            <div className="relative rounded-2xl border border-slate-800/80 bg-gradient-to-br from-slate-900/90 via-[#0a0f1d] to-slate-950 p-6 sm:p-8 shadow-xl overflow-hidden backdrop-blur-xl">
+              {/* Subtle Ambient Glow */}
               <div className="absolute inset-0 overflow-hidden pointer-events-none">
                 <img
                   src={imageError ? fallbackImage : (movie.image_url || fallbackImage)}
@@ -356,10 +356,10 @@ export default function MovieDetailsPage() {
                 <div className="absolute inset-0 bg-gradient-to-t from-[#060911] via-[#060911]/80 to-transparent" />
               </div>
 
-              <div className="relative z-10 grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 items-start">
+              <div className="relative z-10 grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-8 items-start">
                 {/* Poster Column */}
-                <div className="md:col-span-4 lg:col-span-3">
-                  <div className="relative aspect-[2/3] w-full max-w-[340px] mx-auto md:mx-0 rounded-2xl overflow-hidden bg-slate-950 border border-slate-800/80 shadow-2xl shadow-black/80 group">
+                <div className="md:col-span-5 lg:col-span-4 flex justify-center md:justify-start">
+                  <div className="relative aspect-[2/3] w-full max-w-[260px] sm:max-w-[290px] rounded-xl overflow-hidden bg-slate-950 border border-slate-800 shadow-2xl shadow-black/80 group">
                     <img
                       src={imageError ? fallbackImage : (movie.image_url || fallbackImage)}
                       alt={movie.title}
@@ -372,18 +372,18 @@ export default function MovieDetailsPage() {
                     <button
                       type="button"
                       onClick={handleOpenTrailer}
-                      className="absolute inset-0 m-auto w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-rose-600/90 hover:bg-rose-600 text-white flex items-center justify-center shadow-2xl shadow-rose-600/50 backdrop-blur-sm transition-all hover:scale-110 active:scale-95 cursor-pointer"
+                      className="absolute inset-0 m-auto w-13 h-13 sm:w-14 sm:h-14 rounded-full bg-rose-600/90 hover:bg-rose-600 text-white flex items-center justify-center shadow-2xl shadow-rose-600/50 backdrop-blur-sm transition-all hover:scale-110 active:scale-95 cursor-pointer"
                       title="Watch Official Trailer on YouTube"
                     >
-                      <Play className="w-6 h-6 sm:w-7 sm:h-7 fill-white translate-x-0.5" />
+                      <Play className="w-6 h-6 fill-white translate-x-0.5" />
                     </button>
                   </div>
                 </div>
 
                 {/* Info Column */}
-                <div className="md:col-span-8 lg:col-span-9 space-y-6">
+                <div className="md:col-span-7 lg:col-span-8 space-y-4 sm:space-y-5">
                   {/* Badges & Meta */}
-                  <div className="flex flex-wrap items-center gap-2.5">
+                  <div className="flex flex-wrap items-center gap-2">
                     <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-[#e50914] text-white shadow-md shadow-red-950/40">
                       {movie.genre}
                     </span>
@@ -400,13 +400,13 @@ export default function MovieDetailsPage() {
                   </div>
 
                   {/* Movie Title */}
-                  <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">
+                  <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight leading-tight">
                     {movie.title}
                   </h1>
 
                   {/* Star Rating Bar */}
                   {movie.rating !== undefined && movie.rating >= 5 && movie.rating <= 10 && (
-                    <div className="flex items-center gap-3 bg-slate-950/60 border border-slate-800/80 p-3 rounded-xl w-fit">
+                    <div className="flex items-center gap-3 bg-slate-950/60 border border-slate-800/80 p-2.5 rounded-xl w-fit">
                       <div className="flex items-center gap-1">
                         {[1, 2, 3, 4, 5].map((star) => {
                           const normalizedRating = movie.rating! / 2; // out of 5
@@ -432,11 +432,11 @@ export default function MovieDetailsPage() {
                   )}
 
                   {/* Action Buttons Row */}
-                  <div className="flex flex-wrap items-center gap-3 pt-2">
+                  <div className="flex flex-wrap items-center gap-2.5 pt-1">
                     <button
                       type="button"
                       onClick={handleOpenTrailer}
-                      className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-600 text-white font-bold text-xs sm:text-sm shadow-xl shadow-rose-600/30 flex items-center gap-2 cursor-pointer transition-all active:scale-95"
+                      className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-600 text-white font-bold text-xs sm:text-sm shadow-lg shadow-rose-600/30 flex items-center gap-2 cursor-pointer transition-all active:scale-95"
                     >
                       <Play className="w-4 h-4 fill-white" />
                       <span>Watch Trailer</span>
@@ -456,19 +456,19 @@ export default function MovieDetailsPage() {
                   </div>
 
                   {/* Overview / Description */}
-                  <div className="space-y-2 pt-2">
-                    <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
+                  <div className="space-y-1.5 pt-1">
+                    <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
                       <Film className="w-3.5 h-3.5 text-rose-400" />
                       Synopsis
                     </h3>
-                    <p className="text-slate-300 text-sm sm:text-base leading-relaxed font-normal max-w-4xl">
+                    <p className="text-slate-300 text-xs sm:text-sm leading-relaxed font-normal">
                       {movie.description}
                     </p>
                   </div>
 
                   {/* Quick Spec Highlights Grid */}
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2">
-                    <div className="bg-slate-950/70 border border-slate-800/90 rounded-xl p-3.5 space-y-1">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 pt-1">
+                    <div className="bg-slate-950/70 border border-slate-800/90 rounded-xl p-3 space-y-0.5">
                       <div className="flex items-center gap-1.5 text-xs text-slate-400">
                         <Film className="w-3.5 h-3.5 text-rose-400" />
                         <span>Genre</span>
@@ -476,7 +476,7 @@ export default function MovieDetailsPage() {
                       <p className="text-xs sm:text-sm font-bold text-white">{movie.genre}</p>
                     </div>
 
-                    <div className="bg-slate-950/70 border border-slate-800/90 rounded-xl p-3.5 space-y-1">
+                    <div className="bg-slate-950/70 border border-slate-800/90 rounded-xl p-3 space-y-0.5">
                       <div className="flex items-center gap-1.5 text-xs text-slate-400">
                         <Calendar className="w-3.5 h-3.5 text-blue-400" />
                         <span>Release Year</span>
@@ -484,7 +484,7 @@ export default function MovieDetailsPage() {
                       <p className="text-xs sm:text-sm font-bold text-white">{movie.release_year}</p>
                     </div>
 
-                    <div className="bg-slate-950/70 border border-slate-800/90 rounded-xl p-3.5 space-y-1">
+                    <div className="bg-slate-950/70 border border-slate-800/90 rounded-xl p-3 space-y-0.5">
                       <div className="flex items-center gap-1.5 text-xs text-slate-400">
                         <Eye className="w-3.5 h-3.5 text-emerald-400" />
                         <span>Popularity</span>
@@ -502,19 +502,19 @@ export default function MovieDetailsPage() {
             {/* SECTION: SIMILAR MOVIES ("MORE LIKE THIS")                                */}
             {/* ========================================================================= */}
             {similarMovies.length > 0 && (
-              <section className="space-y-6 pt-6 border-t border-slate-900">
+              <section className="space-y-5 pt-6 border-t border-slate-900">
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2.5">
-                    <Sparkles className="w-5 h-5 text-rose-400" />
-                    <h2 className="text-xl sm:text-2xl font-bold text-white">
+                  <div className="flex items-center gap-2">
+                    <Sparkles className="w-4.5 h-4.5 text-rose-400" />
+                    <h2 className="text-lg sm:text-xl font-bold text-white">
                       More Like This
                     </h2>
                   </div>
                   <span className="text-xs text-slate-400">Based on {movie.genre}</span>
                 </div>
 
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6">
-                  {similarMovies.slice(0, 6).map((simMovie) => (
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 sm:gap-6">
+                  {similarMovies.slice(0, 4).map((simMovie) => (
                     <MovieCard
                       key={simMovie.id || (simMovie as any)._id}
                       movie={simMovie}
