@@ -55,34 +55,6 @@ export const Navbar: React.FC<NavbarProps> = ({
               </span>
             </Link>
 
-            {/* Navigation Tabs */}
-            {isAuthenticated && onSelectTab && (
-              <nav className="hidden md:flex items-center gap-1.5 text-xs font-semibold">
-                <button
-                  type="button"
-                  onClick={() => onSelectTab("all")}
-                  className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
-                    activeTab === "all"
-                      ? "bg-rose-500/15 text-white border border-rose-500/30"
-                      : "text-slate-400 hover:text-slate-200 hover:bg-slate-900"
-                  }`}
-                >
-                  🍿 Browse Catalog
-                </button>
-                <button
-                  type="button"
-                  onClick={() => onSelectTab("watchlist")}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
-                    activeTab === "watchlist"
-                      ? "bg-rose-500/15 text-white border border-rose-500/30"
-                      : "text-slate-400 hover:text-slate-200 hover:bg-slate-900"
-                  }`}
-                >
-                  <Bookmark className="w-3.5 h-3.5 text-rose-400" />
-                  <span>My Watchlist ({watchlist.length})</span>
-                </button>
-              </nav>
-            )}
           </div>
 
           {/* User Profile & Logout Button if Authenticated */}
