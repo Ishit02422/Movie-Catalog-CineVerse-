@@ -17,10 +17,8 @@ import {
   Settings,
   Bookmark,
   Clock,
-  Flame,
   ArrowRight,
   RotateCcw,
-  Star,
 } from "lucide-react";
 
 export default function Home() {
@@ -29,16 +27,11 @@ export default function Home() {
   const {
     movies,
     featuredMovies,
-    availableGenres,
-    availableYears,
     recentlyViewed,
     recommendedMovies,
-    trendingMovies,
-    topRatedMovies,
     search,
     selectedGenre,
     selectedYear,
-    selectedSort,
     isFiltering,
     filteredMovies,
     catalogTitle,
@@ -315,37 +308,7 @@ export default function Home() {
               </section>
             )}
 
-            {/* ========================================================================= */}
-            {/* SECTION: TOP RATED MASTERPIECES                                           */}
-            {/* ========================================================================= */}
-            {!isFiltering && topRatedMovies.length > 0 && (
-              <section className="space-y-5 pt-8 border-t border-slate-900">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-xl bg-rose-500/15 border border-rose-500/30 flex items-center justify-center text-rose-400">
-                      <Flame className="w-4.5 h-4.5" />
-                    </div>
-                    <div>
-                      <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
-                        Top Rated Masterpieces
-                      </h2>
-                      <p className="text-xs text-slate-400 mt-0.5 font-normal">
-                        Highest rated critically acclaimed cinema
-                      </p>
-                    </div>
-                  </div>
-                </div>
 
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-5 sm:gap-6">
-                  {topRatedMovies.map((movie) => (
-                    <MovieCard
-                      key={movie.id || (movie as any)._id}
-                      movie={movie}
-                    />
-                  ))}
-                </div>
-              </section>
-            )}
 
             {/* ========================================================================= */}
             {/* SECTION: RECENTLY VIEWED                                                  */}
