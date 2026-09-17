@@ -149,12 +149,6 @@ export default function Home() {
       .slice(0, 4);
   }, [watchlist, recentlyViewed, movies]);
 
-  // Dynamic Top Trending Movies based on live real-time view counts
-  const trendingMovies = useMemo(() => {
-    return [...movies]
-      .sort((a, b) => (b.views_count || 0) - (a.views_count || 0) || (b.rating || 0) - (a.rating || 0))
-      .slice(0, 4);
-  }, [movies]);
 
   const handleClearFilters = () => {
     setSearch("");
@@ -434,40 +428,6 @@ export default function Home() {
               title={catalogTitle}
             />
 
-            {/* ========================================================================= */}
-            {/* SECTION: DYNAMIC TRENDING & MOST POPULAR (LIVE VIEWS)                     */}
-            {/* ========================================================================= */}
-            {!isFiltering && trendingMovies.length > 0 && (
-              <section className="space-y-6 pt-10 border-t border-slate-900">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-2xl bg-rose-500/15 border border-rose-500/30 flex items-center justify-center text-[#e50914] shadow-lg shadow-rose-950/40">
-                      <Flame className="w-5 h-5 fill-current" />
-                    </div>
-                    <div>
-                      <h2 className="text-2xl sm:text-3xl font-black text-white flex items-center gap-2.5">
-                        <span>Trending &amp; Most Popular</span>
-                        <span className="text-xs px-2.5 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30 font-bold uppercase tracking-wider">
-                          Live
-                        </span>
-                      </h2>
-                      <p className="text-sm text-slate-400 mt-0.5">
-                        Top watched blockbusters ranked dynamically by live viewer count
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-7">
-                  {trendingMovies.map((movie) => (
-                    <MovieCard
-                      key={`trending-${movie.id || (movie as any)._id}`}
-                      movie={movie}
-                    />
-                  ))}
-                </div>
-              </section>
-            )}
 
             {/* ========================================================================= */}
             {/* SECTION: PERSONALIZED RECOMMENDATIONS                                     */}
