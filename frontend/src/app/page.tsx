@@ -221,33 +221,31 @@ export default function Home() {
         onSelectTab={setActiveTab}
       />
 
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-12 animate-in fade-in duration-500">
-        {/* Welcome User Banner with larger, bolder styling */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-gradient-to-r from-slate-900/90 via-slate-900/80 to-slate-950 border border-slate-800 p-6 sm:p-8 rounded-3xl shadow-2xl backdrop-blur-xl">
-          <div className="flex items-center gap-5">
-            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-tr from-[#e50914] to-rose-600 flex items-center justify-center font-black text-white shadow-xl shadow-rose-600/30 text-2xl shrink-0">
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-8 sm:space-y-10 animate-in fade-in duration-500">
+        {/* Welcome User Banner with sleek, compact modern styling */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 sm:gap-6 bg-gradient-to-r from-slate-900/90 via-[#0a0f1d] to-slate-950 border border-slate-800/80 p-5 sm:p-6 rounded-2xl shadow-xl backdrop-blur-xl">
+          <div className="flex items-center gap-3.5 sm:gap-4">
+            <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-tr from-[#e50914] to-rose-600 flex items-center justify-center font-bold text-white shadow-md shadow-rose-600/30 text-lg sm:text-xl shrink-0">
               {user?.first_name ? user.first_name.charAt(0).toUpperCase() : user?.name ? user.name.charAt(0).toUpperCase() : "M"}
             </div>
             <div>
-              <h2 className="text-xl sm:text-2xl lg:text-3xl font-black text-white tracking-tight">
-                Welcome back <br /> {user?.name
-                  || `Member +91-${user?.phone?.slice(-4)}`}
-
+              <h2 className="text-base sm:text-lg lg:text-xl font-bold text-white tracking-tight">
+                Welcome back, <span className="font-black text-white">{user?.name || `Member +91-${user?.phone?.slice(-4)}`}</span>
               </h2>
-              <p className="text-sm sm:text-base text-slate-300 mt-1">
+              <p className="text-xs sm:text-sm text-slate-400 mt-0.5">
                 Your personalized movie catalog and entertainment streaming portal is active.
               </p>
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="flex flex-wrap items-center gap-2.5">
             {/* View Mode Toggle: All Movies / My List */}
-            <div className="inline-flex rounded-2xl bg-slate-950 p-1.5 border border-slate-800 text-sm font-bold shadow-inner">
+            <div className="inline-flex rounded-xl bg-slate-950 p-1 border border-slate-800/80 text-xs font-semibold shadow-inner">
               <button
                 type="button"
                 onClick={() => setActiveTab("all")}
-                className={`px-5 py-2.5 rounded-xl transition-all cursor-pointer ${activeTab === "all"
-                  ? "bg-[#e50914] text-white shadow-md shadow-rose-600/30"
+                className={`px-3.5 py-1.5 rounded-lg transition-all cursor-pointer ${activeTab === "all"
+                  ? "bg-[#e50914] text-white shadow-sm"
                   : "text-slate-400 hover:text-white"
                   }`}
               >
@@ -256,12 +254,12 @@ export default function Home() {
               <button
                 type="button"
                 onClick={() => setActiveTab("watchlist")}
-                className={`flex items-center gap-2 px-5 py-2.5 rounded-xl transition-all cursor-pointer ${activeTab === "watchlist"
-                  ? "bg-[#e50914] text-white shadow-md shadow-rose-600/30"
+                className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg transition-all cursor-pointer ${activeTab === "watchlist"
+                  ? "bg-[#e50914] text-white shadow-sm"
                   : "text-slate-400 hover:text-white"
                   }`}
               >
-                <Bookmark className="w-4 h-4" />
+                <Bookmark className="w-3.5 h-3.5" />
                 <span>My List ({watchlist.length})</span>
               </button>
             </div>
@@ -269,9 +267,9 @@ export default function Home() {
             <button
               type="button"
               onClick={() => setIsProfileOpen(true)}
-              className="inline-flex items-center gap-2 px-5 py-3.5 rounded-2xl bg-slate-800 hover:bg-slate-750 text-sm font-bold text-white border border-slate-700 hover:border-rose-500/50 transition-all cursor-pointer active:scale-95 shadow-lg"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-xs font-semibold text-slate-200 hover:text-white border border-slate-800 hover:border-slate-700 transition-all cursor-pointer shadow-sm"
             >
-              <Settings className="w-4 h-4 text-rose-400" />
+              <Settings className="w-3.5 h-3.5 text-rose-400" />
               <span>Edit Profile</span>
             </button>
           </div>
@@ -287,15 +285,15 @@ export default function Home() {
         {/* TAB 1: WATCHLIST / MY LIST VIEW                                           */}
         {/* ========================================================================= */}
         {activeTab === "watchlist" && (
-          <section className="space-y-8 animate-in fade-in duration-300">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-5">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-rose-500/15 border border-rose-500/30 text-[#e50914] flex items-center justify-center shadow-lg">
-                  <Bookmark className="w-6 h-6" />
+          <section className="space-y-6 animate-in fade-in duration-300">
+            <div className="flex items-center justify-between border-b border-slate-800/80 pb-4">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-xl bg-rose-500/15 border border-rose-500/30 text-[#e50914] flex items-center justify-center shadow-md">
+                  <Bookmark className="w-4.5 h-4.5" />
                 </div>
                 <div>
-                  <h1 className="text-2xl sm:text-3xl font-black text-white">My Watchlist</h1>
-                  <p className="text-sm text-slate-400 mt-0.5">
+                  <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight">My Watchlist</h1>
+                  <p className="text-xs text-slate-400 mt-0.5">
                     Movies you have saved to watch later ({watchlist.length} movies)
                   </p>
                 </div>
@@ -304,34 +302,34 @@ export default function Home() {
               <button
                 type="button"
                 onClick={() => setActiveTab("all")}
-                className="text-sm font-bold text-slate-300 hover:text-white flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-900 border border-slate-800 hover:border-slate-700 cursor-pointer transition-colors"
+                className="text-xs font-semibold text-slate-300 hover:text-white flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 hover:border-slate-700 cursor-pointer transition-colors"
               >
                 <span>Browse All Movies</span>
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight className="w-3.5 h-3.5" />
               </button>
             </div>
 
             {watchlist.length === 0 ? (
-              <div className="py-20 text-center space-y-5 rounded-3xl bg-slate-900/50 border border-slate-800 p-8">
-                <div className="w-20 h-20 rounded-3xl bg-slate-800 text-slate-400 flex items-center justify-center mx-auto shadow-inner">
-                  <Bookmark className="w-10 h-10" />
+              <div className="py-16 text-center space-y-4 rounded-2xl bg-slate-900/40 border border-slate-800/80 p-6">
+                <div className="w-14 h-14 rounded-2xl bg-slate-800 text-slate-400 flex items-center justify-center mx-auto shadow-inner">
+                  <Bookmark className="w-7 h-7" />
                 </div>
-                <div className="space-y-2">
-                  <h3 className="text-2xl font-bold text-white">Your Watchlist is empty</h3>
-                  <p className="text-base text-slate-400 max-w-md mx-auto">
+                <div className="space-y-1">
+                  <h3 className="text-lg font-bold text-white">Your Watchlist is empty</h3>
+                  <p className="text-xs text-slate-400 max-w-sm mx-auto">
                     Click the Bookmark icon on any movie card or detail page to save your favorite movies here.
                   </p>
                 </div>
                 <button
                   type="button"
                   onClick={() => setActiveTab("all")}
-                  className="px-8 py-3.5 rounded-2xl bg-[#e50914] hover:bg-rose-600 text-white font-bold text-base shadow-xl shadow-rose-600/40 transition-all cursor-pointer"
+                  className="px-5 py-2.5 rounded-xl bg-[#e50914] hover:bg-rose-600 text-white font-bold text-xs shadow-lg shadow-rose-600/40 transition-all cursor-pointer"
                 >
                   Explore Catalog Now
                 </button>
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-7">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 sm:gap-6">
                 {watchlist.map((movie) => (
                   <MovieCard
                     key={movie.id || (movie as any)._id}
@@ -373,47 +371,47 @@ export default function Home() {
 
             {/* Active Filter Tags with 1-Click Clear */}
             {(search.trim() !== "" || selectedGenre !== "All" || selectedYear !== "") && (
-              <div className="flex flex-wrap items-center gap-3 -mt-4 bg-slate-900/80 p-4 rounded-2xl border border-slate-800 shadow-md animate-in fade-in">
-                <span className="text-sm font-bold text-slate-300">Active Filters:</span>
+              <div className="flex flex-wrap items-center gap-2 -mt-4 bg-slate-900/80 p-3 sm:p-3.5 rounded-xl border border-slate-800/80 shadow-md animate-in fade-in">
+                <span className="text-xs font-bold text-slate-300">Active Filters:</span>
                 {selectedYear && (
                   <button
                     type="button"
                     onClick={() => setSelectedYear("")}
-                    className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-rose-500/20 border border-rose-500/40 text-rose-200 text-sm font-bold hover:bg-rose-500/30 transition-all cursor-pointer"
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-rose-500/20 border border-rose-500/40 text-rose-200 text-xs font-semibold hover:bg-rose-500/30 transition-all cursor-pointer"
                     title="Click to remove Year filter"
                   >
                     <span>📅 Year: {selectedYear}</span>
-                    <span className="text-rose-400 font-black ml-1">✕</span>
+                    <span className="text-rose-400 font-bold ml-0.5">✕</span>
                   </button>
                 )}
                 {selectedGenre !== "All" && (
                   <button
                     type="button"
                     onClick={() => setSelectedGenre("All")}
-                    className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-rose-500/20 border border-rose-500/40 text-rose-200 text-sm font-bold hover:bg-rose-500/30 transition-all cursor-pointer"
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-rose-500/20 border border-rose-500/40 text-rose-200 text-xs font-semibold hover:bg-rose-500/30 transition-all cursor-pointer"
                     title="Click to remove Genre filter"
                   >
                     <span>⚡ Genre: {selectedGenre}</span>
-                    <span className="text-rose-400 font-black ml-1">✕</span>
+                    <span className="text-rose-400 font-bold ml-0.5">✕</span>
                   </button>
                 )}
                 {search.trim() !== "" && (
                   <button
                     type="button"
                     onClick={() => setSearch("")}
-                    className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-rose-500/20 border border-rose-500/40 text-rose-200 text-sm font-bold hover:bg-rose-500/30 transition-all cursor-pointer"
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-rose-500/20 border border-rose-500/40 text-rose-200 text-xs font-semibold hover:bg-rose-500/30 transition-all cursor-pointer"
                     title="Click to clear search text"
                   >
                     <span>🔍 Search: &ldquo;{search.trim()}&rdquo;</span>
-                    <span className="text-rose-400 font-black ml-1">✕</span>
+                    <span className="text-rose-400 font-bold ml-0.5">✕</span>
                   </button>
                 )}
                 <button
                   type="button"
                   onClick={handleClearFilters}
-                  className="flex items-center gap-1.5 text-sm font-bold text-rose-400 hover:text-rose-300 ml-auto transition-colors cursor-pointer"
+                  className="flex items-center gap-1 text-xs font-bold text-rose-400 hover:text-rose-300 ml-auto transition-colors cursor-pointer"
                 >
-                  <RotateCcw className="w-4 h-4" />
+                  <RotateCcw className="w-3.5 h-3.5" />
                   <span>Reset All</span>
                 </button>
               </div>
@@ -433,24 +431,24 @@ export default function Home() {
             {/* SECTION: PERSONALIZED RECOMMENDATIONS                                     */}
             {/* ========================================================================= */}
             {!isFiltering && recommendedMovies.length > 0 && (
-              <section className="space-y-6 pt-10 border-t border-slate-900">
+              <section className="space-y-5 pt-8 border-t border-slate-900">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-2xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400">
-                      <Sparkles className="w-5 h-5" />
+                    <div className="w-9 h-9 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400">
+                      <Sparkles className="w-4.5 h-4.5" />
                     </div>
                     <div>
-                      <h2 className="text-2xl sm:text-3xl font-black text-white">
+                      <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
                         Recommended For You
                       </h2>
-                      <p className="text-sm text-slate-400 mt-0.5">
+                      <p className="text-xs text-slate-400 mt-0.5 font-normal">
                         Tailored to your favorite genres and viewing patterns
                       </p>
                     </div>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-7">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 sm:gap-6">
                   {recommendedMovies.map((movie) => (
                     <MovieCard
                       key={movie.id || (movie as any)._id}
@@ -465,17 +463,17 @@ export default function Home() {
             {/* SECTION: RECENTLY VIEWED                                                  */}
             {/* ========================================================================= */}
             {!isFiltering && recentlyViewed.length > 0 && (
-              <section className="space-y-6 pt-10 border-t border-slate-900">
+              <section className="space-y-5 pt-8 border-t border-slate-900">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-2xl bg-blue-500/15 border border-blue-500/30 flex items-center justify-center text-blue-400">
-                      <Clock className="w-5 h-5" />
+                    <div className="w-9 h-9 rounded-xl bg-blue-500/15 border border-blue-500/30 flex items-center justify-center text-blue-400">
+                      <Clock className="w-4.5 h-4.5" />
                     </div>
                     <div>
-                      <h2 className="text-2xl sm:text-3xl font-black text-white">
+                      <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
                         Recently Viewed
                       </h2>
-                      <p className="text-sm text-slate-400 mt-0.5">
+                      <p className="text-xs text-slate-400 mt-0.5 font-normal">
                         Quickly resume movies you looked at recently
                       </p>
                     </div>
@@ -490,13 +488,13 @@ export default function Home() {
                       localStorage.removeItem("cineverse_recently_viewed");
                       setRecentlyViewed([]);
                     }}
-                    className="text-sm font-semibold text-slate-400 hover:text-rose-400 transition-colors cursor-pointer px-3.5 py-1.5 rounded-xl bg-slate-900 border border-slate-800"
+                    className="text-xs font-semibold text-slate-400 hover:text-rose-400 transition-colors cursor-pointer px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800"
                   >
                     Clear History
                   </button>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-7">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 sm:gap-6">
                   {recentlyViewed.slice(0, 4).map((movie) => (
                     <MovieCard
                       key={movie.id || (movie as any)._id}

@@ -40,7 +40,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({ movie, onPlayTrailer }) =>
   return (
     <Link
       href={`/movies/${movieId}`}
-      className="group relative flex flex-col overflow-hidden rounded-3xl bg-slate-900/80 border border-slate-800 hover:border-rose-500/60 transition-all duration-300 hover:shadow-2xl hover:shadow-rose-950/40 hover:-translate-y-2 focus:outline-none focus:ring-2 focus:ring-rose-500"
+      className="group relative flex flex-col overflow-hidden rounded-2xl bg-slate-900/90 border border-slate-800/80 hover:border-rose-500/50 transition-all duration-300 hover:shadow-xl hover:shadow-rose-950/30 hover:-translate-y-1.5 focus:outline-none focus:ring-2 focus:ring-rose-500/40"
     >
       {/* Poster Image Container */}
       <div className="relative aspect-[2/3] w-full overflow-hidden bg-slate-950">
@@ -56,13 +56,13 @@ export const MovieCard: React.FC<MovieCardProps> = ({ movie, onPlayTrailer }) =>
         <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/25 to-transparent opacity-60 group-hover:opacity-85 transition-opacity duration-300" />
 
         {/* Top Badges: Genre & Rating & Watchlist */}
-        <div className="absolute top-3.5 inset-x-3.5 flex items-center justify-between z-10">
-          <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold bg-slate-950/95 text-rose-300 border border-rose-500/30 backdrop-blur-md shadow-md">
+        <div className="absolute top-3 inset-x-3 flex items-center justify-between z-10">
+          <span className="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-950/90 text-rose-300 border border-rose-500/30 backdrop-blur-md shadow-sm">
             {movie.genre}
           </span>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5">
             {movie.rating !== undefined && movie.rating >= 5 && movie.rating <= 10 && (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-black bg-slate-950/95 text-amber-300 border border-amber-500/30 backdrop-blur-md shadow-md">
+              <span className="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-bold bg-slate-950/90 text-amber-300 border border-amber-500/30 backdrop-blur-md shadow-sm">
                 <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
                 {movie.rating.toFixed(1)}
               </span>
@@ -72,15 +72,15 @@ export const MovieCard: React.FC<MovieCardProps> = ({ movie, onPlayTrailer }) =>
               type="button"
               onClick={handleWatchlistClick}
               title={isSaved ? "Saved in My List (Click to remove)" : "Add to My List"}
-              className={`w-9 h-9 rounded-full flex items-center justify-center transition-all cursor-pointer shadow-lg active:scale-90 ${isSaved
+              className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all cursor-pointer shadow-md active:scale-90 ${isSaved
                   ? "bg-[#e50914] text-white border-2 border-white shadow-rose-950 scale-105"
                   : "bg-black/80 hover:bg-[#e50914] text-white border border-white/30 hover:border-white backdrop-blur-md"
                 }`}
             >
               {isSaved ? (
-                <Check className="w-4 h-4 stroke-[3]" />
+                <Check className="w-3.5 h-3.5 stroke-[3]" />
               ) : (
-                <Bookmark className="w-4 h-4" />
+                <Bookmark className="w-3.5 h-3.5" />
               )}
             </button>
           </div>
@@ -91,25 +91,25 @@ export const MovieCard: React.FC<MovieCardProps> = ({ movie, onPlayTrailer }) =>
           <button
             type="button"
             onClick={handleTrailerClick}
-            className="pointer-events-auto flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-[#e50914] hover:bg-rose-600 text-white font-bold text-xs shadow-2xl shadow-rose-600/60 border border-rose-400/40 cursor-pointer active:scale-95 transition-all"
+            className="pointer-events-auto flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[#e50914] hover:bg-rose-600 text-white font-bold text-xs shadow-xl shadow-rose-600/50 border border-rose-400/30 cursor-pointer active:scale-95 transition-all"
           >
-            <Play className="w-4 h-4 fill-white" />
+            <Play className="w-3.5 h-3.5 fill-white" />
             <span>Watch Trailer</span>
           </button>
         </div>
       </div>
 
       {/* Card Content Details */}
-      <div className="flex flex-col flex-1 p-5 space-y-2.5">
-        {/* Release Year & Status with larger font */}
-        <div className="flex items-center justify-between text-xs sm:text-sm text-slate-400 font-medium">
+      <div className="flex flex-col flex-1 p-4 space-y-2">
+        {/* Release Year & Status with refined typography */}
+        <div className="flex items-center justify-between text-xs text-slate-400 font-medium">
           <div className="flex items-center gap-1.5">
-            <Calendar className="w-4 h-4 text-rose-500" />
+            <Calendar className="w-3.5 h-3.5 text-rose-500" />
             <span>{movie.release_year}</span>
           </div>
           {movie.views_count !== undefined && (
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-slate-800/80 border border-slate-700/60 text-emerald-400 font-bold text-xs shadow-sm">
-              <Eye className="w-3.5 h-3.5" />
+            <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-slate-800/80 border border-slate-700/60 text-emerald-400 font-semibold text-[11px] shadow-sm">
+              <Eye className="w-3 h-3" />
               <span>
                 {movie.views_count >= 1000000
                   ? `${(movie.views_count / 1000000).toFixed(1)}M views`
@@ -121,13 +121,13 @@ export const MovieCard: React.FC<MovieCardProps> = ({ movie, onPlayTrailer }) =>
           )}
         </div>
 
-        {/* Movie Title with larger bold font */}
-        <h3 className="text-lg sm:text-xl font-bold text-white group-hover:text-rose-400 transition-colors duration-200 line-clamp-1 leading-snug">
+        {/* Movie Title with balanced bold font */}
+        <h3 className="text-base sm:text-lg font-bold text-white group-hover:text-rose-400 transition-colors duration-200 line-clamp-1 leading-snug">
           {movie.title}
         </h3>
 
-        {/* Short Description with readable size */}
-        <p className="text-sm text-slate-400 line-clamp-2 leading-relaxed flex-1">
+        {/* Short Description */}
+        <p className="text-xs sm:text-sm text-slate-400 line-clamp-2 leading-relaxed flex-1 font-normal">
           {movie.description}
         </p>
       </div>
