@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Image from "next/image";
 import { useAuth } from "../context/AuthContext";
 import { Movie } from "../types/movie";
@@ -222,23 +222,32 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
     return () => clearTimeout(timer);
   }, [successMessage]);
 
+  // Dynamic visible trending movies supporting auto-slide & manual left/right navigation
+  const activeMoviePool: Movie[] = useMemo(() => {
+    if (sampleMovies && sampleMovies.length > 0) return sampleMovies;
+    return FALLBACK_POSTERS.map((url, idx) => getMovieForPoster(url, idx));
+  }, [sampleMovies]);
+
   // Auto cycle trending movie posters rotation every 7 seconds
   useEffect(() => {
-    if (screen !== "landing" || posters.length === 0) return;
+    if (screen !== "landing" || activeMoviePool.length === 0) return;
     const interval = setInterval(() => {
-      setTrendingOffset((prev) => (prev + 1) % posters.length);
+      setTrendingOffset((prev) => (prev + 1) % activeMoviePool.length);
     }, 7000);
     return () => clearInterval(interval);
-  }, [screen, posters.length]);
+  }, [screen, activeMoviePool.length]);
 
-  const countToShow = posters.length <= 6 ? posters.length : 6;
-  const visibleTrendingPosters = Array.from({ length: countToShow }, (_, i) => {
-    const posterIndex = (trendingOffset + i) % posters.length;
-    return {
-      url: posters[posterIndex],
-      index: posterIndex,
-    };
-  });
+  const countToShow = Math.min(6, activeMoviePool.length);
+  const visibleTrendingMovies = useMemo(() => {
+    if (activeMoviePool.length === 0) return [];
+    return Array.from({ length: countToShow }, (_, i) => {
+      const movieIndex = (trendingOffset + i) % activeMoviePool.length;
+      return {
+        movie: activeMoviePool[movieIndex],
+        index: movieIndex,
+      };
+    });
+  }, [activeMoviePool, countToShow, trendingOffset]);
 
   // Smart Movie Resolver for Preview Modal on Poster Click
   const getMovieForPoster = (posterUrl: string, idx: number): Movie => {
@@ -758,7 +767,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
               <div className="flex items-center gap-2 self-end sm:self-center">
                 <button
                   type="button"
-                  onClick={() => setTrendingOffset((prev) => (prev - 1 + posters.length) % posters.length)}
+                  onClick={() => setTrendingOffset((prev) => (prev - 1 + activeMoviePool.length) % activeMoviePool.length)}
                   aria-label="Previous Trending Movies"
                   className="p-2 sm:p-2.5 rounded-xl bg-slate-900/90 hover:bg-[#e50914] text-slate-300 hover:text-white border border-slate-800 hover:border-red-500/80 flex items-center justify-center backdrop-blur-md shadow-md transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer"
                   title="Previous"
@@ -767,7 +776,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                 </button>
                 <button
                   type="button"
-                  onClick={() => setTrendingOffset((prev) => (prev + 1) % posters.length)}
+                  onClick={() => setTrendingOffset((prev) => (prev + 1) % activeMoviePool.length)}
                   aria-label="Next Trending Movies"
                   className="p-2 sm:p-2.5 rounded-xl bg-slate-900/90 hover:bg-[#e50914] text-slate-300 hover:text-white border border-slate-800 hover:border-red-500/80 flex items-center justify-center backdrop-blur-md shadow-md transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer"
                   title="Next"
@@ -777,41 +786,23 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
               </div>
             </div>
 
-            {/* High-Gloss Movie Cards (Directly synced with Admin Featured movies in Database) */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4">
-              {sampleMovies.length > 0 ? (
-                sampleMovies.map((movie, idx) => (
-                  <div
-                    key={movie.id || (movie as any)._id || idx}
-                    onClick={() => setPreviewMovie(movie)}
-                    className="group relative aspect-[2/3] w-full rounded-2xl overflow-hidden bg-slate-950 border border-slate-800/80 hover:border-rose-500/80 transition-all duration-500 hover:scale-[1.05] hover:-translate-y-2 cursor-pointer shadow-xl hover:shadow-2xl hover:shadow-rose-600/40 select-none"
-                  >
-                    <img
-                      src={movie.image_url}
-                      alt={movie.title}
-                      className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-110"
-                      loading="lazy"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-40 group-hover:opacity-10 transition-opacity duration-300" />
-                  </div>
-                ))
-              ) : (
-                visibleTrendingPosters.map((item, idx) => (
-                  <div
-                    key={`${item.url}-${idx}`}
-                    onClick={() => setPreviewMovie(getMovieForPoster(item.url, item.index))}
-                    className="group relative aspect-[2/3] w-full rounded-2xl overflow-hidden bg-slate-950 border border-slate-800/80 hover:border-rose-500/80 transition-all duration-500 hover:scale-[1.05] hover:-translate-y-2 cursor-pointer shadow-xl hover:shadow-2xl hover:shadow-rose-600/40 select-none"
-                  >
-                    <img
-                      src={item.url}
-                      alt="Trending Movie"
-                      className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-110"
-                      loading="lazy"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-40 group-hover:opacity-10 transition-opacity duration-300" />
-                  </div>
-                ))
-              )}
+            {/* High-Gloss Movie Cards (Smoothly Sliding Dynamic Featured Movies) */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 lg:grid-cols-6 gap-3 sm:gap-4">
+              {visibleTrendingMovies.map(({ movie, index }: { movie: Movie; index: number }, idx: number) => (
+                <div
+                  key={`${movie.id || (movie as any)._id || movie.image_url}-${index}-${idx}`}
+                  onClick={() => setPreviewMovie(movie)}
+                  className="group relative aspect-[2/3] w-full rounded-2xl overflow-hidden bg-slate-950 border border-slate-800/80 hover:border-rose-500/80 transition-all duration-500 hover:scale-[1.05] hover:-translate-y-2 cursor-pointer shadow-xl hover:shadow-2xl hover:shadow-rose-600/40 select-none animate-in fade-in duration-300"
+                >
+                  <img
+                    src={movie.image_url}
+                    alt={movie.title}
+                    className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-110"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-40 group-hover:opacity-10 transition-opacity duration-300" />
+                </div>
+              ))}
             </div>
           </section>
 
