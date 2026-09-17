@@ -12,7 +12,6 @@ import { useAuth } from "../../../context/AuthContext";
 import { useMovieStore } from "../../../context/MovieContext";
 import { useToast } from "../../../context/ToastContext";
 import {
-  ArrowLeft,
   Star,
   Calendar,
   Film,
@@ -256,14 +255,6 @@ export default function MovieDetailsPage() {
           </div>
 
           <div className="flex items-center gap-2.5">
-            <Link
-              href="/"
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800 text-xs sm:text-sm font-semibold transition-all cursor-pointer"
-            >
-              <ArrowLeft className="w-3.5 h-3.5 text-rose-400" />
-              <span>Back</span>
-            </Link>
-
             {movie && (
               <>
                 <button
