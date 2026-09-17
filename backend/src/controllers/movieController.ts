@@ -125,17 +125,27 @@ export const getMovieById = async (
 ): Promise<void> => {
   try {
     const { id } = req.params;
+    const { inc_view } = req.query;
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
       throw new ApiError(`Invalid movie ID format: '${id}'`, 400);
     }
 
-    // Atomically increment views_count on every movie detail view
-    const movie = await Movie.findOneAndUpdate(
-      { _id: id, status: { $ne: "removed" } },
-      { $inc: { views_count: 1 } },
-      { new: true }
-    );
+    let movie;
+    if (inc_view === "true") {
+      // Increment view count atomically only on first genuine view
+      movie = await Movie.findOneAndUpdate(
+        { _id: id, status: { $ne: "removed" } },
+        { $inc: { views_count: 1 } },
+        { new: true }
+      );
+    } else {
+      // Read without incrementing
+      movie = await Movie.findOne({
+        _id: id,
+        status: { $ne: "removed" },
+      });
+    }
 
     if (!movie) {
       throw new ApiError(`Movie not found with id: ${id}`, 404);

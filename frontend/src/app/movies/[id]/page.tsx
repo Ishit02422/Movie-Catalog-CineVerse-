@@ -119,7 +119,26 @@ export default function MovieDetailsPage() {
       setIsLoading(true);
       setError(null);
       try {
-        const data = await fetchMovieById(id);
+        // Track unique view: only increment count on the first visit to this movie
+        let shouldIncrement = false;
+        if (typeof window !== "undefined") {
+          try {
+            const viewedKey = "cineverse_viewed_movie_ids";
+            const stored = localStorage.getItem(viewedKey) || sessionStorage.getItem(viewedKey);
+            const viewedIds: string[] = stored ? JSON.parse(stored) : [];
+
+            if (!viewedIds.includes(id)) {
+              shouldIncrement = true;
+              viewedIds.push(id);
+              localStorage.setItem(viewedKey, JSON.stringify(viewedIds));
+              sessionStorage.setItem(viewedKey, JSON.stringify(viewedIds));
+            }
+          } catch (e) {
+            console.warn("Storage view check error:", e);
+          }
+        }
+
+        const data = await fetchMovieById(id, shouldIncrement);
         if (!data) {
           setError("Movie not found. The movie ID might be invalid or deleted.");
         } else {
