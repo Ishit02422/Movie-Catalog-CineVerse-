@@ -247,7 +247,7 @@ export default function MovieDetailsPage() {
       {/* Sticky Header */}
       <Navbar />
 
-      <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-8 animate-in fade-in duration-500">
+      <main className="flex-1 max-w-[1500px] w-full mx-auto px-4 sm:px-6 lg:px-10 py-6 sm:py-8 space-y-10 animate-in fade-in duration-500">
         {/* Top Back Navigation Bar */}
         <div className="flex items-center justify-between">
           <Link
@@ -307,7 +307,7 @@ export default function MovieDetailsPage() {
         {/* Loading State Skeleton */}
         {isLoading && (
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-8 animate-pulse bg-slate-900/60 border border-slate-800/80 rounded-2xl p-6 sm:p-8">
-            <div className="md:col-span-5 lg:col-span-4 aspect-[2/3] max-w-[280px] rounded-xl bg-slate-800" />
+            <div className="md:col-span-5 lg:col-span-4 aspect-[2/3] max-w-[320px] rounded-xl bg-slate-800" />
             <div className="md:col-span-7 lg:col-span-8 space-y-4 pt-2">
               <div className="h-6 w-28 bg-slate-800 rounded-full" />
               <div className="h-9 w-3/4 bg-slate-800 rounded-xl" />
@@ -344,7 +344,7 @@ export default function MovieDetailsPage() {
         {!isLoading && movie && (
           <div className="space-y-10">
             {/* Main Header / Showcase Card */}
-            <div className="relative rounded-2xl border border-slate-800/80 bg-gradient-to-br from-slate-900/90 via-[#0a0f1d] to-slate-950 p-6 sm:p-8 shadow-xl overflow-hidden backdrop-blur-xl">
+            <div className="relative rounded-3xl border border-slate-800/80 bg-gradient-to-br from-slate-900/95 via-[#0a0f1d] to-slate-950 p-6 sm:p-8 lg:p-10 shadow-2xl overflow-hidden backdrop-blur-xl">
               {/* Subtle Ambient Glow */}
               <div className="absolute inset-0 overflow-hidden pointer-events-none">
                 <img
@@ -356,10 +356,10 @@ export default function MovieDetailsPage() {
                 <div className="absolute inset-0 bg-gradient-to-t from-[#060911] via-[#060911]/80 to-transparent" />
               </div>
 
-              <div className="relative z-10 grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-8 items-start">
+              <div className="relative z-10 grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-10 items-center">
                 {/* Poster Column */}
                 <div className="md:col-span-5 lg:col-span-4 flex justify-center md:justify-start">
-                  <div className="relative aspect-[2/3] w-full max-w-[260px] sm:max-w-[290px] rounded-xl overflow-hidden bg-slate-950 border border-slate-800 shadow-2xl shadow-black/80 group">
+                  <div className="relative aspect-[2/3] w-full max-w-[300px] sm:max-w-[340px] rounded-2xl overflow-hidden bg-slate-950 border border-slate-700/80 shadow-2xl shadow-black/80 group">
                     <img
                       src={imageError ? fallbackImage : (movie.image_url || fallbackImage)}
                       alt={movie.title}
@@ -372,16 +372,16 @@ export default function MovieDetailsPage() {
                     <button
                       type="button"
                       onClick={handleOpenTrailer}
-                      className="absolute inset-0 m-auto w-13 h-13 sm:w-14 sm:h-14 rounded-full bg-rose-600/90 hover:bg-rose-600 text-white flex items-center justify-center shadow-2xl shadow-rose-600/50 backdrop-blur-sm transition-all hover:scale-110 active:scale-95 cursor-pointer"
+                      className="absolute inset-0 m-auto w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-rose-600/90 hover:bg-rose-600 text-white flex items-center justify-center shadow-2xl shadow-rose-600/50 backdrop-blur-sm transition-all hover:scale-110 active:scale-95 cursor-pointer"
                       title="Watch Official Trailer on YouTube"
                     >
-                      <Play className="w-6 h-6 fill-white translate-x-0.5" />
+                      <Play className="w-6 h-6 sm:w-7 sm:h-7 fill-white translate-x-0.5" />
                     </button>
                   </div>
                 </div>
 
                 {/* Info Column */}
-                <div className="md:col-span-7 lg:col-span-8 space-y-4 sm:space-y-5">
+                <div className="md:col-span-7 lg:col-span-8 space-y-5">
                   {/* Badges & Meta */}
                   <div className="flex flex-wrap items-center gap-2">
                     <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-[#e50914] text-white shadow-md shadow-red-950/40">
@@ -461,7 +461,7 @@ export default function MovieDetailsPage() {
                       <Film className="w-3.5 h-3.5 text-rose-400" />
                       Synopsis
                     </h3>
-                    <p className="text-slate-300 text-xs sm:text-sm leading-relaxed font-normal">
+                    <p className="text-slate-300 text-xs sm:text-sm leading-relaxed font-normal max-w-3xl">
                       {movie.description}
                     </p>
                   </div>
@@ -513,8 +513,8 @@ export default function MovieDetailsPage() {
                   <span className="text-xs text-slate-400">Based on {movie.genre}</span>
                 </div>
 
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 sm:gap-6">
-                  {similarMovies.slice(0, 4).map((simMovie) => (
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6">
+                  {similarMovies.slice(0, 5).map((simMovie) => (
                     <MovieCard
                       key={simMovie.id || (simMovie as any)._id}
                       movie={simMovie}
@@ -768,7 +768,7 @@ export default function MovieDetailsPage() {
 
       {/* Footer */}
       <footer className="border-t border-slate-900 bg-slate-950/80 py-8 text-center text-xs text-slate-500 mt-12">
-        <div className="max-w-[1720px] mx-auto px-4 sm:px-6 lg:px-10 space-y-2">
+        <div className="max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-10 space-y-2">
           <p className="font-medium text-slate-400">
             CineVerse Movie Catalog Application &copy; {new Date().getFullYear()}
           </p>
