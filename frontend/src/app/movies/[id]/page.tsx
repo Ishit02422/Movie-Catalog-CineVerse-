@@ -108,8 +108,12 @@ export default function MovieDetailsPage() {
     }
   }, []);
 
+  const fetchedIdRef = useRef<string | null>(null);
+
   useEffect(() => {
     if (!id) return;
+    if (fetchedIdRef.current === id) return;
+    fetchedIdRef.current = id;
 
     async function loadMovieDetails() {
       setIsLoading(true);
