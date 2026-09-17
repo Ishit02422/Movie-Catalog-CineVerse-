@@ -55,7 +55,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ movies }) => {
       </div>
 
       {/* Main Content Layout: Left Details + Right Complete Full Poster */}
-      <div className="relative z-10 grid grid-cols-1 md:grid-cols-12 gap-6 lg:gap-10 items-center p-6 sm:p-8 lg:p-10 min-h-[360px] sm:min-h-[400px]">
+      <div className="relative z-10 grid grid-cols-1 md:grid-cols-12 gap-6 lg:gap-12 items-center p-6 sm:p-8 lg:p-12 min-h-[360px] sm:min-h-[420px]">
         {/* Left Column: Movie Info */}
         <div className="md:col-span-8 flex flex-col justify-center space-y-4">
           {/* Badges Row with clean, readable fonts */}
@@ -85,7 +85,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ movies }) => {
           </h1>
 
           {/* Description with balanced readable text */}
-          <p className="text-slate-300/90 text-xs sm:text-sm md:text-base line-clamp-3 sm:line-clamp-4 leading-relaxed max-w-2xl font-normal">
+          <p className="text-slate-300/90 text-xs sm:text-sm md:text-base line-clamp-3 sm:line-clamp-4 leading-relaxed max-w-3xl font-normal">
             {currentMovie.description}
           </p>
 
@@ -114,7 +114,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ movies }) => {
         <div className="hidden md:flex md:col-span-4 items-center justify-center lg:justify-end">
           <Link
             href={`/movies/${movieId}`}
-            className="group/card relative block w-44 sm:w-52 lg:w-60 aspect-[2/3] rounded-xl overflow-hidden bg-slate-900 border border-white/15 shadow-2xl shadow-black hover:border-[#e50914] transition-all duration-300 hover:scale-103"
+            className="group/card relative block w-44 sm:w-52 lg:w-64 aspect-[2/3] rounded-2xl overflow-hidden bg-slate-900 border border-white/15 shadow-2xl shadow-black hover:border-[#e50914] transition-all duration-300 hover:scale-103"
           >
             <img
               key={`poster-${movieId}`}
