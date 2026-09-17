@@ -841,35 +841,35 @@ export default function AdminPage() {
         {/* ========================================================================= */}
         {/* LEFT SIDEBAR: CATEGORIES / GENRES / FILE NAVIGATION */}
         {/* ========================================================================= */}
-        <aside className="w-full md:w-80 lg:w-96 bg-[#080b12] border-r border-white/[0.08] flex flex-col shrink-0 p-5 sm:p-6 space-y-6 h-full overflow-y-auto custom-scrollbar">
+        <aside className="w-full md:w-72 lg:w-80 bg-[#080b12] border-r border-white/[0.08] flex flex-col shrink-0 p-4 sm:p-5 space-y-5 h-full overflow-y-auto custom-scrollbar">
           {/* Quick Action: Add Movie Button */}
           <button
             onClick={handleOpenAddModal}
-            className="w-full py-4 px-5 bg-gradient-to-r from-[#e50914] to-rose-600 hover:from-rose-600 hover:to-rose-700 text-white font-black text-base rounded-2xl shadow-xl shadow-rose-950/60 transition-all flex items-center justify-center gap-2.5 cursor-pointer active:scale-98 shrink-0"
+            className="w-full py-3 px-4 bg-gradient-to-r from-[#e50914] to-rose-600 hover:from-rose-600 hover:to-rose-700 text-white font-bold text-sm rounded-xl shadow-lg shadow-rose-950/50 transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-98 shrink-0"
           >
-            <Plus className="w-5 h-5 stroke-[3]" />
+            <Plus className="w-4.5 h-4.5 stroke-[2.5]" />
             <span>Add New Movie</span>
           </button>
 
           {/* Main Navigation Group */}
           <div className="shrink-0">
-            <p className="text-xs sm:text-sm font-black uppercase tracking-wider text-slate-400 mb-3 px-2">
+            <p className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2.5 px-2">
               Catalog Views
             </p>
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               {/* All Movies */}
               <button
                 onClick={() => setSelectedNav("all")}
-                className={`w-full flex items-center justify-between px-4 py-3.5 rounded-2xl text-base font-extrabold transition-all cursor-pointer ${selectedNav === "all"
-                  ? "bg-[#e50914] text-white shadow-lg shadow-rose-950/60 scale-[1.02]"
+                className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all cursor-pointer ${selectedNav === "all"
+                  ? "bg-[#e50914] text-white shadow-md shadow-rose-950/60"
                   : "text-slate-300 hover:bg-white/[0.06] hover:text-white"
                   }`}
               >
-                <div className="flex items-center gap-3">
-                  <Clapperboard className="w-5 h-5 text-white" />
+                <div className="flex items-center gap-2.5">
+                  <Clapperboard className="w-4.5 h-4.5 text-white" />
                   <span>All Movies</span>
                 </div>
-                <span className={`px-3 py-1 rounded-xl text-xs sm:text-sm font-black ${selectedNav === "all" ? "bg-black/40 text-white" : "bg-white/[0.08] text-slate-300"
+                <span className={`px-2.5 py-0.5 rounded-lg text-xs font-bold ${selectedNav === "all" ? "bg-black/40 text-white" : "bg-white/[0.08] text-slate-300"
                   }`}>
                   {movies.length}
                 </span>
@@ -878,16 +878,16 @@ export default function AdminPage() {
               {/* Featured Hero Banner */}
               <button
                 onClick={() => setSelectedNav("featured")}
-                className={`w-full flex items-center justify-between px-4 py-3.5 rounded-2xl text-base font-extrabold transition-all cursor-pointer ${selectedNav === "featured"
-                  ? "bg-amber-500/20 text-amber-300 border border-amber-500/30 shadow-lg shadow-amber-950/40 scale-[1.02]"
+                className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all cursor-pointer ${selectedNav === "featured"
+                  ? "bg-amber-500/20 text-amber-300 border border-amber-500/30 shadow-md shadow-amber-950/40"
                   : "text-slate-300 hover:bg-white/[0.06] hover:text-white"
                   }`}
               >
-                <div className="flex items-center gap-3">
-                  <Star className={`w-5 h-5 ${selectedNav === "featured" ? "fill-amber-400 text-amber-400" : "text-amber-400"}`} />
+                <div className="flex items-center gap-2.5">
+                  <Star className={`w-4.5 h-4.5 ${selectedNav === "featured" ? "fill-amber-400 text-amber-400" : "text-amber-400"}`} />
                   <span>Hero Banner Featured</span>
                 </div>
-                <span className={`px-3 py-1 rounded-xl text-xs sm:text-sm font-black ${selectedNav === "featured" ? "bg-amber-500/20 text-amber-300 border border-amber-500/40" : "bg-amber-500/10 text-amber-400 border border-amber-500/20"
+                <span className={`px-2.5 py-0.5 rounded-lg text-xs font-bold ${selectedNav === "featured" ? "bg-amber-500/20 text-amber-300 border border-amber-500/40" : "bg-amber-500/10 text-amber-400 border border-amber-500/20"
                   }`}>
                   {featuredCount}
                 </span>
@@ -897,24 +897,24 @@ export default function AdminPage() {
 
           {/* Visibility & Status Filters */}
           <div className="shrink-0 pt-2 border-t border-white/[0.06]">
-            <p className="text-xs sm:text-sm font-black uppercase tracking-wider text-slate-400 mb-3 px-2 flex items-center justify-between">
+            <p className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2.5 px-2 flex items-center justify-between">
               <span>Status & Visibility</span>
-              <ShieldCheck className="w-4.5 h-4.5 text-slate-400" />
+              <ShieldCheck className="w-4 h-4 text-slate-400" />
             </p>
-            <div className="space-y-1.5">
+            <div className="space-y-1">
               {/* Active */}
               <button
                 onClick={() => setSelectedNav("status_active")}
-                className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl text-base font-bold transition-all cursor-pointer ${selectedNav === "status_active"
-                  ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/35 shadow-md scale-[1.01]"
+                className={`w-full flex items-center justify-between px-3.5 py-2 rounded-xl text-sm font-medium transition-all cursor-pointer ${selectedNav === "status_active"
+                  ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/35 shadow-sm"
                   : "text-slate-300 hover:bg-white/[0.06] hover:text-white"
                   }`}
               >
-                <div className="flex items-center gap-3">
-                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]"></span>
+                <div className="flex items-center gap-2.5">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]"></span>
                   <span>Active (Live)</span>
                 </div>
-                <span className={`px-3 py-0.5 rounded-xl text-xs sm:text-sm font-black ${selectedNav === "status_active" ? "bg-emerald-500/25 text-emerald-200" : "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+                <span className={`px-2 py-0.5 rounded-lg text-xs font-bold ${selectedNav === "status_active" ? "bg-emerald-500/25 text-emerald-200" : "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
                   }`}>
                   {statusCounts.active}
                 </span>
@@ -923,16 +923,16 @@ export default function AdminPage() {
               {/* Hidden */}
               <button
                 onClick={() => setSelectedNav("status_hidden")}
-                className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl text-base font-bold transition-all cursor-pointer ${selectedNav === "status_hidden"
-                  ? "bg-purple-500/20 text-purple-300 border border-purple-500/35 shadow-md scale-[1.01]"
+                className={`w-full flex items-center justify-between px-3.5 py-2 rounded-xl text-sm font-medium transition-all cursor-pointer ${selectedNav === "status_hidden"
+                  ? "bg-purple-500/20 text-purple-300 border border-purple-500/35 shadow-sm"
                   : "text-slate-300 hover:bg-white/[0.06] hover:text-white"
                   }`}
               >
-                <div className="flex items-center gap-3">
-                  <span className="w-2.5 h-2.5 rounded-full bg-purple-400 shadow-[0_0_8px_#c084fc]"></span>
+                <div className="flex items-center gap-2.5">
+                  <span className="w-2 h-2 rounded-full bg-purple-400 shadow-[0_0_8px_#c084fc]"></span>
                   <span>Hidden (Private)</span>
                 </div>
-                <span className={`px-3 py-0.5 rounded-xl text-xs sm:text-sm font-black ${selectedNav === "status_hidden" ? "bg-purple-500/25 text-purple-200" : "bg-purple-500/10 text-purple-300 border border-purple-500/20"
+                <span className={`px-2 py-0.5 rounded-lg text-xs font-bold ${selectedNav === "status_hidden" ? "bg-purple-500/25 text-purple-200" : "bg-purple-500/10 text-purple-300 border border-purple-500/20"
                   }`}>
                   {statusCounts.hidden}
                 </span>
@@ -941,16 +941,16 @@ export default function AdminPage() {
               {/* Under Review */}
               <button
                 onClick={() => setSelectedNav("status_under_review")}
-                className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl text-base font-bold transition-all cursor-pointer ${selectedNav === "status_under_review"
-                  ? "bg-amber-500/20 text-amber-300 border border-amber-500/35 shadow-md scale-[1.01]"
+                className={`w-full flex items-center justify-between px-3.5 py-2 rounded-xl text-sm font-medium transition-all cursor-pointer ${selectedNav === "status_under_review"
+                  ? "bg-amber-500/20 text-amber-300 border border-amber-500/35 shadow-sm"
                   : "text-slate-300 hover:bg-white/[0.06] hover:text-white"
                   }`}
               >
-                <div className="flex items-center gap-3">
-                  <span className="w-2.5 h-2.5 rounded-full bg-amber-400 shadow-[0_0_8px_#fbbf24]"></span>
+                <div className="flex items-center gap-2.5">
+                  <span className="w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_8px_#fbbf24]"></span>
                   <span>Under Review</span>
                 </div>
-                <span className={`px-3 py-0.5 rounded-xl text-xs sm:text-sm font-black ${selectedNav === "status_under_review" ? "bg-amber-500/25 text-amber-200" : "bg-amber-500/10 text-amber-400 border border-amber-500/20"
+                <span className={`px-2 py-0.5 rounded-lg text-xs font-bold ${selectedNav === "status_under_review" ? "bg-amber-500/25 text-amber-200" : "bg-amber-500/10 text-amber-400 border border-amber-500/20"
                   }`}>
                   {statusCounts.under_review}
                 </span>
@@ -959,16 +959,16 @@ export default function AdminPage() {
               {/* Removed */}
               <button
                 onClick={() => setSelectedNav("status_removed")}
-                className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl text-base font-bold transition-all cursor-pointer ${selectedNav === "status_removed"
-                  ? "bg-rose-500/20 text-rose-300 border border-rose-500/35 shadow-md scale-[1.01]"
+                className={`w-full flex items-center justify-between px-3.5 py-2 rounded-xl text-sm font-medium transition-all cursor-pointer ${selectedNav === "status_removed"
+                  ? "bg-rose-500/20 text-rose-300 border border-rose-500/35 shadow-sm"
                   : "text-slate-300 hover:bg-white/[0.06] hover:text-white"
                   }`}
               >
-                <div className="flex items-center gap-3">
-                  <span className="w-2.5 h-2.5 rounded-full bg-rose-400 shadow-[0_0_8px_#fb7185]"></span>
+                <div className="flex items-center gap-2.5">
+                  <span className="w-2 h-2 rounded-full bg-rose-400 shadow-[0_0_8px_#fb7185]"></span>
                   <span>Removed / Archived</span>
                 </div>
-                <span className={`px-3 py-0.5 rounded-xl text-xs sm:text-sm font-black ${selectedNav === "status_removed" ? "bg-rose-500/25 text-rose-200" : "bg-rose-500/10 text-rose-400 border border-rose-500/20"
+                <span className={`px-2 py-0.5 rounded-lg text-xs font-bold ${selectedNav === "status_removed" ? "bg-rose-500/25 text-rose-200" : "bg-rose-500/10 text-rose-400 border border-rose-500/20"
                   }`}>
                   {statusCounts.removed}
                 </span>
@@ -978,11 +978,11 @@ export default function AdminPage() {
 
           {/* Genre / Categories Group */}
           <div className="flex-1">
-            <p className="text-xs sm:text-sm font-black uppercase tracking-wider text-slate-400 mb-3 px-2 flex items-center justify-between">
+            <p className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2.5 px-2 flex items-center justify-between">
               <span>Categories (Genres)</span>
-              <Folder className="w-4.5 h-4.5 text-slate-400" />
+              <Folder className="w-4 h-4 text-slate-400" />
             </p>
-            <div className="space-y-2">
+            <div className="space-y-1">
               {genreCategories.map((cat) => {
                 const count = genreCounts[cat.id] || 0;
                 const isSelected = selectedNav.toLowerCase() === cat.id.toLowerCase();
@@ -990,16 +990,16 @@ export default function AdminPage() {
                   <button
                     key={cat.id}
                     onClick={() => setSelectedNav(cat.id)}
-                    className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl text-base font-bold transition-all cursor-pointer ${isSelected
-                      ? "bg-[#e50914] text-white shadow-lg shadow-rose-950/50 scale-[1.01]"
+                    className={`w-full flex items-center justify-between px-3.5 py-2 rounded-xl text-sm font-medium transition-all cursor-pointer ${isSelected
+                      ? "bg-[#e50914] text-white shadow-md shadow-rose-950/50"
                       : "text-slate-300 hover:bg-white/[0.06] hover:text-white"
                       }`}
                   >
-                    <div className="flex items-center gap-3.5">
-                      <span className="text-lg">{cat.icon}</span>
+                    <div className="flex items-center gap-2.5">
+                      <span className="text-base">{cat.icon}</span>
                       <span>{cat.name}</span>
                     </div>
-                    <span className={`text-xs sm:text-sm font-black px-3 py-0.5 rounded-xl border ${isSelected
+                    <span className={`text-xs font-bold px-2 py-0.5 rounded-lg border ${isSelected
                       ? "text-white bg-black/40 border-white/10"
                       : count > 0
                         ? "text-slate-300 bg-white/[0.06] border-white/[0.06]"
@@ -1013,7 +1013,7 @@ export default function AdminPage() {
             </div>
           </div>
 
-          <div className="pt-3 pb-1 border-t border-white/[0.06] text-[11px] text-slate-500 text-center font-medium shrink-0">
+          <div className="pt-2 pb-1 border-t border-white/[0.06] text-[11px] text-slate-500 text-center font-medium shrink-0">
             CineVerse Studio • v1.0
           </div>
         </aside>
@@ -1021,22 +1021,22 @@ export default function AdminPage() {
         {/* ========================================================================= */}
         {/* CENTER / MAIN DETAIL VIEW */}
         {/* ========================================================================= */}
-        <main className="flex-1 bg-[#06080e] p-4 sm:p-6 lg:p-8 h-full overflow-y-auto custom-scrollbar">
+        <main className="flex-1 bg-[#06080e] p-4 sm:p-6 lg:p-7 h-full overflow-y-auto custom-scrollbar">
           {/* Toast Notification */}
           {statusMessage && (
             <div
-              className={`mb-6 p-4 rounded-2xl flex items-center justify-between shadow-xl transition-all animate-fadeIn ${statusMessage.type === "success"
+              className={`mb-5 p-3.5 rounded-xl flex items-center justify-between shadow-lg transition-all animate-fadeIn ${statusMessage.type === "success"
                 ? "bg-emerald-950/90 border border-emerald-500/40 text-emerald-100"
                 : "bg-rose-950/90 border border-rose-500/40 text-rose-100"
                 }`}
             >
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2.5">
                 {statusMessage.type === "success" ? (
-                  <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
+                  <CheckCircle2 className="w-4.5 h-4.5 text-emerald-400 shrink-0" />
                 ) : (
-                  <AlertTriangle className="w-5 h-5 text-rose-400 shrink-0" />
+                  <AlertTriangle className="w-4.5 h-4.5 text-rose-400 shrink-0" />
                 )}
-                <span className="text-sm font-semibold">{statusMessage.text}</span>
+                <span className="text-sm font-medium">{statusMessage.text}</span>
               </div>
               <button
                 onClick={() => setStatusMessage(null)}
@@ -1048,30 +1048,30 @@ export default function AdminPage() {
           )}
 
           {/* Section Header & Toolbar */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-6 border-b border-white/[0.08]">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5 pb-4 border-b border-white/[0.08]">
             <div>
-              <div className="flex items-center gap-3">
-                <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight font-sans">
+              <div className="flex items-center gap-2.5">
+                <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight font-sans">
                   {activeTitle}
                 </h2>
-                <span className="px-3 py-1 rounded-full text-xs sm:text-sm font-extrabold bg-rose-500/10 text-rose-400 border border-rose-500/20">
+                <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-500/10 text-rose-400 border border-rose-500/20">
                   {displayedMovies.length} Movies
                 </span>
               </div>
-              <p className="text-xs sm:text-sm text-slate-400 mt-1">
+              <p className="text-xs text-slate-400 mt-1 font-normal">
                 Manage details, posters, ratings and featured banner status.
               </p>
             </div>
 
             {/* View Switcher & Sort Selector */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2.5">
               {/* Sort Selector */}
-              <div className="flex items-center gap-2 bg-[#0c101a] border border-white/[0.08] rounded-2xl px-3.5 py-2.5 text-xs sm:text-sm shadow-md">
-                <SlidersHorizontal className="w-4 h-4 text-slate-400" />
+              <div className="flex items-center gap-2 bg-[#0c101a] border border-white/[0.08] rounded-xl px-3 py-2 text-xs font-semibold shadow-sm">
+                <SlidersHorizontal className="w-3.5 h-3.5 text-slate-400" />
                 <select
                   value={sortBy}
                   onChange={(e: any) => setSortBy(e.target.value)}
-                  className="bg-transparent font-bold text-slate-200 focus:outline-none cursor-pointer"
+                  className="bg-transparent font-semibold text-slate-200 focus:outline-none cursor-pointer text-xs"
                 >
                   <option value="newest" className="bg-[#0c101a]">Newest Year</option>
                   <option value="oldest" className="bg-[#0c101a]">Oldest Year</option>
@@ -1081,34 +1081,34 @@ export default function AdminPage() {
               </div>
 
               {/* View Mode Toggle: Detailed List vs Poster Grid */}
-              <div className="flex items-center bg-[#0c101a] border border-white/[0.08] rounded-2xl p-1.5 shadow-md">
+              <div className="flex items-center bg-[#0c101a] border border-white/[0.08] rounded-xl p-1 shadow-sm">
                 <button
                   onClick={() => setViewMode("list")}
                   title="Detailed List View"
-                  className={`p-2 rounded-xl transition-all cursor-pointer ${viewMode === "list"
-                    ? "bg-[#e50914] text-white shadow-md shadow-rose-950/60"
+                  className={`p-1.5 rounded-lg transition-all cursor-pointer ${viewMode === "list"
+                    ? "bg-[#e50914] text-white shadow-sm"
                     : "text-slate-400 hover:text-white"
                     }`}
                 >
-                  <List className="w-5 h-5" />
+                  <List className="w-4 h-4" />
                 </button>
                 <button
                   onClick={() => setViewMode("grid")}
                   title="Poster Cards Grid"
-                  className={`p-2 rounded-xl transition-all cursor-pointer ${viewMode === "grid"
-                    ? "bg-[#e50914] text-white shadow-md shadow-rose-950/60"
+                  className={`p-1.5 rounded-lg transition-all cursor-pointer ${viewMode === "grid"
+                    ? "bg-[#e50914] text-white shadow-sm"
                     : "text-slate-400 hover:text-white"
                     }`}
                 >
-                  <LayoutGrid className="w-5 h-5" />
+                  <LayoutGrid className="w-4 h-4" />
                 </button>
               </div>
             </div>
           </div>
 
           {/* Search Bar in Detail Pane */}
-          <div className="relative mb-6">
-            <Search className="w-5 h-5 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" />
+          <div className="relative mb-5">
+            <Search className="w-4.5 h-4.5 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
               type="text"
               value={searchQuery}
@@ -1127,12 +1127,12 @@ export default function AdminPage() {
                 }
               }}
               placeholder={`Search ${activeTitle.toLowerCase()} by title, year or category...`}
-              className="w-full bg-[#0c101a] border border-white/[0.08] rounded-2xl pl-12 pr-10 py-3.5 sm:py-4 text-sm sm:text-base text-white focus:outline-none focus:border-[#e50914] transition-all placeholder:text-slate-400 shadow-lg"
+              className="w-full bg-[#0c101a] border border-white/[0.08] rounded-xl pl-11 pr-10 py-2.5 sm:py-3 text-sm text-white focus:outline-none focus:border-[#e50914] transition-all placeholder:text-slate-500 shadow-sm"
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery("")}
-                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white p-1.5 cursor-pointer rounded-lg hover:bg-white/10 transition-colors"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white p-1 cursor-pointer rounded-lg hover:bg-white/10 transition-colors"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -1143,31 +1143,31 @@ export default function AdminPage() {
           {/* DETAIL VIEW 1: DETAILED MASTER-DETAIL MOVIE ROWS */}
           {/* ========================================================================= */}
           {displayedMovies.length === 0 ? (
-            <div className="bg-[#0c101a]/70 border border-white/[0.06] rounded-3xl p-16 text-center text-slate-400">
-              <Film className="w-14 h-14 mx-auto text-slate-600 mb-4" />
-              <h3 className="text-lg font-bold text-white mb-1.5">No movies found in this view</h3>
-              <p className="text-sm text-slate-400 mb-5">Try clearing your search query or add a new movie to this category.</p>
+            <div className="bg-[#0c101a]/70 border border-white/[0.06] rounded-2xl p-12 text-center text-slate-400">
+              <Film className="w-12 h-12 mx-auto text-slate-600 mb-3" />
+              <h3 className="text-base font-bold text-white mb-1">No movies found in this view</h3>
+              <p className="text-xs text-slate-400 mb-4">Try clearing your search query or add a new movie to this category.</p>
               <button
                 onClick={handleOpenAddModal}
-                className="px-5 py-2.5 bg-[#e50914] hover:bg-rose-700 text-white text-sm font-bold rounded-xl shadow-lg transition-all cursor-pointer"
+                className="px-4 py-2 bg-[#e50914] hover:bg-rose-700 text-white text-xs font-bold rounded-xl shadow transition-all cursor-pointer"
               >
                 + Add Movie to {selectedNav === "all" ? "Catalog" : selectedNav}
               </button>
             </div>
           ) : viewMode === "list" ? (
-            <div className="space-y-4">
+            <div className="space-y-3">
               {displayedMovies.map((movie) => {
                 const movieId = movie.id || (movie as any)._id;
                 const movieStatus = movie.status || "active";
                 return (
                   <div
                     key={movieId}
-                    className="bg-[#0b0f19] hover:bg-[#0f1422] border border-white/[0.07] hover:border-white/[0.16] rounded-2xl sm:rounded-3xl p-5 sm:p-6 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-5 sm:gap-6 transition-all duration-300 group shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:shadow-[0_12px_40px_rgba(0,0,0,0.7)]"
+                    className="bg-[#0b0f19] hover:bg-[#0f1422] border border-white/[0.07] hover:border-white/[0.16] rounded-2xl p-4 sm:p-5 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 sm:gap-5 transition-all duration-300 group shadow-lg"
                   >
                     {/* Left Details: Poster + Info */}
-                    <div className="flex items-start sm:items-center gap-4 sm:gap-5 flex-1 min-w-0 w-full">
-                      {/* Cinema Poster Thumbnail (Prominent & Clear) */}
-                      <div className="w-20 h-28 sm:w-24 sm:h-34 rounded-2xl bg-black overflow-hidden shrink-0 border border-white/[0.12] shadow-xl relative group-hover:border-rose-500/40 transition-colors">
+                    <div className="flex items-start sm:items-center gap-3.5 sm:gap-4 flex-1 min-w-0 w-full">
+                      {/* Cinema Poster Thumbnail */}
+                      <div className="w-18 h-26 sm:w-20 sm:h-28 rounded-xl bg-black overflow-hidden shrink-0 border border-white/[0.12] shadow-md relative group-hover:border-rose-500/40 transition-colors">
                         <img
                           src={movie.image_url}
                           alt={movie.title}
@@ -1178,26 +1178,26 @@ export default function AdminPage() {
                           }}
                         />
                         {movie.is_featured && (
-                          <div className="absolute top-1.5 right-1.5 w-5 h-5 bg-amber-500 rounded-full flex items-center justify-center text-slate-950 shadow-md">
-                            <Star className="w-3 h-3 fill-slate-950" />
+                          <div className="absolute top-1.5 right-1.5 w-4.5 h-4.5 bg-amber-500 rounded-full flex items-center justify-center text-slate-950 shadow">
+                            <Star className="w-2.5 h-2.5 fill-slate-950" />
                           </div>
                         )}
                       </div>
 
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 sm:gap-2.5 flex-wrap">
-                          <h4 className="font-black text-white text-lg sm:text-xl group-hover:text-rose-400 transition-colors">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <h4 className="font-bold text-white text-base sm:text-lg group-hover:text-rose-400 transition-colors">
                             {movie.title}
                           </h4>
-                          <span className="text-xs sm:text-sm font-bold text-slate-300 bg-white/[0.06] px-2.5 py-0.5 rounded-lg border border-white/[0.08]">
+                          <span className="text-xs font-semibold text-slate-300 bg-white/[0.06] px-2 py-0.5 rounded-md border border-white/[0.08]">
                             {movie.release_year}
                           </span>
-                          <span className="text-xs sm:text-sm font-bold text-slate-200 bg-white/[0.06] border border-white/[0.1] px-2.5 py-0.5 rounded-lg hover:border-rose-500/30 hover:text-rose-300 transition-colors">
+                          <span className="text-xs font-semibold text-slate-300 bg-white/[0.06] border border-white/[0.1] px-2 py-0.5 rounded-md hover:border-rose-500/30 hover:text-rose-300 transition-colors">
                             {movie.genre}
                           </span>
                           {/* Harmonized Status Badge */}
                           <span
-                            className={`text-xs font-bold px-2.5 py-0.5 rounded-lg border shadow-sm ${movieStatus === "active"
+                            className={`text-xs font-semibold px-2 py-0.5 rounded-md border shadow-sm ${movieStatus === "active"
                               ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/25"
                               : movieStatus === "hidden"
                                 ? "bg-purple-500/10 text-purple-300 border-purple-500/25"
@@ -1216,41 +1216,41 @@ export default function AdminPage() {
                           </span>
                         </div>
 
-                        <p className="text-xs sm:text-sm text-slate-300/90 line-clamp-2 mt-2 leading-relaxed font-normal">
+                        <p className="text-xs sm:text-sm text-slate-300/85 line-clamp-2 mt-1.5 leading-relaxed font-normal">
                           {movie.description}
                         </p>
 
-                        <div className="flex items-center gap-3 sm:gap-4 mt-3 text-xs sm:text-sm text-slate-400 flex-wrap">
+                        <div className="flex items-center gap-2.5 mt-2.5 text-xs text-slate-400 flex-wrap">
                           <button
                             onClick={() => handleOpenReviewsModal(movie)}
-                            className="flex items-center gap-1.5 font-bold text-amber-400 hover:text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 px-3 py-1 rounded-xl border border-amber-500/25 transition-all cursor-pointer shadow-sm"
+                            className="flex items-center gap-1 font-semibold text-amber-400 hover:text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 px-2.5 py-0.5 rounded-lg border border-amber-500/25 transition-all cursor-pointer shadow-sm"
                             title="View Audience Reviews"
                           >
-                            <Star className="w-4 h-4 fill-amber-400" />
+                            <Star className="w-3.5 h-3.5 fill-amber-400" />
                             <span>{movie.rating?.toFixed(1) || "8.0"} / 10</span>
-                            <span className="text-xs text-slate-400 font-semibold ml-1">(Reviews)</span>
+                            <span className="text-[11px] text-slate-400 ml-0.5">(Reviews)</span>
                           </button>
                           <span className="text-slate-600">•</span>
-                          <span className={`font-semibold ${movie.is_featured ? "text-amber-400" : "text-slate-400"}`}>
+                          <span className={`font-medium ${movie.is_featured ? "text-amber-400" : "text-slate-400"}`}>
                             {movie.is_featured ? "⭐ Featured on Hero" : "Standard Catalog"}
                           </span>
                         </div>
                       </div>
                     </div>
 
-                    {/* Right In-line Action Controls (Clean, unified aesthetic) */}
-                    <div className="flex items-center gap-2.5 sm:gap-3 shrink-0 pt-3 lg:pt-0 border-t lg:border-t-0 border-white/[0.06] w-full lg:w-auto justify-end flex-wrap">
+                    {/* Right In-line Action Controls */}
+                    <div className="flex items-center gap-2 shrink-0 pt-2.5 lg:pt-0 border-t lg:border-t-0 border-white/[0.06] w-full lg:w-auto justify-end flex-wrap">
                       {/* Status Selector Dropdown */}
                       <select
                         value={movieStatus}
                         onChange={(e) => handleUpdateStatus(movie, e.target.value as any)}
-                        className="text-xs sm:text-sm font-bold px-3.5 py-2.5 rounded-xl border border-white/[0.1] bg-[#070b13] text-slate-200 hover:border-white/[0.25] focus:border-rose-500/80 transition-all cursor-pointer focus:outline-none shadow-md"
+                        className="text-xs font-semibold px-3 py-2 rounded-xl border border-white/[0.1] bg-[#070b13] text-slate-200 hover:border-white/[0.25] focus:border-rose-500/80 transition-all cursor-pointer focus:outline-none shadow-sm"
                         title="Change Visibility Status"
                       >
-                        <option value="active" className="bg-[#0c101a] text-emerald-400 font-bold">🟢 Active (Live)</option>
-                        <option value="hidden" className="bg-[#0c101a] text-purple-300 font-bold">👁️ Hidden (Private)</option>
-                        <option value="under_review" className="bg-[#0c101a] text-amber-400 font-bold">🟡 Under Review</option>
-                        <option value="removed" className="bg-[#0c101a] text-rose-400 font-bold">🔴 Removed</option>
+                        <option value="active" className="bg-[#0c101a] text-emerald-400 font-semibold">🟢 Active (Live)</option>
+                        <option value="hidden" className="bg-[#0c101a] text-purple-300 font-semibold">👁️ Hidden (Private)</option>
+                        <option value="under_review" className="bg-[#0c101a] text-amber-400 font-semibold">🟡 Under Review</option>
+                        <option value="removed" className="bg-[#0c101a] text-rose-400 font-semibold">🔴 Removed</option>
                       </select>
 
                       {/* Reviews Inspector Button */}
@@ -1258,9 +1258,9 @@ export default function AdminPage() {
                         type="button"
                         onClick={() => handleOpenReviewsModal(movie)}
                         title="Inspect User Reviews & Comments"
-                        className="flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-white/[0.06] hover:bg-white/[0.12] text-slate-200 hover:text-white border border-white/[0.08] transition-all cursor-pointer shadow-md"
+                        className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-white/[0.06] hover:bg-white/[0.12] text-slate-200 hover:text-white border border-white/[0.08] transition-all cursor-pointer shadow-sm"
                       >
-                        <MessageSquare className="w-4 h-4 text-rose-400" />
+                        <MessageSquare className="w-3.5 h-3.5 text-rose-400" />
                         <span>Reviews</span>
                       </button>
 
@@ -1269,12 +1269,12 @@ export default function AdminPage() {
                         type="button"
                         onClick={() => handleToggleFeatured(movie)}
                         title={movie.is_featured ? "Remove from Hero Banner" : "Feature on Hero Banner"}
-                        className={`flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer shadow-md ${movie.is_featured
+                        className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer shadow-sm ${movie.is_featured
                           ? "bg-amber-500/15 text-amber-300 border border-amber-500/30 hover:bg-amber-500/25"
                           : "bg-white/[0.04] text-slate-300 hover:text-amber-400 hover:bg-white/[0.08] border border-white/[0.08]"
                           }`}
                       >
-                        <Star className={`w-4 h-4 ${movie.is_featured ? "fill-amber-400 text-amber-400" : ""}`} />
+                        <Star className={`w-3.5 h-3.5 ${movie.is_featured ? "fill-amber-400 text-amber-400" : ""}`} />
                         <span>{movie.is_featured ? "Featured" : "Feature"}</span>
                       </button>
 
@@ -1282,18 +1282,18 @@ export default function AdminPage() {
                       <button
                         onClick={() => handleOpenEditModal(movie)}
                         title="Edit Movie Details"
-                        className="p-2.5 sm:p-3 rounded-xl bg-white/[0.06] hover:bg-white/[0.12] text-slate-200 hover:text-white border border-white/[0.08] transition-all cursor-pointer shadow-md"
+                        className="p-2 rounded-xl bg-white/[0.06] hover:bg-white/[0.12] text-slate-200 hover:text-white border border-white/[0.08] transition-all cursor-pointer shadow-sm"
                       >
-                        <Edit2 className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
+                        <Edit2 className="w-4 h-4" />
                       </button>
 
                       {/* Delete Button */}
                       <button
                         onClick={() => handleOpenDeleteModal(movie)}
                         title="Delete Movie"
-                        className="p-2.5 sm:p-3 rounded-xl bg-rose-500/[0.08] hover:bg-rose-500/[0.2] text-rose-400 hover:text-rose-300 border border-rose-500/25 transition-all cursor-pointer shadow-md"
+                        className="p-2 rounded-xl bg-rose-500/[0.08] hover:bg-rose-500/[0.2] text-rose-400 hover:text-rose-300 border border-rose-500/25 transition-all cursor-pointer shadow-sm"
                       >
-                        <Trash2 className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
+                        <Trash2 className="w-4 h-4" />
                       </button>
                     </div>
                   </div>
@@ -1304,14 +1304,14 @@ export default function AdminPage() {
             /* ========================================================================= */
             /* DETAIL VIEW 2: POSTER CARDS GRID */
             /* ========================================================================= */
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
               {displayedMovies.map((movie) => {
                 const movieId = movie.id || (movie as any)._id;
                 const movieStatus = movie.status || "active";
                 return (
                   <div
                     key={movieId}
-                    className="group relative bg-[#0b0f19] border border-white/[0.08] rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl hover:border-rose-500/40 transition-all duration-300 flex flex-col"
+                    className="group relative bg-[#0b0f19] border border-white/[0.08] rounded-xl overflow-hidden shadow-md hover:shadow-xl hover:border-rose-500/40 transition-all duration-300 flex flex-col"
                   >
                     <div className="aspect-[2/3] w-full bg-black overflow-hidden relative">
                       <img
@@ -1328,23 +1328,23 @@ export default function AdminPage() {
                         type="button"
                         onClick={() => handleToggleFeatured(movie)}
                         title={movie.is_featured ? "Remove from Hero Banner" : "Feature on Hero Banner"}
-                        className={`absolute top-2.5 right-2.5 p-2 rounded-xl backdrop-blur-md transition-all cursor-pointer ${movie.is_featured
-                          ? "bg-amber-500 text-slate-950 shadow-lg shadow-amber-500/30 scale-105"
+                        className={`absolute top-2 right-2 p-1.5 rounded-lg backdrop-blur-md transition-all cursor-pointer ${movie.is_featured
+                          ? "bg-amber-500 text-slate-950 shadow-md shadow-amber-500/30 scale-105"
                           : "bg-black/60 text-slate-400 hover:text-amber-400"
                           }`}
                       >
-                        <Star className={`w-4 h-4 ${movie.is_featured ? "fill-slate-950" : ""}`} />
+                        <Star className={`w-3.5 h-3.5 ${movie.is_featured ? "fill-slate-950" : ""}`} />
                       </button>
 
-                      <div className="absolute top-2.5 left-2.5 px-2.5 py-1 rounded-xl bg-black/80 backdrop-blur-md border border-white/15 flex items-center gap-1.5 text-xs font-black text-amber-400 shadow-md">
-                        <Star className="w-3.5 h-3.5 fill-amber-400" />
+                      <div className="absolute top-2 left-2 px-2 py-0.5 rounded-lg bg-black/80 backdrop-blur-md border border-white/15 flex items-center gap-1 text-xs font-bold text-amber-400 shadow">
+                        <Star className="w-3 h-3 fill-amber-400" />
                         <span>{movie.rating?.toFixed(1) || "8.0"}</span>
                       </div>
 
                       {/* Status Tag on Poster */}
-                      <div className="absolute bottom-2.5 left-2.5">
+                      <div className="absolute bottom-2 left-2">
                         <span
-                          className={`text-[10px] sm:text-xs font-bold px-2.5 py-1 rounded-lg backdrop-blur-md border shadow-md ${movieStatus === "active"
+                          className={`text-[11px] font-semibold px-2 py-0.5 rounded-md backdrop-blur-md border shadow ${movieStatus === "active"
                             ? "bg-emerald-950/90 text-emerald-300 border-emerald-500/40"
                             : movieStatus === "hidden"
                               ? "bg-purple-950/90 text-purple-200 border-purple-500/40"
@@ -1363,39 +1363,39 @@ export default function AdminPage() {
                         </span>
                       </div>
 
-                      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-end justify-center p-3.5 gap-2.5">
+                      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-end justify-center p-3 gap-2">
                         <button
                           onClick={() => handleOpenEditModal(movie)}
-                          className="flex-1 py-2.5 rounded-xl bg-white/20 hover:bg-white/30 backdrop-blur-md text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+                          className="flex-1 py-2 rounded-lg bg-white/20 hover:bg-white/30 backdrop-blur-md text-white font-semibold text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer"
                         >
-                          <Edit2 className="w-4 h-4" />
+                          <Edit2 className="w-3.5 h-3.5" />
                           <span>Edit</span>
                         </button>
                         <button
                           onClick={() => handleOpenDeleteModal(movie)}
-                          className="p-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white transition-all cursor-pointer shadow-md"
+                          className="p-2 rounded-lg bg-rose-600 hover:bg-rose-700 text-white transition-all cursor-pointer shadow"
                         >
-                          <Trash2 className="w-4 h-4" />
+                          <Trash2 className="w-3.5 h-3.5" />
                         </button>
                       </div>
                     </div>
 
-                    <div className="p-4 flex-1 flex flex-col justify-between bg-[#0b0f19] space-y-3">
+                    <div className="p-3.5 flex-1 flex flex-col justify-between bg-[#0b0f19] space-y-2.5">
                       <div>
-                        <h4 className="font-bold text-white text-sm sm:text-base line-clamp-1 group-hover:text-rose-400 transition-colors">
+                        <h4 className="font-bold text-white text-sm line-clamp-1 group-hover:text-rose-400 transition-colors">
                           {movie.title}
                         </h4>
-                        <p className="text-xs text-slate-400 mt-1">
-                          {movie.release_year} • <span className="text-slate-300 font-semibold">{movie.genre?.split(/[,/|]/)[0]}</span>
+                        <p className="text-xs text-slate-400 mt-0.5 font-normal">
+                          {movie.release_year} • <span className="text-slate-300 font-medium">{movie.genre?.split(/[,/|]/)[0]}</span>
                         </p>
                       </div>
 
-                      <div className="pt-2 border-t border-white/[0.06] space-y-2.5">
+                      <div className="pt-2 border-t border-white/[0.06] space-y-2">
                         {/* Quick Status Select on Grid Card */}
                         <select
                           value={movieStatus}
                           onChange={(e) => handleUpdateStatus(movie, e.target.value as any)}
-                          className="w-full text-xs font-bold px-2.5 py-1.5 rounded-xl border border-white/[0.1] bg-[#070b13] text-slate-200 hover:border-white/[0.25] transition-all cursor-pointer focus:outline-none"
+                          className="w-full text-xs font-medium px-2 py-1.5 rounded-lg border border-white/[0.1] bg-[#070b13] text-slate-200 hover:border-white/[0.25] transition-all cursor-pointer focus:outline-none"
                         >
                           <option value="active" className="bg-[#0c101a] text-emerald-400">🟢 Active (Live)</option>
                           <option value="hidden" className="bg-[#0c101a] text-purple-300">👁️ Hidden (Private)</option>
@@ -1403,27 +1403,27 @@ export default function AdminPage() {
                           <option value="removed" className="bg-[#0c101a] text-rose-400">🔴 Removed</option>
                         </select>
 
-                        <div className="flex items-center justify-between text-xs font-semibold">
-                          <span className={`px-2.5 py-1 rounded-lg font-bold text-[11px] ${movie.is_featured
+                        <div className="flex items-center justify-between text-xs">
+                          <span className={`px-2 py-0.5 rounded-md font-semibold text-[11px] ${movie.is_featured
                             ? "bg-amber-500/15 text-amber-400 border border-amber-500/30"
                             : "bg-white/[0.05] text-slate-400 border border-white/[0.06]"
                             }`}>
                             {movie.is_featured ? "⭐ Featured" : "Standard"}
                           </span>
-                          <div className="flex items-center gap-1.5">
+                          <div className="flex items-center gap-1">
                             <button
                               onClick={() => handleOpenEditModal(movie)}
-                              className="text-slate-400 hover:text-white p-1.5 rounded-lg hover:bg-white/10 transition-colors cursor-pointer"
+                              className="text-slate-400 hover:text-white p-1 rounded-md hover:bg-white/10 transition-colors cursor-pointer"
                               title="Edit Movie"
                             >
-                              <Edit2 className="w-4 h-4" />
+                              <Edit2 className="w-3.5 h-3.5" />
                             </button>
                             <button
                               onClick={() => handleOpenDeleteModal(movie)}
-                              className="text-slate-400 hover:text-rose-400 p-1.5 rounded-lg hover:bg-rose-500/15 transition-colors cursor-pointer"
+                              className="text-slate-400 hover:text-rose-400 p-1 rounded-md hover:bg-rose-500/15 transition-colors cursor-pointer"
                               title="Delete Movie"
                             >
-                              <Trash2 className="w-4 h-4" />
+                              <Trash2 className="w-3.5 h-3.5" />
                             </button>
                           </div>
                         </div>
@@ -1440,45 +1440,42 @@ export default function AdminPage() {
       {/* ========================================================================= */}
       {/* ADD MOVIE MODAL (With Live Cinema Poster Preview) */}
       {/* ========================================================================= */}
-      {/* ========================================================================= */}
-      {/* ADD MOVIE MODAL (With Live Cinema Poster Preview) */}
-      {/* ========================================================================= */}
       {isAddModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-2xl animate-fadeIn">
-          <div className="w-full max-w-5xl bg-[#0b1120]/95 border border-slate-700/60 rounded-3xl p-6 sm:p-9 shadow-[0_30px_100px_rgba(0,0,0,0.95)] max-h-[92vh] overflow-y-auto custom-scrollbar">
+          <div className="w-full max-w-5xl bg-[#0b1120]/95 border border-slate-700/60 rounded-3xl p-5 sm:p-8 shadow-[0_30px_100px_rgba(0,0,0,0.95)] max-h-[92vh] overflow-y-auto custom-scrollbar">
             {/* Modal Header */}
-            <div className="flex items-center justify-between pb-5 border-b border-slate-700/60 mb-6">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#e50914] to-rose-700 flex items-center justify-center text-white shadow-xl shadow-rose-950/60 ring-2 ring-white/10 shrink-0">
-                  <Plus className="w-6 h-6 stroke-[3]" />
+            <div className="flex items-center justify-between pb-4 border-b border-slate-700/60 mb-5">
+              <div className="flex items-center gap-3.5">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#e50914] to-rose-700 flex items-center justify-center text-white shadow-lg shadow-rose-950/60 ring-1 ring-white/10 shrink-0">
+                  <Plus className="w-5 h-5 stroke-[2.5]" />
                 </div>
                 <div>
-                  <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">Add New Movie</h2>
-                  <p className="text-sm text-slate-300 mt-1 font-medium">Publish a new blockbuster to CineVerse catalog</p>
+                  <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">Add New Movie</h2>
+                  <p className="text-xs sm:text-sm text-slate-400 mt-0.5 font-normal">Publish a new blockbuster to CineVerse catalog</p>
                 </div>
               </div>
               <button
                 onClick={() => setIsAddModalOpen(false)}
-                className="w-10 h-10 rounded-xl bg-white/[0.06] hover:bg-white/[0.15] border border-white/10 text-slate-300 hover:text-white transition-all flex items-center justify-center cursor-pointer"
+                className="w-9 h-9 rounded-xl bg-white/[0.06] hover:bg-white/[0.15] border border-white/10 text-slate-300 hover:text-white transition-all flex items-center justify-center cursor-pointer"
               >
-                <X className="w-5 h-5" />
+                <X className="w-4.5 h-4.5" />
               </button>
             </div>
 
             {formError && (
-              <div className="mb-6 p-4 rounded-2xl bg-rose-500/15 border border-rose-500/40 text-rose-300 text-sm flex items-center gap-3">
-                <AlertTriangle className="w-5 h-5 text-rose-400 shrink-0" />
+              <div className="mb-5 p-3.5 rounded-xl bg-rose-500/15 border border-rose-500/40 text-rose-300 text-xs sm:text-sm flex items-center gap-2.5">
+                <AlertTriangle className="w-4.5 h-4.5 text-rose-400 shrink-0" />
                 <span className="font-semibold">{formError}</span>
               </div>
             )}
 
-            <form onSubmit={handleAddSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
+            <form onSubmit={handleAddSubmit} className="space-y-5">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-7 items-start">
                 {/* Left Column: Form Fields */}
-                <div className="lg:col-span-7 space-y-5">
+                <div className="lg:col-span-7 space-y-4">
                   {/* Title Field */}
                   <div>
-                    <label className="block text-sm font-bold uppercase tracking-wider text-slate-200 mb-2">
+                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
                       Movie Title <span className="text-[#e50914]">*</span>
                     </label>
                     <input
@@ -1487,21 +1484,21 @@ export default function AdminPage() {
                       value={formData.title}
                       onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                       placeholder="e.g. Inception, Interstellar, The Dark Knight"
-                      className="w-full bg-[#131b2e] border border-slate-700/80 hover:border-slate-500 focus:border-[#e50914] focus:ring-2 focus:ring-[#e50914]/25 rounded-xl px-4 py-3 text-base text-white placeholder:text-slate-500 transition-all font-medium shadow-inner"
+                      className="w-full bg-[#131b2e] border border-slate-700/80 hover:border-slate-500 focus:border-[#e50914] focus:ring-1 focus:ring-[#e50914]/25 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder:text-slate-500 transition-all font-medium shadow-inner"
                     />
                   </div>
 
                   {/* 3 Equal Columns: Genre, Release Year, Visibility */}
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 sm:gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     <div>
-                      <label className="block text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-200 mb-2">
+                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
                         Genre <span className="text-[#e50914]">*</span>
                       </label>
                       <select
                         required
                         value={formData.genre}
                         onChange={(e) => setFormData({ ...formData, genre: e.target.value })}
-                        className="w-full bg-[#131b2e] border border-slate-700/80 hover:border-slate-500 focus:border-[#e50914] focus:ring-2 focus:ring-[#e50914]/25 rounded-xl px-3.5 py-3 text-sm font-semibold text-white transition-all cursor-pointer"
+                        className="w-full bg-[#131b2e] border border-slate-700/80 hover:border-slate-500 focus:border-[#e50914] focus:ring-1 focus:ring-[#e50914]/25 rounded-xl px-3 py-2.5 text-xs sm:text-sm font-semibold text-white transition-all cursor-pointer"
                       >
                         {formData.genre && !genreCategories.some((c) => c.name.toLowerCase() === formData.genre.toLowerCase()) && (
                           <option value={formData.genre} className="bg-[#0f172a] text-white">
@@ -1517,14 +1514,14 @@ export default function AdminPage() {
                     </div>
 
                     <div>
-                      <label className="block text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-200 mb-2">
+                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
                         Release Year <span className="text-[#e50914]">*</span>
                       </label>
                       <select
                         required
                         value={formData.release_year}
                         onChange={(e) => setFormData({ ...formData, release_year: Number(e.target.value) })}
-                        className="w-full bg-[#131b2e] border border-slate-700/80 hover:border-slate-500 focus:border-[#e50914] focus:ring-2 focus:ring-[#e50914]/25 rounded-xl px-3.5 py-3 text-sm font-semibold text-white transition-all cursor-pointer"
+                        className="w-full bg-[#131b2e] border border-slate-700/80 hover:border-slate-500 focus:border-[#e50914] focus:ring-1 focus:ring-[#e50914]/25 rounded-xl px-3 py-2.5 text-xs sm:text-sm font-semibold text-white transition-all cursor-pointer"
                       >
                         {releaseYearsList.map((yr) => (
                           <option key={yr} value={yr} className="bg-[#0f172a] text-white">
@@ -1535,30 +1532,30 @@ export default function AdminPage() {
                     </div>
 
                     <div>
-                      <label className="block text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-200 mb-2">
+                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
                         Visibility <span className="text-[#e50914]">*</span>
                       </label>
                       <select
                         value={formData.status}
                         onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                        className="w-full bg-[#131b2e] border border-slate-700/80 hover:border-slate-500 focus:border-[#e50914] focus:ring-2 focus:ring-[#e50914]/25 rounded-xl px-3.5 py-3 text-sm font-semibold text-white transition-all cursor-pointer"
+                        className="w-full bg-[#131b2e] border border-slate-700/80 hover:border-slate-500 focus:border-[#e50914] focus:ring-1 focus:ring-[#e50914]/25 rounded-xl px-3 py-2.5 text-xs sm:text-sm font-semibold text-white transition-all cursor-pointer"
                       >
-                        <option value="active" className="bg-[#0f172a] text-emerald-400 font-bold">🟢 Active</option>
-                        <option value="hidden" className="bg-[#0f172a] text-purple-300 font-bold">👁️ Hidden</option>
-                        <option value="under_review" className="bg-[#0f172a] text-amber-400 font-bold">🟡 Review</option>
-                        <option value="removed" className="bg-[#0f172a] text-rose-400 font-bold">🔴 Removed</option>
+                        <option value="active" className="bg-[#0f172a] text-emerald-400 font-semibold">🟢 Active</option>
+                        <option value="hidden" className="bg-[#0f172a] text-purple-300 font-semibold">👁️ Hidden</option>
+                        <option value="under_review" className="bg-[#0f172a] text-amber-400 font-semibold">🟡 Review</option>
+                        <option value="removed" className="bg-[#0f172a] text-rose-400 font-semibold">🔴 Removed</option>
                       </select>
                     </div>
                   </div>
 
                   {/* Rating Slider Box */}
-                  <div className="p-4 sm:p-5 rounded-2xl bg-[#11192b] border border-slate-700/70 space-y-3">
+                  <div className="p-3.5 sm:p-4 rounded-xl bg-[#11192b] border border-slate-700/70 space-y-2.5">
                     <div className="flex items-center justify-between">
-                      <label className="text-sm font-bold uppercase tracking-wider text-slate-200 flex items-center gap-2">
-                        <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
+                      <label className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
+                        <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
                         <span>Rating Score</span>
                       </label>
-                      <span className="bg-amber-400/15 border border-amber-400/40 text-amber-300 px-3.5 py-1 rounded-full text-sm font-black flex items-center gap-1.5 shadow-sm">
+                      <span className="bg-amber-400/15 border border-amber-400/40 text-amber-300 px-2.5 py-0.5 rounded-full text-xs font-bold flex items-center gap-1 shadow-sm">
                         {formData.rating.toFixed(1)} ★
                       </span>
                     </div>
@@ -1569,9 +1566,9 @@ export default function AdminPage() {
                       step={0.1}
                       value={formData.rating}
                       onChange={(e) => setFormData({ ...formData, rating: Number(e.target.value) })}
-                      className="w-full accent-[#e50914] h-2.5 bg-slate-800 rounded-lg cursor-pointer transition-all"
+                      className="w-full accent-[#e50914] h-2 bg-slate-800 rounded-lg cursor-pointer transition-all"
                     />
-                    <div className="flex justify-between text-xs font-semibold text-slate-400 px-1">
+                    <div className="flex justify-between text-[11px] font-medium text-slate-400 px-1">
                       <span>0.0</span>
                       <span>5.0 (Avg)</span>
                       <span>7.5 (Good)</span>
@@ -1580,21 +1577,21 @@ export default function AdminPage() {
                   </div>
 
                   {/* Poster Image Upload */}
-                  <div className="p-4 sm:p-5 rounded-2xl bg-[#11192b] border border-slate-700/70 space-y-3.5">
+                  <div className="p-3.5 sm:p-4 rounded-xl bg-[#11192b] border border-slate-700/70 space-y-3">
                     <div className="flex items-center justify-between">
-                      <label className="text-sm font-bold uppercase tracking-wider text-slate-200 flex items-center gap-2">
-                        <ImageIcon className="w-4 h-4 text-[#e50914]" />
+                      <label className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
+                        <ImageIcon className="w-3.5 h-3.5 text-[#e50914]" />
                         <span>Poster Image <span className="text-[#e50914]">*</span></span>
                       </label>
                       {formData.image_url && (
-                        <span className="text-xs font-bold text-emerald-400 flex items-center gap-1.5 bg-emerald-500/15 px-3 py-1 rounded-full border border-emerald-500/30">
-                          <CheckCircle className="w-3.5 h-3.5" /> Image Selected
+                        <span className="text-xs font-bold text-emerald-400 flex items-center gap-1 bg-emerald-500/15 px-2.5 py-0.5 rounded-full border border-emerald-500/30">
+                          <CheckCircle className="w-3 h-3" /> Image Selected
                         </span>
                       )}
                     </div>
 
                     <label
-                      className={`group relative flex items-center gap-4 p-4 sm:p-5 rounded-xl border-2 border-dashed transition-all cursor-pointer ${formData.image_url
+                      className={`group relative flex items-center gap-3.5 p-3.5 sm:p-4 rounded-xl border-2 border-dashed transition-all cursor-pointer ${formData.image_url
                         ? "border-emerald-500/45 bg-emerald-950/20 hover:border-emerald-500/70"
                         : "border-slate-600/80 bg-[#141e33]/70 hover:border-[#e50914] hover:bg-[#e50914]/[0.06]"
                         }`}
@@ -1606,22 +1603,22 @@ export default function AdminPage() {
                         className="hidden"
                         disabled={isUploadingImage}
                       />
-                      <div className="w-11 h-11 rounded-xl bg-white/[0.08] group-hover:bg-[#e50914]/20 group-hover:text-[#e50914] text-slate-200 flex items-center justify-center transition-all shrink-0">
+                      <div className="w-10 h-10 rounded-xl bg-white/[0.08] group-hover:bg-[#e50914]/20 group-hover:text-[#e50914] text-slate-200 flex items-center justify-center transition-all shrink-0">
                         {isUploadingImage ? (
-                          <Loader2 className="w-6 h-6 animate-spin text-[#e50914]" />
+                          <Loader2 className="w-5 h-5 animate-spin text-[#e50914]" />
                         ) : (
-                          <Upload className="w-6 h-6" />
+                          <Upload className="w-5 h-5" />
                         )}
                       </div>
                       <div className="min-w-0 flex-1">
-                        <p className="text-sm sm:text-base font-bold text-white group-hover:text-rose-300 transition-colors truncate">
+                        <p className="text-xs sm:text-sm font-bold text-white group-hover:text-rose-300 transition-colors truncate">
                           {isUploadingImage
                             ? "Optimizing & Processing Image..."
                             : formData.image_url
                               ? "Click to Choose / Change Poster"
                               : "Click to Upload Poster from Device"}
                         </p>
-                        <p className="text-xs text-slate-400 mt-1">
+                        <p className="text-[11px] text-slate-400 mt-0.5">
                           Supports all file sizes (MBs / 4K / HD) • PNG, JPG, JPEG, WEBP
                         </p>
                       </div>
@@ -1635,9 +1632,9 @@ export default function AdminPage() {
                             setFormData((prev) => ({ ...prev, image_url: "" }));
                             setImagePreviewStatus("idle");
                           }}
-                          className="text-xs sm:text-sm font-bold text-rose-400 hover:text-rose-300 flex items-center gap-1.5 hover:underline cursor-pointer transition-colors"
+                          className="text-xs font-semibold text-rose-400 hover:text-rose-300 flex items-center gap-1 hover:underline cursor-pointer transition-colors"
                         >
-                          <X className="w-4 h-4" /> Remove poster
+                          <X className="w-3.5 h-3.5" /> Remove poster
                         </button>
                       </div>
                     )}
@@ -1645,45 +1642,45 @@ export default function AdminPage() {
 
                   {/* Synopsis Field */}
                   <div>
-                    <label className="block text-sm font-bold uppercase tracking-wider text-slate-200 mb-2">
+                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
                       Storyline <span className="text-[#e50914]">*</span>
                     </label>
                     <textarea
-                      rows={4}
+                      rows={3}
                       required
                       value={formData.description}
                       onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                       placeholder="Write a captivating plot description for CineVerse audience..."
-                      className="w-full bg-[#131b2e] border border-slate-700/80 hover:border-slate-500 focus:border-[#e50914] focus:ring-2 focus:ring-[#e50914]/25 rounded-xl p-4 text-sm sm:text-base text-slate-100 placeholder:text-slate-500 transition-all resize-none leading-relaxed custom-scrollbar shadow-inner"
+                      className="w-full bg-[#131b2e] border border-slate-700/80 hover:border-slate-500 focus:border-[#e50914] focus:ring-1 focus:ring-[#e50914]/25 rounded-xl p-3 text-xs sm:text-sm text-slate-100 placeholder:text-slate-500 transition-all resize-none leading-relaxed custom-scrollbar shadow-inner"
                     />
                   </div>
                 </div>
 
                 {/* Right Column: Live Poster Studio Preview */}
-                <div className="lg:col-span-5 rounded-2xl bg-[#11192b] border border-slate-700/70 p-5 sm:p-6 flex flex-col items-center justify-between gap-5 h-full">
-                  <div className="w-full flex items-center justify-between pb-3.5 border-b border-slate-700/60">
-                    <p className="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
-                      <Film className="w-4 h-4 text-[#e50914]" /> Live Cinema Preview
+                <div className="lg:col-span-5 rounded-2xl bg-[#11192b] border border-slate-700/70 p-4 sm:p-5 flex flex-col items-center justify-between gap-4 h-full">
+                  <div className="w-full flex items-center justify-between pb-3 border-b border-slate-700/60">
+                    <p className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
+                      <Film className="w-3.5 h-3.5 text-[#e50914]" /> Live Cinema Preview
                     </p>
                     {formData.image_url ? (
                       imagePreviewStatus === "valid" ? (
-                        <span className="text-xs font-bold text-emerald-400 bg-emerald-500/15 border border-emerald-500/30 px-2.5 py-1 rounded-lg flex items-center gap-1">
-                          <CheckCircle className="w-3.5 h-3.5" /> Ready
+                        <span className="text-xs font-bold text-emerald-400 bg-emerald-500/15 border border-emerald-500/30 px-2 py-0.5 rounded-lg flex items-center gap-1">
+                          <CheckCircle className="w-3 h-3" /> Ready
                         </span>
                       ) : imagePreviewStatus === "error" ? (
-                        <span className="text-xs font-bold text-rose-400 bg-rose-500/15 border border-rose-500/30 px-2.5 py-1 rounded-lg flex items-center gap-1">
-                          <AlertTriangle className="w-3.5 h-3.5" /> Error
+                        <span className="text-xs font-bold text-rose-400 bg-rose-500/15 border border-rose-500/30 px-2 py-0.5 rounded-lg flex items-center gap-1">
+                          <AlertTriangle className="w-3 h-3" /> Error
                         </span>
                       ) : (
-                        <span className="text-xs text-slate-300 bg-white/[0.08] px-2.5 py-1 rounded-lg">Loading</span>
+                        <span className="text-xs text-slate-300 bg-white/[0.08] px-2 py-0.5 rounded-lg">Loading</span>
                       )
                     ) : (
-                      <span className="text-xs font-medium text-slate-400 bg-white/[0.06] px-2.5 py-1 rounded-lg">Empty</span>
+                      <span className="text-xs font-medium text-slate-400 bg-white/[0.06] px-2 py-0.5 rounded-lg">Empty</span>
                     )}
                   </div>
 
                   {/* Poster Preview Frame */}
-                  <div className="w-48 sm:w-56 aspect-[2/3] rounded-2xl bg-black overflow-hidden border-2 border-slate-600 shadow-[0_20px_60px_rgba(0,0,0,0.9)] relative group transition-all">
+                  <div className="w-44 sm:w-52 aspect-[2/3] rounded-2xl bg-black overflow-hidden border-2 border-slate-600 shadow-xl relative group transition-all">
                     {formData.image_url ? (
                       <>
                         <img
@@ -1699,29 +1696,29 @@ export default function AdminPage() {
                           }}
                         />
                         {/* Status Overlay Badges */}
-                        <div className="absolute top-3 left-3 pointer-events-none">
-                          <span className="px-2.5 py-1 rounded-lg bg-black/80 backdrop-blur-md text-white text-xs font-bold border border-white/20 shadow">
+                        <div className="absolute top-2.5 left-2.5 pointer-events-none">
+                          <span className="px-2 py-0.5 rounded-md bg-black/80 backdrop-blur-md text-white text-[11px] font-bold border border-white/20 shadow">
                             {formData.genre || "Cinema"}
                           </span>
                         </div>
-                        <div className="absolute top-3 right-3 pointer-events-none">
-                          <span className="px-2.5 py-1 rounded-lg bg-amber-500 text-slate-950 text-xs font-black shadow flex items-center gap-1">
+                        <div className="absolute top-2.5 right-2.5 pointer-events-none">
+                          <span className="px-2 py-0.5 rounded-md bg-amber-500 text-slate-950 text-[11px] font-black shadow flex items-center gap-1">
                             {formData.rating.toFixed(1)} ★
                           </span>
                         </div>
                         <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-transparent pointer-events-none" />
-                        <div className="absolute bottom-3 left-3 right-3 pointer-events-none">
-                          <p className="text-white text-sm sm:text-base font-bold truncate drop-shadow-md">{formData.title || "Movie Title"}</p>
-                          <p className="text-slate-300 text-xs drop-shadow">{formData.release_year}</p>
+                        <div className="absolute bottom-2.5 left-2.5 right-2.5 pointer-events-none">
+                          <p className="text-white text-xs sm:text-sm font-bold truncate drop-shadow-md">{formData.title || "Movie Title"}</p>
+                          <p className="text-slate-300 text-[11px] drop-shadow">{formData.release_year}</p>
                         </div>
                       </>
                     ) : (
-                      <div className="w-full h-full flex flex-col items-center justify-center p-5 text-center text-slate-400 space-y-3">
-                        <div className="w-14 h-14 rounded-2xl bg-white/[0.06] flex items-center justify-center text-slate-500">
-                          <Film className="w-7 h-7" />
+                      <div className="w-full h-full flex flex-col items-center justify-center p-4 text-center text-slate-400 space-y-2">
+                        <div className="w-12 h-12 rounded-xl bg-white/[0.06] flex items-center justify-center text-slate-500">
+                          <Film className="w-6 h-6" />
                         </div>
-                        <p className="text-sm font-bold text-slate-300">No Poster Uploaded</p>
-                        <p className="text-xs text-slate-400 leading-normal">Upload an image on the left to see live preview</p>
+                        <p className="text-xs font-bold text-slate-300">No Poster Uploaded</p>
+                        <p className="text-[11px] text-slate-400 leading-normal">Upload an image on the left to see live preview</p>
                       </div>
                     )}
                   </div>
@@ -1729,27 +1726,27 @@ export default function AdminPage() {
                   {/* Hero Banner Feature Switch */}
                   <div
                     onClick={() => setFormData({ ...formData, is_featured: !formData.is_featured })}
-                    className="w-full p-4 rounded-xl bg-[#141e33] hover:bg-[#18243c] border border-slate-700/80 transition-all cursor-pointer flex items-center justify-between group"
+                    className="w-full p-3 rounded-xl bg-[#141e33] hover:bg-[#18243c] border border-slate-700/80 transition-all cursor-pointer flex items-center justify-between group"
                   >
-                    <div className="flex items-center gap-3.5">
-                      <div className="w-9 h-9 rounded-lg bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-lg bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0">
                         <Star className={`w-4 h-4 ${formData.is_featured ? "fill-amber-400" : ""}`} />
                       </div>
                       <div>
-                        <p className="text-sm font-bold text-slate-100 group-hover:text-white transition-colors">
+                        <p className="text-xs sm:text-sm font-bold text-slate-100 group-hover:text-white transition-colors">
                           Hero Banner Feature
                         </p>
-                        <p className="text-xs text-slate-400 mt-0.5">
+                        <p className="text-[11px] text-slate-400 mt-0.5">
                           Pin movie to homepage top billboard
                         </p>
                       </div>
                     </div>
                     <div
-                      className={`w-10 h-6 rounded-full p-0.5 transition-colors relative flex items-center ${formData.is_featured ? "bg-[#e50914]" : "bg-slate-600"
+                      className={`w-9 h-5 rounded-full p-0.5 transition-colors relative flex items-center ${formData.is_featured ? "bg-[#e50914]" : "bg-slate-600"
                         }`}
                     >
                       <div
-                        className={`w-5 h-5 rounded-full bg-white shadow transition-transform ${formData.is_featured ? "translate-x-4" : "translate-x-0"
+                        className={`w-4 h-4 rounded-full bg-white shadow transition-transform ${formData.is_featured ? "translate-x-4" : "translate-x-0"
                           }`}
                       />
                     </div>
@@ -1758,22 +1755,22 @@ export default function AdminPage() {
               </div>
 
               {/* Modal Actions */}
-              <div className="flex items-center justify-end gap-3.5 pt-6 border-t border-slate-700/60 mt-3">
+              <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-700/60 mt-2">
                 <button
                   type="button"
                   onClick={() => setIsAddModalOpen(false)}
-                  className="px-6 py-3 rounded-xl text-sm font-bold text-slate-300 hover:text-white bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 transition-all cursor-pointer"
+                  className="px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-slate-300 hover:text-white bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 transition-all cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={formSubmitting}
-                  className="px-7 py-3 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-[#e50914] via-rose-600 to-rose-700 hover:from-rose-600 hover:to-rose-800 shadow-xl shadow-rose-950/70 transition-all flex items-center gap-2.5 cursor-pointer disabled:opacity-50"
+                  className="px-6 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-white bg-gradient-to-r from-[#e50914] via-rose-600 to-rose-700 hover:from-rose-600 hover:to-rose-800 shadow-lg shadow-rose-950/70 transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
                 >
                   {formSubmitting ? (
                     <>
-                      <Loader2 className="w-5 h-5 animate-spin" />
+                      <Loader2 className="w-4 h-4 animate-spin" />
                       <span>Publishing...</span>
                     </>
                   ) : (
@@ -1791,43 +1788,43 @@ export default function AdminPage() {
       {/* ========================================================================= */}
       {isEditModalOpen && activeMovie && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-2xl animate-fadeIn">
-          <div className="w-full max-w-5xl bg-[#0b1120]/95 border border-slate-700/60 rounded-3xl p-6 sm:p-9 shadow-[0_30px_100px_rgba(0,0,0,0.95)] max-h-[92vh] overflow-y-auto custom-scrollbar">
+          <div className="w-full max-w-5xl bg-[#0b1120]/95 border border-slate-700/60 rounded-3xl p-5 sm:p-8 shadow-[0_30px_100px_rgba(0,0,0,0.95)] max-h-[92vh] overflow-y-auto custom-scrollbar">
             {/* Modal Header */}
-            <div className="flex items-center justify-between pb-5 border-b border-slate-700/60 mb-6">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#e50914] to-rose-700 flex items-center justify-center text-white shadow-xl shadow-rose-950/60 ring-2 ring-white/10 shrink-0">
-                  <Edit2 className="w-6 h-6 stroke-[2.5]" />
+            <div className="flex items-center justify-between pb-4 border-b border-slate-700/60 mb-5">
+              <div className="flex items-center gap-3.5">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#e50914] to-rose-700 flex items-center justify-center text-white shadow-lg shadow-rose-950/60 ring-1 ring-white/10 shrink-0">
+                  <Edit2 className="w-5 h-5 stroke-[2.5]" />
                 </div>
                 <div>
-                  <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">Edit Movie Details</h2>
-                  <p className="text-sm text-slate-300 mt-1 flex items-center gap-2 font-medium">
+                  <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">Edit Movie Details</h2>
+                  <p className="text-xs sm:text-sm text-slate-400 mt-0.5 flex items-center gap-1.5 font-normal">
                     <span>Modifying:</span>
-                    <span className="bg-rose-500/15 text-rose-300 border border-rose-500/30 px-3 py-0.5 rounded-lg text-sm font-bold">{activeMovie.title}</span>
+                    <span className="bg-rose-500/15 text-rose-300 border border-rose-500/30 px-2 py-0.5 rounded-md text-xs font-bold">{activeMovie.title}</span>
                   </p>
                 </div>
               </div>
               <button
                 onClick={() => setIsEditModalOpen(false)}
-                className="w-10 h-10 rounded-xl bg-white/[0.06] hover:bg-white/[0.15] border border-white/10 text-slate-300 hover:text-white transition-all flex items-center justify-center cursor-pointer"
+                className="w-9 h-9 rounded-xl bg-white/[0.06] hover:bg-white/[0.15] border border-white/10 text-slate-300 hover:text-white transition-all flex items-center justify-center cursor-pointer"
               >
-                <X className="w-5 h-5" />
+                <X className="w-4.5 h-4.5" />
               </button>
             </div>
 
             {formError && (
-              <div className="mb-6 p-4 rounded-2xl bg-rose-500/15 border border-rose-500/40 text-rose-300 text-sm flex items-center gap-3">
-                <AlertTriangle className="w-5 h-5 text-rose-400 shrink-0" />
+              <div className="mb-5 p-3.5 rounded-xl bg-rose-500/15 border border-rose-500/40 text-rose-300 text-xs sm:text-sm flex items-center gap-2.5">
+                <AlertTriangle className="w-4.5 h-4.5 text-rose-400 shrink-0" />
                 <span className="font-semibold">{formError}</span>
               </div>
             )}
 
-            <form onSubmit={handleEditSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
+            <form onSubmit={handleEditSubmit} className="space-y-5">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-7 items-start">
                 {/* Left Column: Form Fields */}
-                <div className="lg:col-span-7 space-y-5">
+                <div className="lg:col-span-7 space-y-4">
                   {/* Title Field */}
                   <div>
-                    <label className="block text-sm font-bold uppercase tracking-wider text-slate-200 mb-2">
+                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
                       Movie Title <span className="text-[#e50914]">*</span>
                     </label>
                     <input
@@ -1836,21 +1833,21 @@ export default function AdminPage() {
                       value={formData.title}
                       onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                       placeholder="e.g. The Godfather"
-                      className="w-full bg-[#131b2e] border border-slate-700/80 hover:border-slate-500 focus:border-[#e50914] focus:ring-2 focus:ring-[#e50914]/25 rounded-xl px-4 py-3 text-base text-white placeholder:text-slate-500 transition-all font-medium shadow-inner"
+                      className="w-full bg-[#131b2e] border border-slate-700/80 hover:border-slate-500 focus:border-[#e50914] focus:ring-1 focus:ring-[#e50914]/25 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder:text-slate-500 transition-all font-medium shadow-inner"
                     />
                   </div>
 
                   {/* 3 Equal Columns: Genre, Release Year, Visibility */}
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 sm:gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     <div>
-                      <label className="block text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-200 mb-2">
+                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
                         Genre <span className="text-[#e50914]">*</span>
                       </label>
                       <select
                         required
                         value={formData.genre}
                         onChange={(e) => setFormData({ ...formData, genre: e.target.value })}
-                        className="w-full bg-[#131b2e] border border-slate-700/80 hover:border-slate-500 focus:border-[#e50914] focus:ring-2 focus:ring-[#e50914]/25 rounded-xl px-3.5 py-3 text-sm font-semibold text-white transition-all cursor-pointer"
+                        className="w-full bg-[#131b2e] border border-slate-700/80 hover:border-slate-500 focus:border-[#e50914] focus:ring-1 focus:ring-[#e50914]/25 rounded-xl px-3 py-2.5 text-xs sm:text-sm font-semibold text-white transition-all cursor-pointer"
                       >
                         {formData.genre && !genreCategories.some((c) => c.name.toLowerCase() === formData.genre.toLowerCase()) && (
                           <option value={formData.genre} className="bg-[#0f172a] text-white">
@@ -1866,14 +1863,14 @@ export default function AdminPage() {
                     </div>
 
                     <div>
-                      <label className="block text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-200 mb-2">
+                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
                         Release Year <span className="text-[#e50914]">*</span>
                       </label>
                       <select
                         required
                         value={formData.release_year}
                         onChange={(e) => setFormData({ ...formData, release_year: Number(e.target.value) })}
-                        className="w-full bg-[#131b2e] border border-slate-700/80 hover:border-slate-500 focus:border-[#e50914] focus:ring-2 focus:ring-[#e50914]/25 rounded-xl px-3.5 py-3 text-sm font-semibold text-white transition-all cursor-pointer"
+                        className="w-full bg-[#131b2e] border border-slate-700/80 hover:border-slate-500 focus:border-[#e50914] focus:ring-1 focus:ring-[#e50914]/25 rounded-xl px-3 py-2.5 text-xs sm:text-sm font-semibold text-white transition-all cursor-pointer"
                       >
                         {releaseYearsList.map((yr) => (
                           <option key={yr} value={yr} className="bg-[#0f172a] text-white">
@@ -1884,30 +1881,30 @@ export default function AdminPage() {
                     </div>
 
                     <div>
-                      <label className="block text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-200 mb-2">
+                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
                         Visibility <span className="text-[#e50914]">*</span>
                       </label>
                       <select
                         value={formData.status}
                         onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                        className="w-full bg-[#131b2e] border border-slate-700/80 hover:border-slate-500 focus:border-[#e50914] focus:ring-2 focus:ring-[#e50914]/25 rounded-xl px-3.5 py-3 text-sm font-semibold text-white transition-all cursor-pointer"
+                        className="w-full bg-[#131b2e] border border-slate-700/80 hover:border-slate-500 focus:border-[#e50914] focus:ring-1 focus:ring-[#e50914]/25 rounded-xl px-3 py-2.5 text-xs sm:text-sm font-semibold text-white transition-all cursor-pointer"
                       >
-                        <option value="active" className="bg-[#0f172a] text-emerald-400 font-bold">🟢 Active</option>
-                        <option value="hidden" className="bg-[#0f172a] text-purple-300 font-bold">👁️ Hidden</option>
-                        <option value="under_review" className="bg-[#0f172a] text-amber-400 font-bold">🟡 Review</option>
-                        <option value="removed" className="bg-[#0f172a] text-rose-400 font-bold">🔴 Removed</option>
+                        <option value="active" className="bg-[#0f172a] text-emerald-400 font-semibold">🟢 Active</option>
+                        <option value="hidden" className="bg-[#0f172a] text-purple-300 font-semibold">👁️ Hidden</option>
+                        <option value="under_review" className="bg-[#0f172a] text-amber-400 font-semibold">🟡 Review</option>
+                        <option value="removed" className="bg-[#0f172a] text-rose-400 font-semibold">🔴 Removed</option>
                       </select>
                     </div>
                   </div>
 
                   {/* Rating Slider Box */}
-                  <div className="p-4 sm:p-5 rounded-2xl bg-[#11192b] border border-slate-700/70 space-y-3">
+                  <div className="p-3.5 sm:p-4 rounded-xl bg-[#11192b] border border-slate-700/70 space-y-2.5">
                     <div className="flex items-center justify-between">
-                      <label className="text-sm font-bold uppercase tracking-wider text-slate-200 flex items-center gap-2">
-                        <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
+                      <label className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
+                        <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
                         <span>Rating Score</span>
                       </label>
-                      <span className="bg-amber-400/15 border border-amber-400/40 text-amber-300 px-3.5 py-1 rounded-full text-sm font-black flex items-center gap-1.5 shadow-sm">
+                      <span className="bg-amber-400/15 border border-amber-400/40 text-amber-300 px-2.5 py-0.5 rounded-full text-xs font-bold flex items-center gap-1 shadow-sm">
                         {formData.rating.toFixed(1)} ★
                       </span>
                     </div>
@@ -1918,9 +1915,9 @@ export default function AdminPage() {
                       step={0.1}
                       value={formData.rating}
                       onChange={(e) => setFormData({ ...formData, rating: Number(e.target.value) })}
-                      className="w-full accent-[#e50914] h-2.5 bg-slate-800 rounded-lg cursor-pointer transition-all"
+                      className="w-full accent-[#e50914] h-2 bg-slate-800 rounded-lg cursor-pointer transition-all"
                     />
-                    <div className="flex justify-between text-xs font-semibold text-slate-400 px-1">
+                    <div className="flex justify-between text-[11px] font-medium text-slate-400 px-1">
                       <span>0.0</span>
                       <span>5.0 (Avg)</span>
                       <span>7.5 (Good)</span>
@@ -1929,21 +1926,21 @@ export default function AdminPage() {
                   </div>
 
                   {/* Poster Image Upload */}
-                  <div className="p-4 sm:p-5 rounded-2xl bg-[#11192b] border border-slate-700/70 space-y-3.5">
+                  <div className="p-3.5 sm:p-4 rounded-xl bg-[#11192b] border border-slate-700/70 space-y-3">
                     <div className="flex items-center justify-between">
-                      <label className="text-sm font-bold uppercase tracking-wider text-slate-200 flex items-center gap-2">
-                        <ImageIcon className="w-4 h-4 text-[#e50914]" />
+                      <label className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
+                        <ImageIcon className="w-3.5 h-3.5 text-[#e50914]" />
                         <span>Poster Image <span className="text-[#e50914]">*</span></span>
                       </label>
                       {formData.image_url && (
-                        <span className="text-xs font-bold text-emerald-400 flex items-center gap-1.5 bg-emerald-500/15 px-3 py-1 rounded-full border border-emerald-500/30">
-                          <CheckCircle className="w-3.5 h-3.5" /> Image Loaded
+                        <span className="text-xs font-bold text-emerald-400 flex items-center gap-1 bg-emerald-500/15 px-2.5 py-0.5 rounded-full border border-emerald-500/30">
+                          <CheckCircle className="w-3 h-3" /> Image Loaded
                         </span>
                       )}
                     </div>
 
                     <label
-                      className={`group relative flex items-center gap-4 p-4 sm:p-5 rounded-xl border-2 border-dashed transition-all cursor-pointer ${formData.image_url
+                      className={`group relative flex items-center gap-3.5 p-3.5 sm:p-4 rounded-xl border-2 border-dashed transition-all cursor-pointer ${formData.image_url
                         ? "border-emerald-500/45 bg-emerald-950/20 hover:border-emerald-500/70"
                         : "border-slate-600/80 bg-[#141e33]/70 hover:border-[#e50914] hover:bg-[#e50914]/[0.06]"
                         }`}
@@ -1955,22 +1952,22 @@ export default function AdminPage() {
                         className="hidden"
                         disabled={isUploadingImage}
                       />
-                      <div className="w-11 h-11 rounded-xl bg-white/[0.08] group-hover:bg-[#e50914]/20 group-hover:text-[#e50914] text-slate-200 flex items-center justify-center transition-all shrink-0">
+                      <div className="w-10 h-10 rounded-xl bg-white/[0.08] group-hover:bg-[#e50914]/20 group-hover:text-[#e50914] text-slate-200 flex items-center justify-center transition-all shrink-0">
                         {isUploadingImage ? (
-                          <Loader2 className="w-6 h-6 animate-spin text-[#e50914]" />
+                          <Loader2 className="w-5 h-5 animate-spin text-[#e50914]" />
                         ) : (
-                          <Upload className="w-6 h-6" />
+                          <Upload className="w-5 h-5" />
                         )}
                       </div>
                       <div className="min-w-0 flex-1">
-                        <p className="text-sm sm:text-base font-bold text-white group-hover:text-rose-300 transition-colors truncate">
+                        <p className="text-xs sm:text-sm font-bold text-white group-hover:text-rose-300 transition-colors truncate">
                           {isUploadingImage
                             ? "Optimizing & Processing Image..."
                             : formData.image_url
                               ? "Click to Choose / Change Poster"
                               : "Click to Upload Poster from Device"}
                         </p>
-                        <p className="text-xs text-slate-400 mt-1">
+                        <p className="text-[11px] text-slate-400 mt-0.5">
                           Supports all file sizes (MBs / 4K / HD) • PNG, JPG, JPEG, WEBP
                         </p>
                       </div>
@@ -1984,9 +1981,9 @@ export default function AdminPage() {
                             setFormData((prev) => ({ ...prev, image_url: "" }));
                             setImagePreviewStatus("idle");
                           }}
-                          className="text-xs sm:text-sm font-bold text-rose-400 hover:text-rose-300 flex items-center gap-1.5 hover:underline cursor-pointer transition-colors"
+                          className="text-xs font-semibold text-rose-400 hover:text-rose-300 flex items-center gap-1 hover:underline cursor-pointer transition-colors"
                         >
-                          <X className="w-4 h-4" /> Remove poster
+                          <X className="w-3.5 h-3.5" /> Remove poster
                         </button>
                       </div>
                     )}
@@ -1994,45 +1991,45 @@ export default function AdminPage() {
 
                   {/* Synopsis Field */}
                   <div>
-                    <label className="block text-sm font-bold uppercase tracking-wider text-slate-200 mb-2">
+                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
                       Storyline <span className="text-[#e50914]">*</span>
                     </label>
                     <textarea
-                      rows={4}
+                      rows={3}
                       required
                       value={formData.description}
                       onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                       placeholder="Write a captivating plot description for CineVerse audience..."
-                      className="w-full bg-[#131b2e] border border-slate-700/80 hover:border-slate-500 focus:border-[#e50914] focus:ring-2 focus:ring-[#e50914]/25 rounded-xl p-4 text-sm sm:text-base text-slate-100 placeholder:text-slate-500 transition-all resize-none leading-relaxed custom-scrollbar shadow-inner"
+                      className="w-full bg-[#131b2e] border border-slate-700/80 hover:border-slate-500 focus:border-[#e50914] focus:ring-1 focus:ring-[#e50914]/25 rounded-xl p-3 text-xs sm:text-sm text-slate-100 placeholder:text-slate-500 transition-all resize-none leading-relaxed custom-scrollbar shadow-inner"
                     />
                   </div>
                 </div>
 
                 {/* Right Column: Live Poster Studio Preview */}
-                <div className="lg:col-span-5 rounded-2xl bg-[#11192b] border border-slate-700/70 p-5 sm:p-6 flex flex-col items-center justify-between gap-5 h-full">
-                  <div className="w-full flex items-center justify-between pb-3.5 border-b border-slate-700/60">
-                    <p className="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
-                      <Film className="w-4 h-4 text-[#e50914]" /> Poster Preview
+                <div className="lg:col-span-5 rounded-2xl bg-[#11192b] border border-slate-700/70 p-4 sm:p-5 flex flex-col items-center justify-between gap-4 h-full">
+                  <div className="w-full flex items-center justify-between pb-3 border-b border-slate-700/60">
+                    <p className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
+                      <Film className="w-3.5 h-3.5 text-[#e50914]" /> Poster Preview
                     </p>
                     {formData.image_url ? (
                       imagePreviewStatus === "valid" ? (
-                        <span className="text-xs font-bold text-emerald-400 bg-emerald-500/15 border border-emerald-500/30 px-2.5 py-1 rounded-lg flex items-center gap-1">
-                          <CheckCircle className="w-3.5 h-3.5" /> Ready
+                        <span className="text-xs font-bold text-emerald-400 bg-emerald-500/15 border border-emerald-500/30 px-2 py-0.5 rounded-lg flex items-center gap-1">
+                          <CheckCircle className="w-3 h-3" /> Ready
                         </span>
                       ) : imagePreviewStatus === "error" ? (
-                        <span className="text-xs font-bold text-rose-400 bg-rose-500/15 border border-rose-500/30 px-2.5 py-1 rounded-lg flex items-center gap-1">
-                          <AlertTriangle className="w-3.5 h-3.5" /> Error
+                        <span className="text-xs font-bold text-rose-400 bg-rose-500/15 border border-rose-500/30 px-2 py-0.5 rounded-lg flex items-center gap-1">
+                          <AlertTriangle className="w-3 h-3" /> Error
                         </span>
                       ) : (
-                        <span className="text-xs text-slate-300 bg-white/[0.08] px-2.5 py-1 rounded-lg">Loading</span>
+                        <span className="text-xs text-slate-300 bg-white/[0.08] px-2 py-0.5 rounded-lg">Loading</span>
                       )
                     ) : (
-                      <span className="text-xs font-medium text-slate-400 bg-white/[0.06] px-2.5 py-1 rounded-lg">Empty</span>
+                      <span className="text-xs font-medium text-slate-400 bg-white/[0.06] px-2 py-0.5 rounded-lg">Empty</span>
                     )}
                   </div>
 
                   {/* Poster Preview Frame */}
-                  <div className="w-48 sm:w-56 aspect-[2/3] rounded-2xl bg-black overflow-hidden border-2 border-slate-600 shadow-[0_20px_60px_rgba(0,0,0,0.9)] relative group transition-all">
+                  <div className="w-44 sm:w-52 aspect-[2/3] rounded-2xl bg-black overflow-hidden border-2 border-slate-600 shadow-xl relative group transition-all">
                     {formData.image_url ? (
                       <>
                         <img
@@ -2048,29 +2045,29 @@ export default function AdminPage() {
                           }}
                         />
                         {/* Status Overlay Badges */}
-                        <div className="absolute top-3 left-3 pointer-events-none">
-                          <span className="px-2.5 py-1 rounded-lg bg-black/80 backdrop-blur-md text-white text-xs font-bold border border-white/20 shadow">
+                        <div className="absolute top-2.5 left-2.5 pointer-events-none">
+                          <span className="px-2 py-0.5 rounded-md bg-black/80 backdrop-blur-md text-white text-[11px] font-bold border border-white/20 shadow">
                             {formData.genre || "Cinema"}
                           </span>
                         </div>
-                        <div className="absolute top-3 right-3 pointer-events-none">
-                          <span className="px-2.5 py-1 rounded-lg bg-amber-500 text-slate-950 text-xs font-black shadow flex items-center gap-1">
+                        <div className="absolute top-2.5 right-2.5 pointer-events-none">
+                          <span className="px-2 py-0.5 rounded-md bg-amber-500 text-slate-950 text-[11px] font-black shadow flex items-center gap-1">
                             {formData.rating.toFixed(1)} ★
                           </span>
                         </div>
                         <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-transparent pointer-events-none" />
-                        <div className="absolute bottom-3 left-3 right-3 pointer-events-none">
-                          <p className="text-white text-sm sm:text-base font-bold truncate drop-shadow-md">{formData.title || "Movie Title"}</p>
-                          <p className="text-slate-300 text-xs drop-shadow">{formData.release_year}</p>
+                        <div className="absolute bottom-2.5 left-2.5 right-2.5 pointer-events-none">
+                          <p className="text-white text-xs sm:text-sm font-bold truncate drop-shadow-md">{formData.title || "Movie Title"}</p>
+                          <p className="text-slate-300 text-[11px] drop-shadow">{formData.release_year}</p>
                         </div>
                       </>
                     ) : (
-                      <div className="w-full h-full flex flex-col items-center justify-center p-5 text-center text-slate-400 space-y-3">
-                        <div className="w-14 h-14 rounded-2xl bg-white/[0.06] flex items-center justify-center text-slate-500">
-                          <Film className="w-7 h-7" />
+                      <div className="w-full h-full flex flex-col items-center justify-center p-4 text-center text-slate-400 space-y-2">
+                        <div className="w-12 h-12 rounded-xl bg-white/[0.06] flex items-center justify-center text-slate-500">
+                          <Film className="w-6 h-6" />
                         </div>
-                        <p className="text-sm font-bold text-slate-300">No Poster Uploaded</p>
-                        <p className="text-xs text-slate-400 leading-normal">Upload an image on the left to see live preview</p>
+                        <p className="text-xs font-bold text-slate-300">No Poster Uploaded</p>
+                        <p className="text-[11px] text-slate-400 leading-normal">Upload an image on the left to see live preview</p>
                       </div>
                     )}
                   </div>
@@ -2078,27 +2075,27 @@ export default function AdminPage() {
                   {/* Hero Banner Feature Switch */}
                   <div
                     onClick={() => setFormData({ ...formData, is_featured: !formData.is_featured })}
-                    className="w-full p-4 rounded-xl bg-[#141e33] hover:bg-[#18243c] border border-slate-700/80 transition-all cursor-pointer flex items-center justify-between group"
+                    className="w-full p-3 rounded-xl bg-[#141e33] hover:bg-[#18243c] border border-slate-700/80 transition-all cursor-pointer flex items-center justify-between group"
                   >
-                    <div className="flex items-center gap-3.5">
-                      <div className="w-9 h-9 rounded-lg bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-lg bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0">
                         <Star className={`w-4 h-4 ${formData.is_featured ? "fill-amber-400" : ""}`} />
                       </div>
                       <div>
-                        <p className="text-sm font-bold text-slate-100 group-hover:text-white transition-colors">
+                        <p className="text-xs sm:text-sm font-bold text-slate-100 group-hover:text-white transition-colors">
                           Hero Banner Feature
                         </p>
-                        <p className="text-xs text-slate-400 mt-0.5">
+                        <p className="text-[11px] text-slate-400 mt-0.5">
                           Pin movie to homepage top billboard
                         </p>
                       </div>
                     </div>
                     <div
-                      className={`w-10 h-6 rounded-full p-0.5 transition-colors relative flex items-center ${formData.is_featured ? "bg-[#e50914]" : "bg-slate-600"
+                      className={`w-9 h-5 rounded-full p-0.5 transition-colors relative flex items-center ${formData.is_featured ? "bg-[#e50914]" : "bg-slate-600"
                         }`}
                     >
                       <div
-                        className={`w-5 h-5 rounded-full bg-white shadow transition-transform ${formData.is_featured ? "translate-x-4" : "translate-x-0"
+                        className={`w-4 h-4 rounded-full bg-white shadow transition-transform ${formData.is_featured ? "translate-x-4" : "translate-x-0"
                           }`}
                       />
                     </div>
@@ -2107,22 +2104,22 @@ export default function AdminPage() {
               </div>
 
               {/* Modal Actions */}
-              <div className="flex items-center justify-end gap-3.5 pt-6 border-t border-slate-700/60 mt-3">
+              <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-700/60 mt-2">
                 <button
                   type="button"
                   onClick={() => setIsEditModalOpen(false)}
-                  className="px-6 py-3 rounded-xl text-sm font-bold text-slate-300 hover:text-white bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 transition-all cursor-pointer"
+                  className="px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-slate-300 hover:text-white bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 transition-all cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={formSubmitting}
-                  className="px-7 py-3 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-[#e50914] via-rose-600 to-rose-700 hover:from-rose-600 hover:to-rose-800 shadow-xl shadow-rose-950/70 transition-all flex items-center gap-2.5 cursor-pointer disabled:opacity-50"
+                  className="px-6 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-white bg-gradient-to-r from-[#e50914] via-rose-600 to-rose-700 hover:from-rose-600 hover:to-rose-800 shadow-lg shadow-rose-950/70 transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
                 >
                   {formSubmitting ? (
                     <>
-                      <Loader2 className="w-5 h-5 animate-spin" />
+                      <Loader2 className="w-4 h-4 animate-spin" />
                       <span>Saving Changes...</span>
                     </>
                   ) : (
@@ -2140,27 +2137,27 @@ export default function AdminPage() {
       {/* ========================================================================= */}
       {isDeleteModalOpen && activeMovie && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-xl animate-fadeIn">
-          <div className="w-full max-w-md bg-[#0c101a] border border-white/[0.1] rounded-3xl p-7 shadow-[0_25px_80px_rgba(0,0,0,0.9)]">
-            <div className="flex items-center justify-center mb-5">
-              <div className="w-14 h-14 rounded-2xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-rose-500 shadow-lg shadow-rose-950/40">
-                <Trash2 className="w-7 h-7" />
+          <div className="w-full max-w-md bg-[#0c101a] border border-white/[0.1] rounded-2xl p-6 shadow-2xl">
+            <div className="flex items-center justify-center mb-4">
+              <div className="w-12 h-12 rounded-xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-rose-500 shadow-md shadow-rose-950/40">
+                <Trash2 className="w-6 h-6" />
               </div>
             </div>
 
-            <h3 className="text-xl font-black text-center text-white mb-2 tracking-tight">
+            <h3 className="text-lg font-bold text-center text-white mb-1.5 tracking-tight">
               Delete Movie?
             </h3>
-            <p className="text-xs text-slate-400 text-center mb-6 leading-relaxed">
+            <p className="text-xs text-slate-400 text-center mb-5 leading-relaxed">
               Are you sure you want to permanently delete{" "}
-              <span className="text-white font-bold">"{activeMovie.title}"</span>{" "}
+              <span className="text-white font-semibold">"{activeMovie.title}"</span>{" "}
               from the CineVerse catalog? This action cannot be undone.
             </p>
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2.5">
               <button
                 type="button"
                 onClick={() => setIsDeleteModalOpen(false)}
-                className="flex-1 py-3 rounded-xl text-xs font-bold text-slate-300 bg-white/5 hover:bg-white/10 border border-white/10 transition-colors cursor-pointer"
+                className="flex-1 py-2.5 rounded-xl text-xs font-semibold text-slate-300 bg-white/5 hover:bg-white/10 border border-white/10 transition-colors cursor-pointer"
               >
                 Cancel
               </button>
@@ -2168,7 +2165,7 @@ export default function AdminPage() {
                 type="button"
                 onClick={handleDeleteSubmit}
                 disabled={formSubmitting}
-                className="flex-1 py-3 rounded-xl text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-rose-950/60"
+                className="flex-1 py-2.5 rounded-xl text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-md shadow-rose-950/60"
               >
                 {formSubmitting ? (
                   <Loader2 className="w-4 h-4 animate-spin" />
@@ -2186,41 +2183,41 @@ export default function AdminPage() {
       {/* ========================================================================= */}
       {isReviewsModalOpen && activeMovie && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-xl animate-fadeIn">
-          <div className="w-full max-w-2xl bg-[#0c101a] border border-white/[0.1] rounded-3xl p-6 sm:p-8 shadow-[0_25px_80px_rgba(0,0,0,0.9)] max-h-[85vh] flex flex-col">
+          <div className="w-full max-w-2xl bg-[#0c101a] border border-white/[0.1] rounded-2xl p-5 sm:p-6 shadow-2xl max-h-[85vh] flex flex-col">
             {/* Modal Header */}
-            <div className="flex items-center justify-between pb-4 border-b border-white/[0.08] mb-5">
+            <div className="flex items-center justify-between pb-3.5 border-b border-white/[0.08] mb-4">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-amber-500 to-amber-700 flex items-center justify-center text-slate-950 shadow-lg shadow-amber-950/40 font-black">
-                  <Star className="w-5 h-5 fill-slate-950" />
+                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-500 to-amber-700 flex items-center justify-center text-slate-950 shadow-md font-black">
+                  <Star className="w-4.5 h-4.5 fill-slate-950" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-black text-white tracking-tight">
+                  <h3 className="text-base font-bold text-white tracking-tight">
                     Audience Reviews & Ratings
                   </h3>
-                  <p className="text-xs text-slate-400">
-                    Movie: <span className="text-white font-bold">{activeMovie.title}</span> • Overall: <span className="text-amber-400 font-bold">{activeMovie.rating?.toFixed(1) || "8.0"} ★</span>
+                  <p className="text-xs text-slate-400 font-normal">
+                    Movie: <span className="text-white font-semibold">{activeMovie.title}</span> • Overall: <span className="text-amber-400 font-bold">{activeMovie.rating?.toFixed(1) || "8.0"} ★</span>
                   </p>
                 </div>
               </div>
               <button
                 onClick={() => setIsReviewsModalOpen(false)}
-                className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+                className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
               >
-                <X className="w-5 h-5" />
+                <X className="w-4.5 h-4.5" />
               </button>
             </div>
 
             {/* Reviews List Body */}
-            <div className="flex-1 overflow-y-auto pr-1 space-y-3 custom-scrollbar">
+            <div className="flex-1 overflow-y-auto pr-1 space-y-2.5 custom-scrollbar">
               {isLoadingReviews ? (
-                <div className="py-12 flex flex-col items-center justify-center text-slate-400 text-xs gap-2">
-                  <Loader2 className="w-6 h-6 animate-spin text-rose-500" />
+                <div className="py-10 flex flex-col items-center justify-center text-slate-400 text-xs gap-2">
+                  <Loader2 className="w-5 h-5 animate-spin text-rose-500" />
                   <span>Loading audience ratings and comments...</span>
                 </div>
               ) : movieReviews.length === 0 ? (
-                <div className="py-12 text-center text-slate-500 bg-black/40 rounded-2xl border border-white/5">
-                  <MessageSquare className="w-8 h-8 mx-auto text-slate-600 mb-2" />
-                  <p className="text-xs font-bold text-slate-400">No Audience Reviews Yet</p>
+                <div className="py-10 text-center text-slate-500 bg-black/40 rounded-xl border border-white/5">
+                  <MessageSquare className="w-7 h-7 mx-auto text-slate-600 mb-2" />
+                  <p className="text-xs font-semibold text-slate-400">No Audience Reviews Yet</p>
                   <p className="text-[11px] text-slate-500 mt-0.5">When users rate this movie on the details page, their reviews will appear here.</p>
                 </div>
               ) : (
@@ -2229,24 +2226,24 @@ export default function AdminPage() {
                   return (
                     <div
                       key={reviewId}
-                      className="p-4 rounded-2xl bg-black/40 border border-white/[0.06] hover:border-white/[0.12] transition-colors flex items-start justify-between gap-3"
+                      className="p-3.5 rounded-xl bg-black/40 border border-white/[0.06] hover:border-white/[0.12] transition-colors flex items-start justify-between gap-3"
                     >
-                      <div className="flex items-start gap-3 min-w-0">
+                      <div className="flex items-start gap-2.5 min-w-0">
                         {/* User Avatar */}
-                        <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-rose-600 to-rose-800 flex items-center justify-center text-white text-xs font-bold shrink-0 shadow-md">
+                        <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-rose-600 to-rose-800 flex items-center justify-center text-white text-xs font-bold shrink-0 shadow-sm">
                           {rev.user_avatar ? (
                             <img src={rev.user_avatar} alt={rev.user_name} className="w-full h-full rounded-full object-cover" />
                           ) : rev.user_name ? (
                             rev.user_name.charAt(0).toUpperCase()
                           ) : (
-                            <UserIcon className="w-4 h-4" />
+                            <UserIcon className="w-3.5 h-3.5" />
                           )}
                         </div>
 
                         {/* Review Content */}
                         <div className="min-w-0">
                           <div className="flex items-center gap-2 flex-wrap">
-                            <span className="text-xs font-bold text-white truncate">{rev.user_name || "Anonymous Member"}</span>
+                            <span className="text-xs font-semibold text-white truncate">{rev.user_name || "Anonymous Member"}</span>
                             <div className="flex items-center gap-0.5 text-amber-400">
                               {[1, 2, 3, 4, 5].map((s) => (
                                 <Star
@@ -2258,11 +2255,11 @@ export default function AdminPage() {
                             </div>
                           </div>
 
-                          <p className="text-xs text-slate-300 mt-1.5 leading-relaxed bg-white/[0.02] p-2.5 rounded-xl border border-white/5">
+                          <p className="text-xs text-slate-300 mt-1.5 leading-relaxed bg-white/[0.02] p-2.5 rounded-lg border border-white/5 font-normal">
                             "{rev.comment}"
                           </p>
 
-                          <p className="text-[10px] text-slate-500 mt-1.5">
+                          <p className="text-[10px] text-slate-500 mt-1">
                             Submitted on {new Date(rev.created_at || Date.now()).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
                           </p>
                         </div>
@@ -2272,7 +2269,7 @@ export default function AdminPage() {
                       <button
                         onClick={() => handleDeleteReview(reviewId)}
                         title="Delete this review as Admin"
-                        className="p-1.5 rounded-lg text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 transition-colors shrink-0 cursor-pointer"
+                        className="p-1 rounded-md text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 transition-colors shrink-0 cursor-pointer"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
@@ -2283,12 +2280,12 @@ export default function AdminPage() {
             </div>
 
             {/* Modal Footer */}
-            <div className="pt-4 border-t border-white/[0.08] mt-4 flex items-center justify-between text-xs text-slate-400">
+            <div className="pt-3.5 border-t border-white/[0.08] mt-3 flex items-center justify-between text-xs text-slate-400">
               <span>Total Reviews: <b className="text-white">{movieReviews.length}</b></span>
               <button
                 type="button"
                 onClick={() => setIsReviewsModalOpen(false)}
-                className="px-5 py-2 rounded-xl text-xs font-bold text-slate-300 bg-white/5 hover:bg-white/10 transition-colors cursor-pointer"
+                className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-300 bg-white/5 hover:bg-white/10 transition-colors cursor-pointer"
               >
                 Close
               </button>
