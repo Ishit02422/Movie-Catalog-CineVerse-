@@ -1646,7 +1646,7 @@ export default function AdminPage() {
                   {/* Synopsis Field */}
                   <div>
                     <label className="block text-sm font-bold uppercase tracking-wider text-slate-200 mb-2">
-                      Synopsis / Storyline <span className="text-[#e50914]">*</span>
+                      Storyline <span className="text-[#e50914]">*</span>
                     </label>
                     <textarea
                       rows={4}
@@ -1995,7 +1995,7 @@ export default function AdminPage() {
                   {/* Synopsis Field */}
                   <div>
                     <label className="block text-sm font-bold uppercase tracking-wider text-slate-200 mb-2">
-                      Synopsis / Storyline <span className="text-[#e50914]">*</span>
+                      Storyline <span className="text-[#e50914]">*</span>
                     </label>
                     <textarea
                       rows={4}
