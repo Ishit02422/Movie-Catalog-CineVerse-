@@ -51,9 +51,9 @@ export default function MovieDetailsPage() {
   const router = useRouter();
   const id = params?.id as string;
 
-  const { user, token, isAuthenticated } = useAuth();
+  const { user, token, isAuthenticated, isLoading: authLoading } = useAuth();
   const { isInWatchlist, toggleWatchlist } = useWatchlist();
-  const { recordRecentlyViewed, openTrailerModal } = useMovieStore();
+  const { recordRecentlyViewed, openTrailerModal, updateMovieInStore } = useMovieStore();
   const { showToast } = useToast();
 
   const [movie, setMovie] = useState<Movie | null>(null);
@@ -109,7 +109,7 @@ export default function MovieDetailsPage() {
   }, []);
 
   useEffect(() => {
-    if (!id) return;
+    if (!id || authLoading) return;
 
     async function loadMovieDetails() {
       setIsLoading(true);
@@ -144,6 +144,7 @@ export default function MovieDetailsPage() {
           setError("Movie not found. The movie ID might be invalid or deleted.");
         } else {
           setMovie(data);
+          updateMovieInStore(data);
           recordRecentlyViewed(data);
           loadSimilarMovies(id);
           loadReviews(id);
@@ -157,7 +158,7 @@ export default function MovieDetailsPage() {
     }
 
     loadMovieDetails();
-  }, [id, user?.id, (user as any)?._id, user?.email, recordRecentlyViewed, loadSimilarMovies, loadReviews]);
+  }, [id, authLoading, user?.id, (user as any)?._id, user?.email, recordRecentlyViewed, updateMovieInStore, loadSimilarMovies, loadReviews]);
 
   const handleShare = () => {
     if (typeof window !== "undefined") {
@@ -229,7 +230,10 @@ export default function MovieDetailsPage() {
       // Reload reviews and movie to update average score
       await loadReviews(id);
       const updatedMovie = await fetchMovieById(id);
-      if (updatedMovie) setMovie(updatedMovie);
+      if (updatedMovie) {
+        setMovie(updatedMovie);
+        updateMovieInStore(updatedMovie);
+      }
     } catch (err: any) {
       setReviewMessage(err.message || "Failed to post review.");
       showToast("error", err.message || "Failed to post review.");
@@ -249,7 +253,10 @@ export default function MovieDetailsPage() {
         showToast("info", "Audience review deleted.");
         await loadReviews(id);
         const updatedMovie = await fetchMovieById(id);
-        if (updatedMovie) setMovie(updatedMovie);
+        if (updatedMovie) {
+          setMovie(updatedMovie);
+          updateMovieInStore(updatedMovie);
+        }
       }
     } catch (e) {
       console.error("Failed to delete review:", e);

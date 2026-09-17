@@ -43,6 +43,7 @@ interface MovieContextType {
   recordRecentlyViewed: (movie: Movie) => void;
   clearRecentlyViewed: () => void;
   refreshMovies: () => Promise<void>;
+  updateMovieInStore: (movie: Movie) => void;
 
   // Direct Trailer Action
   openTrailerModal: (movie: Movie) => void;
@@ -316,6 +317,18 @@ export const MovieProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   }, [movies]);
 
   // Reset all filters
+  // Dynamically update a single movie's details (e.g. view count / rating) in global state
+  const updateMovieInStore = useCallback((updatedMovie: Movie) => {
+    if (!updatedMovie) return;
+    const movieId = updatedMovie.id || (updatedMovie as any)._id;
+    setMovies((prev) =>
+      prev.map((m) => ((m.id || (m as any)._id) === movieId ? { ...m, ...updatedMovie } : m))
+    );
+    setFeaturedMovies((prev) =>
+      prev.map((m) => ((m.id || (m as any)._id) === movieId ? { ...m, ...updatedMovie } : m))
+    );
+  }, []);
+
   const resetFilters = useCallback(() => {
     setSearch("");
     setSelectedGenre("All");
@@ -349,6 +362,7 @@ export const MovieProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         recordRecentlyViewed,
         clearRecentlyViewed,
         refreshMovies,
+        updateMovieInStore,
         openTrailerModal,
         isLoading,
         error,
