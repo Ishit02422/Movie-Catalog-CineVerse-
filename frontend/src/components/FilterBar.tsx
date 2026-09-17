@@ -2,41 +2,48 @@
 
 import React from "react";
 import { Search, X, RotateCcw, Calendar, Film, ArrowUpDown, Sparkles } from "lucide-react";
+import { useMovieStore } from "../context/MovieContext";
 
 interface FilterBarProps {
-  search: string;
-  onSearchChange: (value: string) => void;
-  selectedGenre: string;
-  onGenreChange: (genre: string) => void;
-  selectedYear: string;
-  onYearChange: (year: string) => void;
-  selectedSort: string;
-  onSortChange: (sort: string) => void;
-  availableGenres: string[];
-  availableYears: number[];
-  onClearFilters: () => void;
-  totalResults: number;
+  search?: string;
+  onSearchChange?: (value: string) => void;
+  selectedGenre?: string;
+  onGenreChange?: (genre: string) => void;
+  selectedYear?: string;
+  onYearChange?: (year: string) => void;
+  selectedSort?: string;
+  onSortChange?: (sort: string) => void;
+  availableGenres?: string[];
+  availableYears?: number[];
+  onClearFilters?: () => void;
+  totalResults?: number;
 }
 
-export const FilterBar: React.FC<FilterBarProps> = ({
-  search,
-  onSearchChange,
-  selectedGenre,
-  onGenreChange,
-  selectedYear,
-  onYearChange,
-  selectedSort,
-  onSortChange,
-  availableGenres,
-  availableYears,
-  onClearFilters,
-  totalResults,
-}) => {
+export const FilterBar: React.FC<FilterBarProps> = (props) => {
+  const store = useMovieStore();
+
+  const search = props.search !== undefined ? props.search : store.search;
+  const onSearchChange = props.onSearchChange || store.setSearch;
+
+  const selectedGenre = props.selectedGenre !== undefined ? props.selectedGenre : store.selectedGenre;
+  const onGenreChange = props.onGenreChange || store.setSelectedGenre;
+
+  const selectedYear = props.selectedYear !== undefined ? props.selectedYear : store.selectedYear;
+  const onYearChange = props.onYearChange || store.setSelectedYear;
+
+  const selectedSort = props.selectedSort !== undefined ? props.selectedSort : store.selectedSort;
+  const onSortChange = props.onSortChange || store.setSelectedSort;
+
+  const availableGenres = props.availableGenres || store.availableGenres;
+  const availableYears = props.availableYears || store.availableYears;
+  const onClearFilters = props.onClearFilters || store.resetFilters;
+  const totalResults = props.totalResults !== undefined ? props.totalResults : store.filteredMovies.length;
+
   const isFiltered = search !== "" || selectedGenre !== "All" || selectedYear !== "";
 
   return (
     <div className="w-full bg-slate-900/90 border border-slate-800/80 backdrop-blur-xl rounded-2xl p-4 sm:p-5 shadow-xl space-y-4">
-      {/* Top Search & Action Row */}
+      {/* Top Search & Action Controls */}
       <div className="flex flex-col lg:flex-row items-stretch lg:items-center gap-3">
         {/* Real-time Search Input Box */}
         <div className="relative flex-1">

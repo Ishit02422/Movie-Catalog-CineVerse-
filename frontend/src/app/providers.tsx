@@ -2,16 +2,30 @@
 
 import React from "react";
 import { AuthProvider } from "../context/AuthContext";
+import { ToastProvider } from "../context/ToastContext";
 import { WatchlistProvider } from "../context/WatchlistContext";
+import { MovieProvider } from "../context/MovieContext";
+import { GlobalTrailerModal } from "../components/GlobalTrailerModal";
 
+/**
+ * Providers is the root global state provider for the entire CineVerse application.
+ * Manages:
+ * 1. AuthContext (User session, Login, OTP, Profile)
+ * 2. ToastContext (Global notification toasts across all pages)
+ * 3. WatchlistContext (User Watchlist, Bookmark sync)
+ * 4. MovieContext (Global movie catalog, search, filter, recommendations, and trailer modal player)
+ */
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <AuthProvider>
-      <WatchlistProvider>{children}</WatchlistProvider>
+      <ToastProvider>
+        <WatchlistProvider>
+          <MovieProvider>
+            {children}
+            <GlobalTrailerModal />
+          </MovieProvider>
+        </WatchlistProvider>
+      </ToastProvider>
     </AuthProvider>
   );
 }
-
-
-// Providers ek wrapper chhe je app na badha pages ne Login/User data ane Watchlist data use karva de chhe.
-// Aa file browser ma run karavani chhe // Etle file ne ekdam top par lakhie 

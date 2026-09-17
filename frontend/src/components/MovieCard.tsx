@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Movie } from "../types/movie";
 import { Star, Calendar, Bookmark, Check, Play, Eye } from "lucide-react";
 import { useWatchlist } from "../context/WatchlistContext";
-import { getYouTubeTrailerUrl } from "../utils/trailerMap";
+import { useMovieStore } from "../context/MovieContext";
 
 interface MovieCardProps {
   movie: Movie;
@@ -15,6 +15,7 @@ interface MovieCardProps {
 export const MovieCard: React.FC<MovieCardProps> = ({ movie, onPlayTrailer }) => {
   const [imageError, setImageError] = useState(false);
   const { isInWatchlist, toggleWatchlist } = useWatchlist();
+  const { openTrailerModal } = useMovieStore();
   const movieId = movie.id || movie._id || "";
   const isSaved = isInWatchlist(movieId);
 
@@ -33,7 +34,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({ movie, onPlayTrailer }) =>
     if (onPlayTrailer) {
       onPlayTrailer(movie);
     } else {
-      window.open(getYouTubeTrailerUrl(movie.title), "_blank", "noopener,noreferrer");
+      openTrailerModal(movie);
     }
   };
 
@@ -72,10 +73,11 @@ export const MovieCard: React.FC<MovieCardProps> = ({ movie, onPlayTrailer }) =>
               type="button"
               onClick={handleWatchlistClick}
               title={isSaved ? "Saved in My List (Click to remove)" : "Add to My List"}
-              className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all cursor-pointer shadow-md active:scale-90 ${isSaved
+              className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all cursor-pointer shadow-md active:scale-90 ${
+                isSaved
                   ? "bg-[#e50914] text-white border-2 border-white shadow-rose-950 scale-105"
                   : "bg-black/80 hover:bg-[#e50914] text-white border border-white/30 hover:border-white backdrop-blur-md"
-                }`}
+              }`}
             >
               {isSaved ? (
                 <Check className="w-3.5 h-3.5 stroke-[3]" />

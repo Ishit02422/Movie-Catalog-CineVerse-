@@ -1,11 +1,9 @@
 "use client";
 
-import React, { useEffect, useState, useMemo } from "react";
-import { Movie } from "../types/movie";
-import { fetchMovies, fetchFeaturedMovies, fetchGenres } from "../lib/api";
+import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useWatchlist } from "../context/WatchlistContext";
-import { useDebounce } from "../hooks/useDebounce";
+import { useMovieStore } from "../context/MovieContext";
 import { Navbar } from "../components/Navbar";
 import { PhoneAuthHero } from "../components/PhoneAuthHero";
 import { HeroBanner } from "../components/HeroBanner";
@@ -13,187 +11,53 @@ import { FilterBar } from "../components/FilterBar";
 import { MovieGrid } from "../components/MovieGrid";
 import { MovieCard } from "../components/MovieCard";
 import { ProfileModal } from "../components/ProfileModal";
-import { Film, Sparkles, Settings, Bookmark, Clock, Flame, ArrowRight, CheckCircle2, RotateCcw } from "lucide-react";
+import {
+  Film,
+  Sparkles,
+  Settings,
+  Bookmark,
+  Clock,
+  Flame,
+  ArrowRight,
+  RotateCcw,
+  Star,
+} from "lucide-react";
 
 export default function Home() {
   const { user, isAuthenticated, isLoading: authLoading } = useAuth();
   const { watchlist } = useWatchlist();
+  const {
+    movies,
+    featuredMovies,
+    availableGenres,
+    availableYears,
+    recentlyViewed,
+    recommendedMovies,
+    trendingMovies,
+    topRatedMovies,
+    search,
+    selectedGenre,
+    selectedYear,
+    selectedSort,
+    isFiltering,
+    filteredMovies,
+    catalogTitle,
+    setSearch,
+    setSelectedGenre,
+    setSelectedYear,
+    setSelectedSort,
+    resetFilters,
+    clearRecentlyViewed,
+    refreshMovies,
+    isLoading: moviesLoading,
+    error,
+  } = useMovieStore();
 
-  const [movies, setMovies] = useState<Movie[]>([]);
-  const [featuredMovies, setFeaturedMovies] = useState<Movie[]>([]);
-  const [availableGenres, setAvailableGenres] = useState<string[]>([]);
-  const [recentlyViewed, setRecentlyViewed] = useState<Movie[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
   const [isProfileOpen, setIsProfileOpen] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<string>("all"); // "all" | "watchlist"
 
-  // Filter & Search states
-  const [search, setSearch] = useState<string>("");
-  const [selectedGenre, setSelectedGenre] = useState<string>("All");
-  const [selectedYear, setSelectedYear] = useState<string>("");
-  const [selectedSort, setSelectedSort] = useState<string>("year_desc");
-
-  // Debounce search input by 350ms
-  const debouncedSearch = useDebounce(search, 350);
-
-  // Load initial movies, featured carousel, and distinct genres
-  useEffect(() => {
-    async function loadInitialMeta() {
-      try {
-        const [featuredData, genresData, allMovies] = await Promise.all([
-          fetchFeaturedMovies(),
-          fetchGenres(),
-          fetchMovies(),
-        ]);
-        setFeaturedMovies(featuredData);
-        setAvailableGenres(genresData);
-        setMovies(allMovies);
-      } catch (err) {
-        console.error("Failed to load initial metadata:", err);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-    loadInitialMeta();
-  }, []);
-
-  // Load recently viewed from localStorage specifically for the active user
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      try {
-        const userKey = user?.id
-          ? `cineverse_recently_viewed_${user.id}`
-          : "cineverse_recently_viewed_guest";
-        const stored = localStorage.getItem(userKey);
-        if (stored) {
-          setRecentlyViewed(JSON.parse(stored));
-        } else {
-          setRecentlyViewed([]);
-        }
-      } catch (e) {
-        console.warn("Could not load recently viewed:", e);
-        setRecentlyViewed([]);
-      }
-    }
-  }, [user?.id]);
-
-  // Fetch filtered movies whenever search, genre, year, or sort changes (when authenticated)
-  const loadFilteredMovies = async () => {
-    if (!isAuthenticated) return;
-    setIsLoading(true);
-    setError(null);
-    try {
-      const data = await fetchMovies({
-        search: debouncedSearch,
-        genre: selectedGenre,
-        release_year: selectedYear ? Number(selectedYear) : undefined,
-        sort: selectedSort,
-      });
-      setMovies(data);
-    } catch (err: any) {
-      console.error("Error fetching movies:", err);
-      setError(
-        err.message ||
-        "Unable to connect to the backend server. Please verify the API is running on port 5000."
-      );
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      loadFilteredMovies();
-    }
-  }, [debouncedSearch, selectedGenre, selectedYear, selectedSort, isAuthenticated]);
-
-  // Dynamic release years: starts from current year down to 1950
-  const availableYears = useMemo(() => {
-    const currentYear = new Date().getFullYear();
-    const years: number[] = [];
-    for (let y = currentYear; y >= 1950; y--) {
-      years.push(y);
-    }
-    return years;
-  }, []);
-
-  // Calculate Personalized Recommendations based on favorite genres
-  const recommendedMovies = useMemo(() => {
-    const userSample = [...watchlist, ...recentlyViewed];
-    if (userSample.length === 0) return [];
-
-    const genreFreq: Record<string, number> = {};
-    userSample.forEach((m) => {
-      if (m.genre) {
-        m.genre.split(/[,/|]/).forEach((g) => {
-          const clean = g.trim().toLowerCase();
-          if (clean) genreFreq[clean] = (genreFreq[clean] || 0) + 1;
-        });
-      }
-    });
-
-    const topGenre = Object.keys(genreFreq).sort((a, b) => genreFreq[b] - genreFreq[a])[0];
-    if (!topGenre) return [];
-
-    const sampleIds = new Set(userSample.map((m) => m.id || (m as any)._id));
-    return movies
-      .filter((m) => {
-        const mId = m.id || (m as any)._id;
-        return (
-          !sampleIds.has(mId) &&
-          m.genre &&
-          m.genre.toLowerCase().includes(topGenre)
-        );
-      })
-      .slice(0, 7);
-  }, [watchlist, recentlyViewed, movies]);
-
-
-  const handleClearFilters = () => {
-    setSearch("");
-    setSelectedGenre("All");
-    setSelectedYear("");
-    setSelectedSort("year_desc");
-  };
-
-  const isFiltering =
-    search.trim() !== "" || selectedGenre !== "All" || selectedYear !== "" || selectedSort !== "year_desc";
-
-  // Dynamic Title for Movie Catalog Grid based on exact active filter/sort
-  const catalogTitle = useMemo(() => {
-    if (search.trim()) {
-      return `Search Results for "${search.trim()}"`;
-    }
-    if (selectedGenre !== "All" && selectedYear) {
-      return `${selectedGenre} Movies (${selectedYear})`;
-    }
-    if (selectedGenre !== "All") {
-      return `${selectedGenre} Movies`;
-    }
-    if (selectedYear) {
-      return `Release Year ${selectedYear} Movies`;
-    }
-    switch (selectedSort) {
-      case "year_desc":
-        return "Latest Releases & Movies";
-      case "year_asc":
-        return "Classic & Oldest Movies";
-      case "rating_desc":
-        return "★ Top Rated Movies (Highest Rating)";
-      case "title_asc":
-        return "Movies in Alphabetical Order (A to Z)";
-      case "title_desc":
-        return "Movies in Reverse Order (Z to A)";
-      case "views_desc":
-        return "Most Popular & Trending";
-      default:
-        return "Explore Movies Catalog";
-    }
-  }, [search, selectedGenre, selectedYear, selectedSort]);
-
-  // Loading state while checking session or initial metadata
-  if (authLoading || (isLoading && featuredMovies.length === 0 && movies.length === 0)) {
+  // Loading state while verifying authentication session
+  if (authLoading || (moviesLoading && movies.length === 0)) {
     return (
       <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center space-y-4">
         <div className="w-14 h-14 rounded-2xl bg-rose-500/15 border border-rose-500/30 text-[#e50914] flex items-center justify-center animate-pulse">
@@ -222,11 +86,15 @@ export default function Home() {
       />
 
       <main className="flex-1 w-full px-4 sm:px-8 lg:px-12 py-6 sm:py-8 space-y-6 sm:space-y-8 animate-in fade-in duration-500">
-        {/* Welcome User Banner with sleek, compact modern styling */}
+        {/* Sleek User Greeting Banner */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 sm:gap-6 bg-gradient-to-r from-slate-900/90 via-[#0a0f1d] to-slate-950 border border-slate-800/80 p-5 sm:p-6 rounded-2xl shadow-xl backdrop-blur-xl">
           <div className="flex items-center gap-3.5 sm:gap-4">
             <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-tr from-[#e50914] to-rose-600 flex items-center justify-center font-bold text-white shadow-md shadow-rose-600/30 text-lg sm:text-xl shrink-0">
-              {user?.first_name ? user.first_name.charAt(0).toUpperCase() : user?.name ? user.name.charAt(0).toUpperCase() : "M"}
+              {user?.first_name
+                ? user.first_name.charAt(0).toUpperCase()
+                : user?.name
+                ? user.name.charAt(0).toUpperCase()
+                : "M"}
             </div>
             <div>
               <h2 className="text-base sm:text-lg lg:text-xl font-bold text-white tracking-tight">
@@ -244,20 +112,22 @@ export default function Home() {
               <button
                 type="button"
                 onClick={() => setActiveTab("all")}
-                className={`px-3.5 py-1.5 rounded-lg transition-all cursor-pointer ${activeTab === "all"
-                  ? "bg-[#e50914] text-white shadow-sm"
-                  : "text-slate-400 hover:text-white"
-                  }`}
+                className={`px-3.5 py-1.5 rounded-lg transition-all cursor-pointer ${
+                  activeTab === "all"
+                    ? "bg-[#e50914] text-white shadow-sm"
+                    : "text-slate-400 hover:text-white"
+                }`}
               >
                 🍿 All Movies
               </button>
               <button
                 type="button"
                 onClick={() => setActiveTab("watchlist")}
-                className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg transition-all cursor-pointer ${activeTab === "watchlist"
-                  ? "bg-[#e50914] text-white shadow-sm"
-                  : "text-slate-400 hover:text-white"
-                  }`}
+                className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg transition-all cursor-pointer ${
+                  activeTab === "watchlist"
+                    ? "bg-[#e50914] text-white shadow-sm"
+                    : "text-slate-400 hover:text-white"
+                }`}
               >
                 <Bookmark className="w-3.5 h-3.5" />
                 <span>My List ({watchlist.length})</span>
@@ -354,23 +224,10 @@ export default function Home() {
             )}
 
             {/* Real-time Search and Multi-Filter Controls */}
-            <FilterBar
-              search={search}
-              onSearchChange={setSearch}
-              selectedGenre={selectedGenre}
-              onGenreChange={setSelectedGenre}
-              selectedYear={selectedYear}
-              onYearChange={setSelectedYear}
-              selectedSort={selectedSort}
-              onSortChange={setSelectedSort}
-              availableGenres={availableGenres}
-              availableYears={availableYears}
-              onClearFilters={handleClearFilters}
-              totalResults={movies.length}
-            />
+            <FilterBar />
 
             {/* Active Filter Tags with 1-Click Clear */}
-            {(search.trim() !== "" || selectedGenre !== "All" || selectedYear !== "") && (
+            {isFiltering && (
               <div className="flex flex-wrap items-center gap-2 -mt-4 bg-slate-900/80 p-3 sm:p-3.5 rounded-xl border border-slate-800/80 shadow-md animate-in fade-in">
                 <span className="text-xs font-bold text-slate-300">Active Filters:</span>
                 {selectedYear && (
@@ -408,7 +265,7 @@ export default function Home() {
                 )}
                 <button
                   type="button"
-                  onClick={handleClearFilters}
+                  onClick={resetFilters}
                   className="flex items-center gap-1 text-xs font-bold text-rose-400 hover:text-rose-300 ml-auto transition-colors cursor-pointer"
                 >
                   <RotateCcw className="w-3.5 h-3.5" />
@@ -419,13 +276,12 @@ export default function Home() {
 
             {/* Dynamic Movie Catalog Grid */}
             <MovieGrid
-              movies={movies}
-              isLoading={isLoading}
+              movies={filteredMovies}
+              isLoading={moviesLoading}
               error={error}
-              onRetry={loadFilteredMovies}
+              onRetry={refreshMovies}
               title={catalogTitle}
             />
-
 
             {/* ========================================================================= */}
             {/* SECTION: PERSONALIZED RECOMMENDATIONS                                     */}
@@ -460,6 +316,38 @@ export default function Home() {
             )}
 
             {/* ========================================================================= */}
+            {/* SECTION: TOP RATED MASTERPIECES                                           */}
+            {/* ========================================================================= */}
+            {!isFiltering && topRatedMovies.length > 0 && (
+              <section className="space-y-5 pt-8 border-t border-slate-900">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-xl bg-rose-500/15 border border-rose-500/30 flex items-center justify-center text-rose-400">
+                      <Flame className="w-4.5 h-4.5" />
+                    </div>
+                    <div>
+                      <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
+                        Top Rated Masterpieces
+                      </h2>
+                      <p className="text-xs text-slate-400 mt-0.5 font-normal">
+                        Highest rated critically acclaimed cinema
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-5 sm:gap-6">
+                  {topRatedMovies.map((movie) => (
+                    <MovieCard
+                      key={movie.id || (movie as any)._id}
+                      movie={movie}
+                    />
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {/* ========================================================================= */}
             {/* SECTION: RECENTLY VIEWED                                                  */}
             {/* ========================================================================= */}
             {!isFiltering && recentlyViewed.length > 0 && (
@@ -480,14 +368,7 @@ export default function Home() {
                   </div>
                   <button
                     type="button"
-                    onClick={() => {
-                      const userKey = user?.id
-                        ? `cineverse_recently_viewed_${user.id}`
-                        : "cineverse_recently_viewed_guest";
-                      localStorage.removeItem(userKey);
-                      localStorage.removeItem("cineverse_recently_viewed");
-                      setRecentlyViewed([]);
-                    }}
+                    onClick={clearRecentlyViewed}
                     className="text-xs font-semibold text-slate-400 hover:text-rose-400 transition-colors cursor-pointer px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800"
                   >
                     Clear History

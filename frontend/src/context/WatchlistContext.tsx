@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { Movie } from "../types/movie";
 import { useAuth } from "./AuthContext";
+import { useToast } from "./ToastContext";
 
 interface WatchlistContextType {
   watchlist: Movie[];
@@ -25,6 +26,7 @@ export const WatchlistProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const { token, isAuthenticated } = useAuth();
+  const { showToast } = useToast();
   const [watchlist, setWatchlist] = useState<Movie[]>([]);
   const [watchlistIds, setWatchlistIds] = useState<Set<string>>(new Set());
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -92,9 +94,11 @@ export const WatchlistProvider: React.FC<{ children: React.ReactNode }> = ({
     if (currentlySaved) {
       nextIds.delete(movieId);
       nextList = nextList.filter((m) => (m.id || (m as any)._id) !== movieId);
+      showToast("info", `Removed "${movie.title}" from your Watchlist`);
     } else {
       nextIds.add(movieId);
       nextList.push(movie);
+      showToast("success", `Added "${movie.title}" to your Watchlist! 🍿`);
     }
 
     setWatchlistIds(nextIds);
@@ -145,10 +149,10 @@ export const WatchlistProvider: React.FC<{ children: React.ReactNode }> = ({
   );
 };
 
-export const useWatchlist = (): WatchlistContextType => {
+export function useWatchlist() {
   const context = useContext(WatchlistContext);
   if (!context) {
     throw new Error("useWatchlist must be used within a WatchlistProvider");
   }
   return context;
-};
+}

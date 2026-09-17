@@ -10,6 +10,8 @@ import { Navbar } from "../../../components/Navbar";
 import { MovieCard } from "../../../components/MovieCard";
 import { useWatchlist } from "../../../context/WatchlistContext";
 import { useAuth } from "../../../context/AuthContext";
+import { useMovieStore } from "../../../context/MovieContext";
+import { useToast } from "../../../context/ToastContext";
 import {
   ArrowLeft,
   Star,
@@ -28,7 +30,6 @@ import {
   Play,
   ExternalLink,
 } from "lucide-react";
-import { getYouTubeTrailerUrl } from "../../../utils/trailerMap";
 
 interface ReviewItem {
   id: string;
@@ -53,6 +54,8 @@ export default function MovieDetailsPage() {
 
   const { user, token, isAuthenticated } = useAuth();
   const { isInWatchlist, toggleWatchlist } = useWatchlist();
+  const { recordRecentlyViewed, openTrailerModal } = useMovieStore();
+  const { showToast } = useToast();
 
   const [movie, setMovie] = useState<Movie | null>(null);
   const [similarMovies, setSimilarMovies] = useState<Movie[]>([]);
@@ -76,28 +79,9 @@ export default function MovieDetailsPage() {
 
   const handleOpenTrailer = () => {
     if (movie) {
-      window.open(getYouTubeTrailerUrl(movie.title), "_blank", "noopener,noreferrer");
+      openTrailerModal(movie);
     }
   };
-
-  // Track recently viewed in localStorage (keyed by active user)
-  const trackRecentlyViewed = useCallback((m: Movie) => {
-    if (typeof window === "undefined") return;
-    try {
-      const userKey = user?.id
-        ? `cineverse_recently_viewed_${user.id}`
-        : "cineverse_recently_viewed_guest";
-      const stored = localStorage.getItem(userKey);
-      let list: Movie[] = stored ? JSON.parse(stored) : [];
-      const currentId = m.id || (m as any)._id;
-      list = list.filter((item) => (item.id || (item as any)._id) !== currentId);
-      list.unshift(m);
-      if (list.length > 12) list = list.slice(0, 12);
-      localStorage.setItem(userKey, JSON.stringify(list));
-    } catch (e) {
-      console.warn("Failed to store recently viewed:", e);
-    }
-  }, [user?.id]);
 
   // Fetch reviews
   const loadReviews = useCallback(async (movieId: string) => {
@@ -141,7 +125,7 @@ export default function MovieDetailsPage() {
           setError("Movie not found. The movie ID might be invalid or deleted.");
         } else {
           setMovie(data);
-          trackRecentlyViewed(data);
+          recordRecentlyViewed(data);
           loadSimilarMovies(id);
           loadReviews(id);
         }
@@ -154,12 +138,13 @@ export default function MovieDetailsPage() {
     }
 
     loadMovieDetails();
-  }, [id, trackRecentlyViewed, loadSimilarMovies, loadReviews]);
+  }, [id, recordRecentlyViewed, loadSimilarMovies, loadReviews]);
 
   const handleShare = () => {
     if (typeof window !== "undefined") {
       navigator.clipboard.writeText(window.location.href);
       setCopied(true);
+      showToast("success", "Movie link copied to clipboard! 📋");
       setTimeout(() => setCopied(false), 2000);
     }
   };
@@ -211,8 +196,7 @@ export default function MovieDetailsPage() {
       setReviewComment("");
       setUserRating(0);
       setReviewMessage("🎉 Your review has been posted successfully!");
-
-
+      showToast("success", "Your review and rating have been posted! ⭐");
 
       // Reload reviews and movie to update average score
       await loadReviews(id);
@@ -220,6 +204,7 @@ export default function MovieDetailsPage() {
       if (updatedMovie) setMovie(updatedMovie);
     } catch (err: any) {
       setReviewMessage(err.message || "Failed to post review.");
+      showToast("error", err.message || "Failed to post review.");
     } finally {
       setIsSubmittingReview(false);
     }
@@ -233,12 +218,14 @@ export default function MovieDetailsPage() {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.ok) {
+        showToast("info", "Audience review deleted.");
         await loadReviews(id);
         const updatedMovie = await fetchMovieById(id);
         if (updatedMovie) setMovie(updatedMovie);
       }
     } catch (e) {
       console.error("Failed to delete review:", e);
+      showToast("error", "Failed to delete review.");
     }
   };
 
