@@ -1472,9 +1472,9 @@ export default function AdminPage() {
                     />
                   </div>
 
-                  {/* 3 Columns: Genre (4 cols), Year (3 cols), Status (5 cols) */}
-                  <div className="grid grid-cols-1 sm:grid-cols-12 gap-3.5 sm:gap-4">
-                    <div className="sm:col-span-4">
+                  {/* 3 Equal Columns: Genre, Release Year, Visibility */}
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 sm:gap-4">
+                    <div>
                       <label className="block text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-200 mb-2">
                         Genre <span className="text-[#e50914]">*</span>
                       </label>
@@ -1482,7 +1482,7 @@ export default function AdminPage() {
                         required
                         value={formData.genre}
                         onChange={(e) => setFormData({ ...formData, genre: e.target.value })}
-                        className="w-full bg-[#131b2e] border border-slate-700/80 hover:border-slate-500 focus:border-[#e50914] focus:ring-2 focus:ring-[#e50914]/25 rounded-xl pl-3 pr-6 py-3 text-xs sm:text-sm font-semibold text-white transition-all cursor-pointer truncate"
+                        className="w-full bg-[#131b2e] border border-slate-700/80 hover:border-slate-500 focus:border-[#e50914] focus:ring-2 focus:ring-[#e50914]/25 rounded-xl px-3.5 py-3 text-sm font-semibold text-white transition-all cursor-pointer"
                       >
                         {formData.genre && !genreCategories.some((c) => c.name.toLowerCase() === formData.genre.toLowerCase()) && (
                           <option value={formData.genre} className="bg-[#0f172a] text-white">
@@ -1497,7 +1497,7 @@ export default function AdminPage() {
                       </select>
                     </div>
 
-                    <div className="sm:col-span-3">
+                    <div>
                       <label className="block text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-200 mb-2">
                         Release Year <span className="text-[#e50914]">*</span>
                       </label>
@@ -1505,7 +1505,7 @@ export default function AdminPage() {
                         required
                         value={formData.release_year}
                         onChange={(e) => setFormData({ ...formData, release_year: Number(e.target.value) })}
-                        className="w-full bg-[#131b2e] border border-slate-700/80 hover:border-slate-500 focus:border-[#e50914] focus:ring-2 focus:ring-[#e50914]/25 rounded-xl pl-3 pr-6 py-3 text-xs sm:text-sm font-semibold text-white transition-all cursor-pointer truncate"
+                        className="w-full bg-[#131b2e] border border-slate-700/80 hover:border-slate-500 focus:border-[#e50914] focus:ring-2 focus:ring-[#e50914]/25 rounded-xl px-3.5 py-3 text-sm font-semibold text-white transition-all cursor-pointer"
                       >
                         {releaseYearsList.map((yr) => (
                           <option key={yr} value={yr} className="bg-[#0f172a] text-white">
@@ -1515,18 +1515,18 @@ export default function AdminPage() {
                       </select>
                     </div>
 
-                    <div className="sm:col-span-5">
+                    <div>
                       <label className="block text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-200 mb-2">
                         Visibility <span className="text-[#e50914]">*</span>
                       </label>
                       <select
                         value={formData.status}
                         onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                        className="w-full bg-[#131b2e] border border-slate-700/80 hover:border-slate-500 focus:border-[#e50914] focus:ring-2 focus:ring-[#e50914]/25 rounded-xl pl-3 pr-6 py-3 text-xs sm:text-sm font-semibold text-white transition-all cursor-pointer truncate"
+                        className="w-full bg-[#131b2e] border border-slate-700/80 hover:border-slate-500 focus:border-[#e50914] focus:ring-2 focus:ring-[#e50914]/25 rounded-xl px-3.5 py-3 text-sm font-semibold text-white transition-all cursor-pointer"
                       >
-                        <option value="active" className="bg-[#0f172a] text-emerald-400 font-bold">🟢 Active (Live)</option>
+                        <option value="active" className="bg-[#0f172a] text-emerald-400 font-bold">🟢 Active</option>
                         <option value="hidden" className="bg-[#0f172a] text-purple-300 font-bold">👁️ Hidden</option>
-                        <option value="under_review" className="bg-[#0f172a] text-amber-400 font-bold">🟡 Under Review</option>
+                        <option value="under_review" className="bg-[#0f172a] text-amber-400 font-bold">🟡 Review</option>
                         <option value="removed" className="bg-[#0f172a] text-rose-400 font-bold">🔴 Removed</option>
                       </select>
                     </div>
@@ -1821,9 +1821,9 @@ export default function AdminPage() {
                     />
                   </div>
 
-                  {/* 3 Columns: Genre (4 cols), Year (3 cols), Status (5 cols) */}
-                  <div className="grid grid-cols-1 sm:grid-cols-12 gap-3.5 sm:gap-4">
-                    <div className="sm:col-span-4">
+                  {/* 3 Equal Columns: Genre, Release Year, Visibility */}
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 sm:gap-4">
+                    <div>
                       <label className="block text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-200 mb-2">
                         Genre <span className="text-[#e50914]">*</span>
                       </label>
@@ -1831,7 +1831,7 @@ export default function AdminPage() {
                         required
                         value={formData.genre}
                         onChange={(e) => setFormData({ ...formData, genre: e.target.value })}
-                        className="w-full bg-[#131b2e] border border-slate-700/80 hover:border-slate-500 focus:border-[#e50914] focus:ring-2 focus:ring-[#e50914]/25 rounded-xl pl-3 pr-6 py-3 text-xs sm:text-sm font-semibold text-white transition-all cursor-pointer truncate"
+                        className="w-full bg-[#131b2e] border border-slate-700/80 hover:border-slate-500 focus:border-[#e50914] focus:ring-2 focus:ring-[#e50914]/25 rounded-xl px-3.5 py-3 text-sm font-semibold text-white transition-all cursor-pointer"
                       >
                         {formData.genre && !genreCategories.some((c) => c.name.toLowerCase() === formData.genre.toLowerCase()) && (
                           <option value={formData.genre} className="bg-[#0f172a] text-white">
@@ -1846,7 +1846,7 @@ export default function AdminPage() {
                       </select>
                     </div>
 
-                    <div className="sm:col-span-3">
+                    <div>
                       <label className="block text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-200 mb-2">
                         Release Year <span className="text-[#e50914]">*</span>
                       </label>
@@ -1854,7 +1854,7 @@ export default function AdminPage() {
                         required
                         value={formData.release_year}
                         onChange={(e) => setFormData({ ...formData, release_year: Number(e.target.value) })}
-                        className="w-full bg-[#131b2e] border border-slate-700/80 hover:border-slate-500 focus:border-[#e50914] focus:ring-2 focus:ring-[#e50914]/25 rounded-xl pl-3 pr-6 py-3 text-xs sm:text-sm font-semibold text-white transition-all cursor-pointer truncate"
+                        className="w-full bg-[#131b2e] border border-slate-700/80 hover:border-slate-500 focus:border-[#e50914] focus:ring-2 focus:ring-[#e50914]/25 rounded-xl px-3.5 py-3 text-sm font-semibold text-white transition-all cursor-pointer"
                       >
                         {releaseYearsList.map((yr) => (
                           <option key={yr} value={yr} className="bg-[#0f172a] text-white">
@@ -1864,18 +1864,18 @@ export default function AdminPage() {
                       </select>
                     </div>
 
-                    <div className="sm:col-span-5">
+                    <div>
                       <label className="block text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-200 mb-2">
                         Visibility <span className="text-[#e50914]">*</span>
                       </label>
                       <select
                         value={formData.status}
                         onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                        className="w-full bg-[#131b2e] border border-slate-700/80 hover:border-slate-500 focus:border-[#e50914] focus:ring-2 focus:ring-[#e50914]/25 rounded-xl pl-3 pr-6 py-3 text-xs sm:text-sm font-semibold text-white transition-all cursor-pointer truncate"
+                        className="w-full bg-[#131b2e] border border-slate-700/80 hover:border-slate-500 focus:border-[#e50914] focus:ring-2 focus:ring-[#e50914]/25 rounded-xl px-3.5 py-3 text-sm font-semibold text-white transition-all cursor-pointer"
                       >
-                        <option value="active" className="bg-[#0f172a] text-emerald-400 font-bold">🟢 Active (Live)</option>
+                        <option value="active" className="bg-[#0f172a] text-emerald-400 font-bold">🟢 Active</option>
                         <option value="hidden" className="bg-[#0f172a] text-purple-300 font-bold">👁️ Hidden</option>
-                        <option value="under_review" className="bg-[#0f172a] text-amber-400 font-bold">🟡 Under Review</option>
+                        <option value="under_review" className="bg-[#0f172a] text-amber-400 font-bold">🟡 Review</option>
                         <option value="removed" className="bg-[#0f172a] text-rose-400 font-bold">🔴 Removed</option>
                       </select>
                     </div>
