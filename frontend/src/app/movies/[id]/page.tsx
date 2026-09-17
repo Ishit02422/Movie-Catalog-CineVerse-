@@ -247,7 +247,7 @@ export default function MovieDetailsPage() {
       {/* Sticky Header */}
       <Navbar />
 
-      <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12 animate-in fade-in duration-500">
+      <main className="flex-1 w-full mx-auto px-4 sm:px-6 lg:px-10 py-6 sm:py-8 space-y-10 animate-in fade-in duration-500">
         {/* Top Back Navigation Bar */}
         <div className="flex items-center justify-between">
           <Link
@@ -306,9 +306,9 @@ export default function MovieDetailsPage() {
 
         {/* Loading State Skeleton */}
         {isLoading && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12 animate-pulse">
-            <div className="aspect-[2/3] rounded-3xl bg-slate-900 border border-slate-800/80" />
-            <div className="md:col-span-2 space-y-6 pt-4">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 animate-pulse">
+            <div className="md:col-span-4 lg:col-span-3 aspect-[2/3] rounded-3xl bg-slate-900 border border-slate-800/80" />
+            <div className="md:col-span-8 lg:col-span-9 space-y-6 pt-4">
               <div className="h-6 w-28 bg-slate-800 rounded-full" />
               <div className="h-10 w-3/4 bg-slate-800 rounded-xl" />
               <div className="h-4 w-full bg-slate-900 rounded" />
@@ -343,143 +343,156 @@ export default function MovieDetailsPage() {
         {/* Main Movie Content */}
         {!isLoading && movie && (
           <div className="space-y-12">
-            {/* Main Header / Banner Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 items-start">
-              {/* Poster Column */}
-              <div className="md:col-span-4 lg:col-span-4">
-                <div className="relative aspect-[2/3] w-full rounded-3xl overflow-hidden bg-slate-900 border border-slate-800/80 shadow-2xl shadow-rose-950/30 group">
-                  <img
-                    src={imageError ? fallbackImage : (movie.image_url || fallbackImage)}
-                    alt={movie.title}
-                    className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
-                    onError={() => setImageError(true)}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-40" />
-
-                  {/* Play Trailer Overlay Button */}
-                  <button
-                    type="button"
-                    onClick={handleOpenTrailer}
-                    className="absolute inset-0 m-auto w-16 h-16 rounded-full bg-rose-600/90 hover:bg-rose-600 text-white flex items-center justify-center shadow-2xl shadow-rose-600/50 backdrop-blur-sm transition-all hover:scale-110 active:scale-95 cursor-pointer"
-                    title="Watch Official Trailer on YouTube"
-                  >
-                    <Play className="w-7 h-7 fill-white translate-x-0.5" />
-                  </button>
-                </div>
+            {/* Main Header / Banner Grid with subtle backdrop glow */}
+            <div className="relative rounded-3xl border border-slate-800/80 bg-gradient-to-br from-slate-900/90 via-[#0a0f1d] to-slate-950 p-6 sm:p-8 lg:p-10 shadow-2xl overflow-hidden">
+              {/* Ambient Glow */}
+              <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                <img
+                  src={imageError ? fallbackImage : (movie.image_url || fallbackImage)}
+                  alt=""
+                  aria-hidden="true"
+                  className="w-full h-full object-cover object-center blur-3xl opacity-20 scale-125 transform"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#060911] via-[#060911]/80 to-transparent" />
               </div>
 
-              {/* Info Column */}
-              <div className="md:col-span-8 lg:col-span-8 space-y-6">
-                {/* Badges & Meta */}
-                <div className="flex flex-wrap items-center gap-2.5">
-                  <span className="inline-flex items-center px-3.5 py-1.5 rounded-full text-xs font-bold bg-[#e50914] text-white shadow-md shadow-red-950/40">
-                    {movie.genre}
-                  </span>
-                  <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-slate-900 border border-slate-800 text-slate-300">
-                    <Calendar className="w-3.5 h-3.5 text-rose-400" />
-                    Released {movie.release_year}
-                  </span>
+              <div className="relative z-10 grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 items-start">
+                {/* Poster Column */}
+                <div className="md:col-span-4 lg:col-span-3">
+                  <div className="relative aspect-[2/3] w-full max-w-[340px] mx-auto md:mx-0 rounded-2xl overflow-hidden bg-slate-950 border border-slate-800/80 shadow-2xl shadow-black/80 group">
+                    <img
+                      src={imageError ? fallbackImage : (movie.image_url || fallbackImage)}
+                      alt={movie.title}
+                      className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
+                      onError={() => setImageError(true)}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-40" />
+
+                    {/* Play Trailer Overlay Button */}
+                    <button
+                      type="button"
+                      onClick={handleOpenTrailer}
+                      className="absolute inset-0 m-auto w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-rose-600/90 hover:bg-rose-600 text-white flex items-center justify-center shadow-2xl shadow-rose-600/50 backdrop-blur-sm transition-all hover:scale-110 active:scale-95 cursor-pointer"
+                      title="Watch Official Trailer on YouTube"
+                    >
+                      <Play className="w-6 h-6 sm:w-7 sm:h-7 fill-white translate-x-0.5" />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Info Column */}
+                <div className="md:col-span-8 lg:col-span-9 space-y-6">
+                  {/* Badges & Meta */}
+                  <div className="flex flex-wrap items-center gap-2.5">
+                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-[#e50914] text-white shadow-md shadow-red-950/40">
+                      {movie.genre}
+                    </span>
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-slate-900 border border-slate-800 text-slate-300">
+                      <Calendar className="w-3.5 h-3.5 text-rose-400" />
+                      Released {movie.release_year}
+                    </span>
+                    {movie.rating !== undefined && movie.rating >= 5 && movie.rating <= 10 && (
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-500/10 text-amber-300 border border-amber-500/20">
+                        <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                        {movie.rating.toFixed(1)} / 10 IMDb
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Movie Title */}
+                  <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">
+                    {movie.title}
+                  </h1>
+
+                  {/* Star Rating Bar */}
                   {movie.rating !== undefined && movie.rating >= 5 && movie.rating <= 10 && (
-                    <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold bg-amber-500/10 text-amber-300 border border-amber-500/20">
-                      <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                      {movie.rating.toFixed(1)} / 10 IMDb
-                    </span>
+                    <div className="flex items-center gap-3 bg-slate-950/60 border border-slate-800/80 p-3 rounded-xl w-fit">
+                      <div className="flex items-center gap-1">
+                        {[1, 2, 3, 4, 5].map((star) => {
+                          const normalizedRating = movie.rating! / 2; // out of 5
+                          const isFilled = star <= Math.floor(normalizedRating);
+                          const isHalf = !isFilled && star === Math.ceil(normalizedRating) && (normalizedRating % 1 >= 0.4);
+                          return (
+                            <Star
+                              key={star}
+                              className={`w-4 h-4 ${isFilled
+                                ? "fill-amber-400 text-amber-400"
+                                : isHalf
+                                  ? "fill-amber-400/50 text-amber-400"
+                                  : "text-slate-700"
+                                }`}
+                            />
+                          );
+                        })}
+                      </div>
+                      <span className="text-xs font-semibold text-slate-300">
+                        Community Rating: <strong className="text-white">{movie.rating.toFixed(1)}</strong>/10
+                      </span>
+                    </div>
                   )}
-                </div>
 
-                {/* Movie Title */}
-                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">
-                  {movie.title}
-                </h1>
+                  {/* Action Buttons Row */}
+                  <div className="flex flex-wrap items-center gap-3 pt-2">
+                    <button
+                      type="button"
+                      onClick={handleOpenTrailer}
+                      className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-600 text-white font-bold text-xs sm:text-sm shadow-xl shadow-rose-600/30 flex items-center gap-2 cursor-pointer transition-all active:scale-95"
+                    >
+                      <Play className="w-4 h-4 fill-white" />
+                      <span>Watch Trailer</span>
+                    </button>
 
-                {/* Star Rating Bar */}
-                {movie.rating !== undefined && movie.rating >= 5 && movie.rating <= 10 && (
-                  <div className="flex items-center gap-3 bg-slate-900/60 border border-slate-800/80 p-3.5 rounded-2xl w-fit">
-                    <div className="flex items-center gap-1">
-                      {[1, 2, 3, 4, 5].map((star) => {
-                        const normalizedRating = movie.rating! / 2; // out of 5
-                        const isFilled = star <= Math.floor(normalizedRating);
-                        const isHalf = !isFilled && star === Math.ceil(normalizedRating) && (normalizedRating % 1 >= 0.4);
-                        return (
-                          <Star
-                            key={star}
-                            className={`w-4 h-4 ${isFilled
-                              ? "fill-amber-400 text-amber-400"
-                              : isHalf
-                                ? "fill-amber-400/50 text-amber-400"
-                                : "text-slate-700"
-                              }`}
-                          />
-                        );
-                      })}
-                    </div>
-                    <span className="text-xs font-semibold text-slate-300">
-                      Community Rating: <strong className="text-white">{movie.rating.toFixed(1)}</strong>/10
-                    </span>
+                    <button
+                      type="button"
+                      onClick={handleWatchlistToggle}
+                      className={`px-4 py-2.5 rounded-xl border text-xs sm:text-sm font-semibold flex items-center gap-2 cursor-pointer transition-all active:scale-95 ${isSaved
+                        ? "bg-[#e50914] text-white border-[#e50914] shadow-md shadow-red-950/40"
+                        : "bg-slate-900/80 hover:bg-slate-800 text-slate-200 border-slate-700"
+                        }`}
+                    >
+                      {isSaved ? <Check className="w-4 h-4 stroke-[3]" /> : <Bookmark className="w-4 h-4" />}
+                      <span>{isSaved ? "Saved in My List" : "Add to Watchlist"}</span>
+                    </button>
                   </div>
-                )}
 
-                {/* Action Buttons Row */}
-                <div className="flex flex-wrap items-center gap-3 pt-2">
-                  <button
-                    type="button"
-                    onClick={handleOpenTrailer}
-                    className="px-6 py-3 rounded-xl bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-600 text-white font-bold text-sm shadow-xl shadow-rose-600/30 flex items-center gap-2 cursor-pointer transition-all active:scale-95"
-                  >
-                    <Play className="w-4 h-4 fill-white" />
-                    <span>Watch Trailer</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={handleWatchlistToggle}
-                    className={`px-5 py-3 rounded-xl border text-sm font-semibold flex items-center gap-2 cursor-pointer transition-all active:scale-95 ${isSaved
-                      ? "bg-[#e50914] text-white border-[#e50914] shadow-md shadow-red-950/40"
-                      : "bg-slate-900/80 hover:bg-slate-800 text-slate-200 border-slate-700"
-                      }`}
-                  >
-                    {isSaved ? <Check className="w-4 h-4 stroke-[3]" /> : <Bookmark className="w-4 h-4" />}
-                    <span>{isSaved ? "Saved in My List" : "Add to Watchlist"}</span>
-                  </button>
-                </div>
-
-                {/* Overview / Description */}
-                <div className="space-y-3 pt-2">
-                  <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-2">
-                    <Film className="w-4 h-4 text-rose-400" />
-                    Synopsis
-                  </h3>
-                  <p className="text-slate-300 text-base sm:text-lg leading-relaxed font-normal">
-                    {movie.description}
-                  </p>
-                </div>
-
-                {/* Quick Spec Highlights Grid */}
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3.5 pt-2">
-                  <div className="bg-slate-900/70 border border-slate-800/90 rounded-2xl p-4 space-y-1">
-                    <div className="flex items-center gap-1.5 text-xs text-slate-400">
+                  {/* Overview / Description */}
+                  <div className="space-y-2 pt-2">
+                    <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
                       <Film className="w-3.5 h-3.5 text-rose-400" />
-                      <span>Genre</span>
-                    </div>
-                    <p className="text-sm font-bold text-white">{movie.genre}</p>
-                  </div>
-
-                  <div className="bg-slate-900/70 border border-slate-800/90 rounded-2xl p-4 space-y-1">
-                    <div className="flex items-center gap-1.5 text-xs text-slate-400">
-                      <Calendar className="w-3.5 h-3.5 text-blue-400" />
-                      <span>Release Year</span>
-                    </div>
-                    <p className="text-sm font-bold text-white">{movie.release_year}</p>
-                  </div>
-
-                  <div className="bg-slate-900/70 border border-slate-800/90 rounded-2xl p-4 space-y-1">
-                    <div className="flex items-center gap-1.5 text-xs text-slate-400">
-                      <Eye className="w-3.5 h-3.5 text-emerald-400" />
-                      <span>Popularity</span>
-                    </div>
-                    <p className="text-sm font-bold text-white">
-                      {movie.views_count ? `${movie.views_count.toLocaleString()} Views` : "Trending"}
+                      Synopsis
+                    </h3>
+                    <p className="text-slate-300 text-sm sm:text-base leading-relaxed font-normal max-w-4xl">
+                      {movie.description}
                     </p>
+                  </div>
+
+                  {/* Quick Spec Highlights Grid */}
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2">
+                    <div className="bg-slate-950/70 border border-slate-800/90 rounded-xl p-3.5 space-y-1">
+                      <div className="flex items-center gap-1.5 text-xs text-slate-400">
+                        <Film className="w-3.5 h-3.5 text-rose-400" />
+                        <span>Genre</span>
+                      </div>
+                      <p className="text-xs sm:text-sm font-bold text-white">{movie.genre}</p>
+                    </div>
+
+                    <div className="bg-slate-950/70 border border-slate-800/90 rounded-xl p-3.5 space-y-1">
+                      <div className="flex items-center gap-1.5 text-xs text-slate-400">
+                        <Calendar className="w-3.5 h-3.5 text-blue-400" />
+                        <span>Release Year</span>
+                      </div>
+                      <p className="text-xs sm:text-sm font-bold text-white">{movie.release_year}</p>
+                    </div>
+
+                    <div className="bg-slate-950/70 border border-slate-800/90 rounded-xl p-3.5 space-y-1">
+                      <div className="flex items-center gap-1.5 text-xs text-slate-400">
+                        <Eye className="w-3.5 h-3.5 text-emerald-400" />
+                        <span>Popularity</span>
+                      </div>
+                      <p className="text-xs sm:text-sm font-bold text-white">
+                        {movie.views_count ? `${movie.views_count.toLocaleString()} Views` : "Trending"}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -500,8 +513,8 @@ export default function MovieDetailsPage() {
                   <span className="text-xs text-slate-400">Based on {movie.genre}</span>
                 </div>
 
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4 sm:gap-6">
-                  {similarMovies.slice(0, 4).map((simMovie) => (
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6">
+                  {similarMovies.slice(0, 6).map((simMovie) => (
                     <MovieCard
                       key={simMovie.id || (simMovie as any)._id}
                       movie={simMovie}
@@ -755,7 +768,7 @@ export default function MovieDetailsPage() {
 
       {/* Footer */}
       <footer className="border-t border-slate-900 bg-slate-950/80 py-8 text-center text-xs text-slate-500 mt-12">
-        <div className="max-w-7xl mx-auto px-4 space-y-2">
+        <div className="max-w-[1720px] mx-auto px-4 sm:px-6 lg:px-10 space-y-2">
           <p className="font-medium text-slate-400">
             CineVerse Movie Catalog Application &copy; {new Date().getFullYear()}
           </p>
