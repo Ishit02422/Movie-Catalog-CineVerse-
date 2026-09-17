@@ -108,29 +108,31 @@ export default function MovieDetailsPage() {
     }
   }, []);
 
-  const fetchedIdRef = useRef<string | null>(null);
-
   useEffect(() => {
     if (!id) return;
-    if (fetchedIdRef.current === id) return;
-    fetchedIdRef.current = id;
 
     async function loadMovieDetails() {
       setIsLoading(true);
       setError(null);
       try {
-        // Track unique view per browser session: only increment count on first visit
+        // Track unique view per specific user account (or guest)
         let shouldIncrementView = false;
         if (typeof window !== "undefined") {
           try {
-            const viewedKey = "cineverse_viewed_movies";
-            const stored = sessionStorage.getItem(viewedKey) || localStorage.getItem(viewedKey);
+            // Clean up any old global key
+            localStorage.removeItem("cineverse_viewed_movies");
+            sessionStorage.removeItem("cineverse_viewed_movies");
+
+            const userId = user?.id || (user as any)?._id || (user?.email ? `email_${user.email}` : "guest");
+            const viewedKey = `cineverse_viewed_${userId}`;
+            const stored = localStorage.getItem(viewedKey) || sessionStorage.getItem(viewedKey);
             const viewedSet: string[] = stored ? JSON.parse(stored) : [];
+
             if (!viewedSet.includes(id)) {
               shouldIncrementView = true;
               viewedSet.push(id);
-              sessionStorage.setItem(viewedKey, JSON.stringify(viewedSet));
               localStorage.setItem(viewedKey, JSON.stringify(viewedSet));
+              sessionStorage.setItem(viewedKey, JSON.stringify(viewedSet));
             }
           } catch (e) {
             console.warn("View tracking storage check failed:", e);
@@ -155,7 +157,7 @@ export default function MovieDetailsPage() {
     }
 
     loadMovieDetails();
-  }, [id, recordRecentlyViewed, loadSimilarMovies, loadReviews]);
+  }, [id, user?.id, (user as any)?._id, user?.email, recordRecentlyViewed, loadSimilarMovies, loadReviews]);
 
   const handleShare = () => {
     if (typeof window !== "undefined") {
