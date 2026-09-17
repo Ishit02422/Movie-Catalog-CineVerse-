@@ -92,16 +92,9 @@ export async function fetchGenres(): Promise<string[]> {
 /**
  * Fetch single movie details by ID
  */
-export async function fetchMovieById(
-  id: string,
-  incView: boolean = false
-): Promise<Movie | null> {
+export async function fetchMovieById(id: string): Promise<Movie | null> {
   try {
-    const url = incView
-      ? `${API_BASE_URL}/movies/${id}?inc_view=true`
-      : `${API_BASE_URL}/movies/${id}`;
-
-    const res = await fetch(url, {
+    const res = await fetch(`${API_BASE_URL}/movies/${id}`, {
       cache: "no-store",
     });
 
