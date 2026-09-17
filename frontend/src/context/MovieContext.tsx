@@ -12,6 +12,7 @@ import { Movie } from "../types/movie";
 import { fetchMovies, fetchFeaturedMovies, fetchGenres } from "../lib/api";
 import { useAuth } from "./AuthContext";
 import { useWatchlist } from "./WatchlistContext";
+import { getYouTubeTrailerUrl } from "../utils/trailerMap";
 
 interface MovieContextType {
   // Data Collections
@@ -43,10 +44,8 @@ interface MovieContextType {
   clearRecentlyViewed: () => void;
   refreshMovies: () => Promise<void>;
 
-  // Global Trailer Modal Player State
-  trailerModalMovie: Movie | null;
+  // Direct Trailer Action
   openTrailerModal: (movie: Movie) => void;
-  closeTrailerModal: () => void;
 
   // Status
   isLoading: boolean;
@@ -72,15 +71,12 @@ export const MovieProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [selectedYear, setSelectedYear] = useState<string>("");
   const [selectedSort, setSelectedSort] = useState<string>("year_desc");
 
-  // Trailer Modal State
-  const [trailerModalMovie, setTrailerModalMovie] = useState<Movie | null>(null);
-
+  // Direct YouTube Official Trailer Launcher
   const openTrailerModal = useCallback((movie: Movie) => {
-    setTrailerModalMovie(movie);
-  }, []);
-
-  const closeTrailerModal = useCallback(() => {
-    setTrailerModalMovie(null);
+    if (typeof window !== "undefined" && movie) {
+      const url = getYouTubeTrailerUrl(movie.title, (movie as any).trailer_url);
+      window.open(url, "_blank", "noopener,noreferrer");
+    }
   }, []);
 
   // Fetch initial all movies, featured movies, and genres from backend API
@@ -353,9 +349,7 @@ export const MovieProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         recordRecentlyViewed,
         clearRecentlyViewed,
         refreshMovies,
-        trailerModalMovie,
         openTrailerModal,
-        closeTrailerModal,
         isLoading,
         error,
       }}
