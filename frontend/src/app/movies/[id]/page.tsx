@@ -26,8 +26,6 @@ import {
   Send,
   Sparkles,
   Play,
-  Volume2,
-  Tv,
   ChevronRight,
   ShieldCheck,
 } from "lucide-react";
@@ -371,13 +369,6 @@ export default function MovieDetailsPage() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-50" />
 
-                    {/* Quality Badges */}
-                    <div className="absolute top-3 left-3 flex flex-col gap-1 z-10">
-                      <span className="px-2 py-0.5 rounded-md bg-black/80 border border-white/20 text-[10px] font-bold text-amber-300 backdrop-blur-md">
-                        4K ULTRA HD
-                      </span>
-                    </div>
-
                     {/* Center Pulsing Play Trailer Button */}
                     <button
                       type="button"
@@ -407,10 +398,6 @@ export default function MovieDetailsPage() {
                         {movie.rating.toFixed(1)} / 10 IMDb
                       </span>
                     )}
-                    <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-300 border border-emerald-500/30">
-                      <Tv className="w-3.5 h-3.5 text-emerald-400" />
-                      Dolby Atmos 5.1
-                    </span>
                   </div>
 
                   {/* Large Cinematic Title */}
@@ -486,7 +473,7 @@ export default function MovieDetailsPage() {
                   </div>
 
                   {/* Specifications Grid */}
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2">
                     <div className="bg-slate-950/70 border border-slate-800/90 rounded-2xl p-3.5 space-y-1">
                       <div className="flex items-center gap-1.5 text-xs text-slate-400">
                         <Film className="w-3.5 h-3.5 text-rose-400" />
@@ -498,7 +485,7 @@ export default function MovieDetailsPage() {
                     <div className="bg-slate-950/70 border border-slate-800/90 rounded-2xl p-3.5 space-y-1">
                       <div className="flex items-center gap-1.5 text-xs text-slate-400">
                         <Calendar className="w-3.5 h-3.5 text-blue-400" />
-                        <span>Year</span>
+                        <span>Release Year</span>
                       </div>
                       <p className="text-xs sm:text-sm font-bold text-white">{movie.release_year}</p>
                     </div>
@@ -511,14 +498,6 @@ export default function MovieDetailsPage() {
                       <p className="text-xs sm:text-sm font-bold text-white">
                         {movie.views_count ? `${movie.views_count.toLocaleString()} Views` : "Trending"}
                       </p>
-                    </div>
-
-                    <div className="bg-slate-950/70 border border-slate-800/90 rounded-2xl p-3.5 space-y-1">
-                      <div className="flex items-center gap-1.5 text-xs text-slate-400">
-                        <Volume2 className="w-3.5 h-3.5 text-amber-400" />
-                        <span>Audio</span>
-                      </div>
-                      <p className="text-xs sm:text-sm font-bold text-white">Dolby 5.1 / Atmos</p>
                     </div>
                   </div>
                 </div>
