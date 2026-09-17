@@ -148,6 +148,15 @@ export default function MovieDetailsPage() {
     }
   };
 
+  const handleBackToDashboard = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (typeof window !== "undefined" && window.history.length > 1) {
+      router.back();
+    } else {
+      router.push("/");
+    }
+  };
+
   const handleWatchlistToggle = async () => {
     if (!movie) return;
     await toggleWatchlist(movie);
@@ -237,13 +246,14 @@ export default function MovieDetailsPage() {
         {/* Breadcrumb Navigation & Quick Actions Bar */}
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800/80 pb-4">
           <div className="flex items-center gap-2 text-xs sm:text-sm font-semibold">
-            <Link
-              href="/"
-              className="inline-flex items-center gap-1.5 text-slate-400 hover:text-white transition-colors"
+            <button
+              type="button"
+              onClick={handleBackToDashboard}
+              className="inline-flex items-center gap-1.5 text-slate-400 hover:text-white transition-colors cursor-pointer"
             >
               <Home className="w-3.5 h-3.5" />
               <span>Catalog</span>
-            </Link>
+            </button>
             <ChevronRight className="w-3.5 h-3.5 text-slate-600" />
             <span className="text-slate-400">{movie?.genre || "Movie"}</span>
             <ChevronRight className="w-3.5 h-3.5 text-slate-600" />

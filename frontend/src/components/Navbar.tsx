@@ -40,6 +40,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           <div className="flex items-center gap-6 sm:gap-10">
             <Link
               href="/"
+              replace
               onClick={() => onSelectTab && onSelectTab("all")}
               className="flex items-center gap-2.5 group transition-transform duration-200 active:scale-95 cursor-pointer"
             >
