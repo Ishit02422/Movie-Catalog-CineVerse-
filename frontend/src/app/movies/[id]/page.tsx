@@ -109,37 +109,13 @@ export default function MovieDetailsPage() {
   }, []);
 
   useEffect(() => {
-    if (!id || authLoading) return;
+    if (!id) return;
 
     async function loadMovieDetails() {
       setIsLoading(true);
       setError(null);
       try {
-        // Track unique view per specific user account (or guest)
-        let shouldIncrementView = false;
-        if (typeof window !== "undefined") {
-          try {
-            // Clean up any old global key
-            localStorage.removeItem("cineverse_viewed_movies");
-            sessionStorage.removeItem("cineverse_viewed_movies");
-
-            const userId = user?.id || (user as any)?._id || (user?.email ? `email_${user.email}` : "guest");
-            const viewedKey = `cineverse_viewed_${userId}`;
-            const stored = localStorage.getItem(viewedKey) || sessionStorage.getItem(viewedKey);
-            const viewedSet: string[] = stored ? JSON.parse(stored) : [];
-
-            if (!viewedSet.includes(id)) {
-              shouldIncrementView = true;
-              viewedSet.push(id);
-              localStorage.setItem(viewedKey, JSON.stringify(viewedSet));
-              sessionStorage.setItem(viewedKey, JSON.stringify(viewedSet));
-            }
-          } catch (e) {
-            console.warn("View tracking storage check failed:", e);
-          }
-        }
-
-        const data = await fetchMovieById(id, shouldIncrementView);
+        const data = await fetchMovieById(id);
         if (!data) {
           setError("Movie not found. The movie ID might be invalid or deleted.");
         } else {
@@ -158,7 +134,7 @@ export default function MovieDetailsPage() {
     }
 
     loadMovieDetails();
-  }, [id, authLoading, user?.id, (user as any)?._id, user?.email, recordRecentlyViewed, updateMovieInStore, loadSimilarMovies, loadReviews]);
+  }, [id, recordRecentlyViewed, updateMovieInStore, loadSimilarMovies, loadReviews]);
 
   const handleShare = () => {
     if (typeof window !== "undefined") {
