@@ -99,7 +99,75 @@
 
 ---
 
-## 📋 4. Functional Requirements (FR)
+## 🔄 4. Feature Technical Data Flows
+
+### 🌟 4.1 Featured Movies & Hero Banner Technical Flow
+The Featured Movies Carousel represents the platform's flagship showcase, integrating an admin toggle workflow, indexed MongoDB querying, and auto-sliding ambient UI components.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Admin as 🛡️ Admin
+    actor User as 👤 User
+    participant UI as 🖥️ HeroBanner.tsx
+    participant State as 🔄 MovieContext.tsx
+    participant API as ⚡ Express API
+    participant DB as 🗄️ MongoDB Atlas
+
+    Note over Admin, DB: Phase A: Admin Marks Movie as Featured
+    Admin->>API: PATCH /api/movies/:id/feature (Authorization: Bearer <Admin_JWT>)
+    API->>DB: Movie.findById(id) -> movie.is_featured = !movie.is_featured -> save()
+    DB-->>API: Document updated { is_featured: true }
+    API-->>Admin: 200 OK + Updated movie data
+
+    Note over User, DB: Phase B: User Loads Featured Carousel
+    User->>UI: Navigates to Homepage (/)
+    UI->>State: Request active catalog
+    State->>API: GET /api/movies/featured
+    API->>DB: Movie.find({ is_featured: true, status: 'active' }).sort({ rating: -1 })
+    DB-->>API: Array of featured movie documents
+    API-->>State: Sets featuredMovies state store
+    State-->>UI: Passes featuredMovies prop to HeroBanner
+
+    Note over UI: Phase C: Carousel Lifecycle & User Actions
+    UI->>UI: Starts 7-second auto-slide timer (setInterval)
+    UI->>UI: Renders ambient blur backdrop + badges + title + synopses
+    User->>UI: Click "Watch Trailer" -> Launches verified official YouTube trailer
+    User->>UI: Click "+ Add to List" -> Toggles WatchlistContext optimistic bookmark
+    User->>UI: Click "View Details" -> Client-side route transition to /movies/:id
+```
+
+### 👁️ 4.2 Single Unique View Tracking Flow
+```mermaid
+sequenceDiagram
+    autonumber
+    actor User as 👤 Visitor
+    participant View as 🖥️ /movies/[id]/page.tsx
+    participant Store as 💾 Local/Session Storage
+    participant API as ⚡ Express API
+    participant DB as 🗄️ MongoDB Atlas
+    participant Context as 🔄 MovieContext.tsx
+
+    User->>View: Opens Movie Details Page (/movies/:id)
+    View->>Store: Check if movie ID exists in cineverse_viewed_movie_ids
+    alt Movie ID NOT found (First Visit)
+        View->>Store: Store movie ID in visited list
+        View->>API: GET /api/movies/:id?inc_view=true
+        API->>DB: Movie.findOneAndUpdate({ _id: id }, { $inc: { views_count: 1 } }, { new: true })
+        DB-->>API: Returns document with incremented view count (+1)
+        API-->>View: Returns updated movie data
+        View->>Context: updateMovieInStore(updatedMovie) [Real-time sync across all cards]
+    else Movie ID Already Exists (Duplicate / Back Navigation)
+        View->>API: GET /api/movies/:id?inc_view=false
+        API->>DB: Movie.findOne({ _id: id }) [Read-only query]
+        DB-->>API: Returns existing movie data
+        API-->>View: Returns data (Zero view count increment)
+    end
+```
+
+---
+
+## 📋 5. Functional Requirements (FR)
 
 | Requirement ID | Module | Feature / Description | Actor |
 | :--- | :--- | :--- | :--- |
@@ -129,7 +197,7 @@
 
 ---
 
-## ⚡ 5. Non-Functional Requirements (NFR)
+## ⚡ 6. Non-Functional Requirements (NFR)
 
 | Requirement No. | Description | Category | Standard Met |
 | :--- | :--- | :--- | :--- |
@@ -142,9 +210,9 @@
 
 ---
 
-## 🗄️ 6. Database Schema & Data Dictionary
+## 🗄️ 7. Database Schema & Data Dictionary
 
-### 6.1 Entity-Relationship (ER) Diagram
+### 7.1 Entity-Relationship (ER) Diagram
 
 ```mermaid
 erDiagram
@@ -197,7 +265,7 @@ erDiagram
     }
 ```
 
-### 6.2 Data Dictionary (Collections & Field Definitions)
+### 7.2 Data Dictionary (Collections & Field Definitions)
 
 #### Table: `users`
 | Field Name | Data Type | Nullable | Unique | Default | Description |
@@ -237,9 +305,9 @@ erDiagram
 
 ---
 
-## 📡 7. REST API Specifications
+## 📡 8. REST API Specifications
 
-### 7.1 Authentication Module (`/api/auth`)
+### 8.1 Authentication Module (`/api/auth`)
 
 #### `POST /api/auth/phone/send-otp`
 - **Description**: Generates a 6-digit cryptographic verification code, hashes it with Bcrypt, stores it with a 5-minute TTL, and transmits it via Nodemailer (Email) or SMS.
@@ -284,7 +352,7 @@ erDiagram
 
 ---
 
-### 7.2 Movie Catalog Module (`/api/movies`)
+### 8.2 Movie Catalog Module (`/api/movies`)
 
 | Method | Endpoint | Query Parameters | Authorization | Description |
 | :--- | :--- | :--- | :--- | :--- |
@@ -295,11 +363,13 @@ erDiagram
 | `POST` | `/api/movies` | None | Admin (Bearer JWT) | Creates new movie entry in database |
 | `PUT` | `/api/movies/:id` | None | Admin (Bearer JWT) | Updates existing movie metadata |
 | `DELETE`| `/api/movies/:id` | None | Admin (Bearer JWT) | Deletes movie from catalog |
+| `PATCH` | `/api/movies/:id/feature`| None | Admin (Bearer JWT) | Toggles Hero Banner featured status |
+| `PATCH` | `/api/movies/:id/status` | None | Admin (Bearer JWT) | Updates movie status (`active`, `hidden`, etc.) |
 | `POST` | `/api/movies/sync-popularity`| None | Admin (Bearer JWT) | Live sync with OMDb/IMDb ratings & views |
 
 ---
 
-## 🔒 8. Security & Optimization Engineering
+## 🔒 9. Security & Optimization Engineering
 
 1. **Zero Plaintext Credentials**: All verification OTP codes are hashed via `bcryptjs` with salt rounds before database insertion.
 2. **Zero-Leak API Responses**: Backend responses never send raw OTP strings or password hashes, eliminating devtools inspection attack vectors.
@@ -310,7 +380,7 @@ erDiagram
 
 ---
 
-## 🚀 9. Deployment & Production Setup
+## 🚀 10. Deployment & Production Setup
 
 ### Environment Variables Configuration
 
@@ -334,5 +404,5 @@ NEXT_PUBLIC_API_URL=https://movie-catalog-cineverse.onrender.com/api
 
 ---
 
-## 🏁 10. Summary & Conclusion
+## 🏁 11. Summary & Conclusion
 CineVerse represents a modern, resilient, full-stack streaming discovery architecture combining **Next.js 16**, **Express.js**, and **MongoDB Atlas**. With strict TypeScript type safety, persistent passwordless authentication, responsive dark cinema aesthetics, and real-time state synchronization, CineVerse provides an industry-standard solution for movie catalog management and user discovery.
