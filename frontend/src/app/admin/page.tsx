@@ -126,17 +126,20 @@ function cleanAndExtractImageUrl(url: string): string {
 }
 
 /**
- * Compress image file to lightweight Base64 data URL (< 150KB)
+ * Compress any large image file (MBs / 4K / high-res) to lightweight Base64 data URL
  */
-function compressImageFile(file: File): Promise<string> {
+async function compressImageFile(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const img = document.createElement("img");
-      img.onload = () => {
+    const objectUrl = URL.createObjectURL(file);
+    const img = document.createElement("img");
+
+    img.onload = () => {
+      try {
+        URL.revokeObjectURL(objectUrl);
         const canvas = document.createElement("canvas");
         let { width, height } = img;
-        const maxDim = 800;
+        const maxDim = 1200; // Crisp high-definition poster resolution
+
         if (width > height && width > maxDim) {
           height = Math.round((height * maxDim) / width);
           width = maxDim;
@@ -144,21 +147,37 @@ function compressImageFile(file: File): Promise<string> {
           width = Math.round((width * maxDim) / height);
           height = maxDim;
         }
+
         canvas.width = width;
         canvas.height = height;
         const ctx = canvas.getContext("2d");
+
         if (ctx) {
+          ctx.imageSmoothingEnabled = true;
+          ctx.imageSmoothingQuality = "high";
           ctx.drawImage(img, 0, 0, width, height);
-          resolve(canvas.toDataURL("image/jpeg", 0.82));
+          const compressedData = canvas.toDataURL("image/jpeg", 0.85);
+          resolve(compressedData);
         } else {
-          resolve(e.target?.result as string);
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result as string);
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
         }
-      };
-      img.onerror = () => resolve(e.target?.result as string);
-      img.src = e.target?.result as string;
+      } catch (err) {
+        reject(err);
+      }
     };
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
+
+    img.onerror = () => {
+      URL.revokeObjectURL(objectUrl);
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    };
+
+    img.src = objectUrl;
   });
 }
 
@@ -1603,7 +1622,7 @@ export default function AdminPage() {
                               : "Click to Upload Poster from Device"}
                         </p>
                         <p className="text-xs text-slate-400 mt-1">
-                          Supports PNG, JPG, JPEG, WEBP (Auto-optimized)
+                          Supports all file sizes (MBs / 4K / HD) • PNG, JPG, JPEG, WEBP
                         </p>
                       </div>
                     </label>
@@ -1952,7 +1971,7 @@ export default function AdminPage() {
                               : "Click to Upload Poster from Device"}
                         </p>
                         <p className="text-xs text-slate-400 mt-1">
-                          Supports PNG, JPG, JPEG, WEBP (Auto-optimized)
+                          Supports all file sizes (MBs / 4K / HD) • PNG, JPG, JPEG, WEBP
                         </p>
                       </div>
                     </label>
