@@ -167,7 +167,48 @@ sequenceDiagram
 
 ---
 
-## 📋 5. Functional Requirements (FR)
+## 👥 5. User & Administrator Operating Guide & Workflows
+
+### 👤 5.1 End-User Workflow (User Journey)
+1. **Passwordless Onboarding**:
+   - The user accesses the landing hero screen.
+   - Enters mobile phone number with the dynamic country code selector (Default `🇮🇳 +91`) or email address, or clicks **"Sign in with Google"**.
+   - Inputs the 6-digit verification OTP received via Email/SMS.
+   - Session persists indefinitely in browser `localStorage` until the user explicitly signs out.
+2. **Catalog Discovery & Search**:
+   - **Hero Banner Showcase**: Views high-priority featured movies with auto-sliding animation.
+   - **Instant Search**: Types movie titles into the 350ms debounced search bar.
+   - **Multi-Taxonomy Filtering**: Narrows catalog by genre pills (Action, Sci-Fi, Crime, etc.), release year range (1950–present), and sorting criteria (Popularity, Top Rated, Latest).
+3. **Movie Streaming & Details**:
+   - Clicks any movie card to load the dedicated widescreen details page.
+   - Unique view counter atomically increments **(+1)** on first visit.
+   - Clicks **"Watch Trailer"** to launch official studio trailers directly on YouTube in an unblocked tab.
+4. **Community Engagement & Watchlist**:
+   - Submits interactive 1-to-5 star ratings and written reviews.
+   - Clicks **"+ Add to List"** to bookmark titles into their personal Watchlist (`My List` tab).
+   - Manages profile credentials and viewing history.
+
+---
+
+### 🛡️ 5.2 Platform Administrator Workflow (Admin Studio `/admin`)
+1. **Secure Admin Authentication**:
+   - Admin logs in with administrative credentials (`admin@cineverse.com`).
+   - The system validates JWT payload role (`role === 'admin'`) and unlocks the protected `/admin` portal.
+2. **Catalog Content Lifecycle Management (CRUD)**:
+   - **Add Movie**: Fills in movie metadata (Title, Genre, Release Year, Description, Poster URL/Base64) and submits.
+   - **Poster Compression**: Client-side canvas compressor converts uploaded images to optimized Base64 data strings.
+   - **Edit & Update**: Edits movie synopses, genres, and ratings in real-time.
+   - **Delete**: Soft or hard deletes outdated movie records from the catalog.
+3. **Hero Carousel Curation**:
+   - Toggles the ⭐ Star Featured button to instantly promote or demote movies to/from the homepage Hero Banner.
+4. **Visibility & Distribution Control**:
+   - Sets movie distribution status: `Active` (publicly visible), `Hidden` (unlisted), `Under Review` (pending moderation), or `Removed`.
+5. **⚡ 1-Click Live IMDb Popularity Engine**:
+   - Triggers the global sync routine calling OMDb/IMDb APIs to update real-world ratings and million-scale viewer statistics across the catalog.
+
+---
+
+## 📋 6. Functional Requirements (FR)
 
 | Requirement ID | Module | Feature / Description | Actor |
 | :--- | :--- | :--- | :--- |
@@ -197,7 +238,7 @@ sequenceDiagram
 
 ---
 
-## ⚡ 6. Non-Functional Requirements (NFR)
+## ⚡ 7. Non-Functional Requirements (NFR)
 
 | Requirement No. | Description | Category | Standard Met |
 | :--- | :--- | :--- | :--- |
@@ -210,9 +251,9 @@ sequenceDiagram
 
 ---
 
-## 🗄️ 7. Database Schema & Data Dictionary
+## 🗄️ 8. Database Schema & Data Dictionary
 
-### 7.1 Entity-Relationship (ER) Diagram
+### 8.1 Entity-Relationship (ER) Diagram
 
 ```mermaid
 erDiagram
@@ -265,7 +306,7 @@ erDiagram
     }
 ```
 
-### 7.2 Data Dictionary (Collections & Field Definitions)
+### 8.2 Data Dictionary (Collections & Field Definitions)
 
 #### Table: `users`
 | Field Name | Data Type | Nullable | Unique | Default | Description |
@@ -305,71 +346,29 @@ erDiagram
 
 ---
 
-## 📡 8. REST API Specifications
+## 📡 9. REST API Specifications
 
-### 8.1 Authentication Module (`/api/auth`)
-
-#### `POST /api/auth/phone/send-otp`
-- **Description**: Generates a 6-digit cryptographic verification code, hashes it with Bcrypt, stores it with a 5-minute TTL, and transmits it via Nodemailer (Email) or SMS.
-- **Request Body**:
-```json
-{
-  "identifier": "+919876543210"
-}
-```
-- **Response (`200 OK`)**:
-```json
-{
-  "success": true,
-  "message": "OTP sent successfully to +919876543210"
-}
-```
-
-#### `POST /api/auth/phone/verify-otp`
-- **Description**: Validates candidate OTP against salted Bcrypt hash in database. If valid, provisions or retrieves user profile and returns a signed JWT authentication token.
-- **Request Body**:
-```json
-{
-  "identifier": "+919876543210",
-  "otp": "482910",
-  "name": "Ishit Patel"
-}
-```
-- **Response (`200 OK`)**:
-```json
-{
-  "success": true,
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6...",
-  "user": {
-    "id": "65fc109a8b1c4d0012a45678",
-    "name": "Ishit Patel",
-    "phone": "+919876543210",
-    "role": "user",
-    "watchlist": []
-  }
-}
-```
-
----
-
-### 8.2 Movie Catalog Module (`/api/movies`)
-
-| Method | Endpoint | Query Parameters | Authorization | Description |
+| Method | Endpoint | Query / Body | Auth | Description |
 | :--- | :--- | :--- | :--- | :--- |
-| `GET` | `/api/movies` | `search`, `genre`, `release_year`, `sort`, `status` | Public | Returns paginated/filtered movie catalog |
-| `GET` | `/api/movies/:id` | `inc_view=true/false` | Public | Returns movie details. Atomically increments `views_count` (+1) only if `inc_view=true` |
-| `GET` | `/api/movies/featured` | None | Public | Returns active Hero Carousel banner movies |
-| `GET` | `/api/movies/genres` | None | Public | Returns list of all unique genres in database |
-| `POST` | `/api/movies` | None | Admin (Bearer JWT) | Creates new movie entry in database |
-| `PUT` | `/api/movies/:id` | None | Admin (Bearer JWT) | Updates existing movie metadata |
-| `DELETE`| `/api/movies/:id` | None | Admin (Bearer JWT) | Deletes movie from catalog |
-| `PATCH` | `/api/movies/:id/feature`| None | Admin (Bearer JWT) | Toggles Hero Banner featured status |
-| `PATCH` | `/api/movies/:id/status` | None | Admin (Bearer JWT) | Updates movie status (`active`, `hidden`, etc.) |
-| `POST` | `/api/movies/sync-popularity`| None | Admin (Bearer JWT) | Live sync with OMDb/IMDb ratings & views |
+| `POST` | `/api/auth/phone/send-otp` | `{ identifier }` | Public | Sends 6-digit OTP via Email/SMS |
+| `POST` | `/api/auth/phone/verify-otp`| `{ identifier, otp, name }` | Public | Validates OTP & returns JWT token |
+| `POST` | `/api/auth/google` | `{ name, email, google_id }` | Public | Google OAuth token issuance |
+| `GET` | `/api/movies` | `search`, `genre`, `release_year`, `sort` | Public | Returns filtered & sorted catalog |
+| `GET` | `/api/movies/:id` | `inc_view=true/false` | Public | Details + atomic unique view tracking |
+| `GET` | `/api/movies/featured` | None | Public | Returns Hero Carousel featured movies |
+| `GET` | `/api/movies/genres` | None | Public | Distinct genres array |
+| `GET` | `/api/movies/:id/reviews`| None | Public | Returns community reviews list |
+| `POST` | `/api/movies/:id/reviews`| `{ rating, comment }` | Private | Submits 5-star review & recalculates average |
+| `POST` | `/api/movies` | Movie data payload | Admin | Creates new movie with live IMDb sync |
+| `PUT` | `/api/movies/:id` | Movie data payload | Admin | Updates existing movie metadata |
+| `DELETE`| `/api/movies/:id` | None | Admin | Deletes movie from catalog |
+| `PATCH` | `/api/movies/:id/feature`| None | Admin | Toggles Hero Banner featured status |
+| `PATCH` | `/api/movies/:id/status` | `{ status }` | Admin | Updates distribution status |
+| `POST` | `/api/movies/sync-popularity`| None | Admin | Live sync with OMDb/IMDb ratings & views |
 
 ---
 
-## 🔒 9. Security & Optimization Engineering
+## 🔒 10. Security & Optimization Engineering
 
 1. **Zero Plaintext Credentials**: All verification OTP codes are hashed via `bcryptjs` with salt rounds before database insertion.
 2. **Zero-Leak API Responses**: Backend responses never send raw OTP strings or password hashes, eliminating devtools inspection attack vectors.
@@ -380,7 +379,7 @@ erDiagram
 
 ---
 
-## 🚀 10. Deployment & Production Setup
+## 🚀 11. Deployment & Production Setup
 
 ### Environment Variables Configuration
 
@@ -404,5 +403,5 @@ NEXT_PUBLIC_API_URL=https://movie-catalog-cineverse.onrender.com/api
 
 ---
 
-## 🏁 11. Summary & Conclusion
+## 🏁 12. Summary & Conclusion
 CineVerse represents a modern, resilient, full-stack streaming discovery architecture combining **Next.js 16**, **Express.js**, and **MongoDB Atlas**. With strict TypeScript type safety, persistent passwordless authentication, responsive dark cinema aesthetics, and real-time state synchronization, CineVerse provides an industry-standard solution for movie catalog management and user discovery.
