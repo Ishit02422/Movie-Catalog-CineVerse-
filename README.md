@@ -1,128 +1,114 @@
-# CineVerse - Full-Stack Movie Catalog Application
+# 🎬 CineVerse - Full-Stack Movie Catalog & Streaming Platform
 
-A responsive, feature-packed full-stack **Movie Catalog Application** built with **Next.js 16 (App Router)**, **TypeScript**, **Tailwind CSS**, **Node.js + Express REST API**, and **MongoDB with Mongoose**.
-
----
-
-## 🌟 Key Features
-
-### 1. Database & Indexing (MongoDB + Mongoose)
-- Curated collection schema with: `id`, `title`, `genre`, `release_year`, `description`, `image_url`, `rating`, `views_count`, `featured`, and timestamps.
-- **Optimized MongoDB Indexes**: High-performance compound & single-field indexes on `title`, `genre`, `release_year`, and `featured`.
-- Automated **Database Seed Script** with 16 curated high-quality movies across multiple genres and years.
-
-### 2. Robust Backend REST APIs (`Express + TypeScript`)
-- `GET /api/movies` — Fetch all movies with simultaneous case-insensitive `search`, `genre` filter, `release_year` filter, and sorting (`rating_desc`, `year_desc`, `title_asc`).
-- `GET /api/movies/:id` — Fetch movie details by ID with validation and 404 handling.
-- `GET /api/movies/genres` — Retrieve distinct available movie genres dynamically.
-- `GET /api/movies/featured` — Retrieve top rated featured movies for the carousel.
-- Centralized error handling, input validation, CORS, and JSON response normalization.
-
-### 3. Modern Cinema-Themed Frontend (`Next.js + Tailwind CSS`)
-- **Direct Catalog Dashboard**: Opens directly to `http://localhost:3000` with zero barriers.
-- **Hero Carousel Banner**: Dynamic auto-sliding featured movies carousel.
-- **Real-Time Search with Debounce**: 350ms custom `useDebounce` hook for smooth, lag-free searching.
-- **Multi-Filter Bar**: Genre pill filters, release year dropdown, sort dropdown, and "Clear Filters" button.
-- **Responsive Movie Grid**: Responsive layout across Mobile, Tablet, and Desktop with poster image fallbacks, hover zoom effects, and rating badges.
-- **Movie Details Page (`/movies/[id]`)**: Detailed view with high-res poster, synopsis, star rating visualization, metadata, copy link action, and "Back to Movies" navigation.
-- **Graceful States**: Polished loading skeleton cards, empty result state, and 404 movie not found view.
+A high-performance, ultra-responsive cinema-themed movie catalog and discovery platform built with **Next.js 16 (App Router, Turbopack)**, **TypeScript 5**, **Tailwind CSS**, **Node.js + Express REST API**, and **MongoDB with Mongoose**.
 
 ---
 
-## 📁 Project Structure
+## 🌟 Key Features & Updates
+
+### 1. 🖥️ Ultra-Responsive Widescreen Layout
+- **Full-Width Expansion**: Fluid responsive container (`w-full px-4 sm:px-8 lg:px-12`) across Dashboard and Movie Details pages.
+- **Dynamic 2 to 7 Grid Columns**: Adapts smoothly from mobile (2 columns) up to ultrawide 2K/4K monitors (7 columns).
+
+### 2. 🔐 Multi-Channel Passwordless Authentication & Session Persistence
+- **Email & Phone OTP**: Passwordless sign-in and registration with 6-digit verification codes sent via Nodemailer (Gmail SMTP) or SMS.
+- **BcryptJS Cryptographic Hashing**: OTP codes are salted and hashed before storing in MongoDB; zero plaintext OTP storage.
+- **1-Click Google OAuth**: Seamless Google Sign-In with Firebase popup.
+- **Persistent Sessions**: User and Admin sessions persist in `localStorage` across browser restarts until explicit logout.
+
+### 3. 🎥 YouTube Official Trailer Engine
+- Direct official trailer launcher (`getYouTubeTrailerUrl`) opening verified official trailers directly on YouTube in new tabs without iframe embedding restrictions.
+
+### 4. 👁️ Live View Counter & Unique View Tracking
+- **Exact Formatted View Counter**: Real-time view metrics (e.g. `5,410,000 views`) on Movie Cards and Details pages.
+- **Unique View Tracking**: Atomically registers **1 unique view (+1)** per audience member without inflating view counts on back navigation.
+- **Real-Time State Sync**: Instant updates across the app via `MovieContext.updateMovieInStore` without manual browser refresh (F5).
+
+### 5. ⭐ Community 5-Star Reviews & Rating Studio
+- Interactive 5-star rating studio with comment submissions, review listing, and author/admin deletion controls.
+
+### 6. 🗂️ Universal Search, Filter & Sort
+- 350ms debounced real-time title search.
+- Multi-genre filtering pills & dropdowns.
+- Historical release year range (1950 to current year).
+- Dynamic sorting by Popularity / Views, IMDb Rating, Release Year, and Alphabetical title.
+
+### 7. ⚙️ Admin Studio Portal (`/admin`)
+- Master-detail content management system for movie CRUD operations, image compression, distribution status workflows (`Active`, `Hidden`, `Under Review`, `Removed`), and 1-click live IMDb popularity synchronization.
+
+---
+
+## 📁 Project Architecture
 
 ```
 Movie Catalog Application/
-├── backend/                        # Node.js + Express + TypeScript + Mongoose
+├── backend/                             # Express.js REST API + MongoDB Mongoose
 │   ├── src/
-│   │   ├── config/db.ts            # Mongoose MongoDB connection
-│   │   ├── controllers/            # movieController.ts
-│   │   ├── middleware/             # errorHandler.ts, authMiddleware.ts
-│   │   ├── models/Movie.ts         # Movie Schema & Performance Indexes
-│   │   ├── routes/movieRoutes.ts   # Express REST endpoints
-│   │   ├── types/movie.ts          # Backend TypeScript interfaces
-│   │   ├── utils/seed.ts           # Database Seeder (16 sample movies)
-│   │   └── server.ts               # Express application entrypoint
-│   ├── package.json
-│   └── tsconfig.json
-├── frontend/                       # Next.js 16 (App Router) + Tailwind CSS
+│   │   ├── config/db.ts                 # Database Connection
+│   │   ├── controllers/                 # authController, movieController, reviewController
+│   │   ├── middleware/                  # authMiddleware, errorHandler
+│   │   ├── models/                      # Movie, User, Review, Otp
+│   │   ├── routes/                      # authRoutes, movieRoutes, reviewRoutes
+│   │   ├── utils/                       # dynamicPopularityService, seed.ts
+│   │   └── server.ts                    # Express Entrypoint
+│   └── package.json
+├── frontend/                            # Next.js 16 (App Router) + Tailwind CSS
 │   ├── src/
 │   │   ├── app/
-│   │   │   ├── page.tsx            # Main Movie Catalog Dashboard
-│   │   │   ├── movies/[id]/page.tsx# Movie Details Page
-│   │   │   ├── layout.tsx          # Root Layout & Typography
-│   │   │   └── globals.css         # Tailwind & Custom Styles
-│   │   ├── components/
-│   │   │   ├── Navbar.tsx          # Sticky Header with Live Movie Counter
-│   │   │   ├── HeroBanner.tsx      # Cinema Featured Carousel Banner
-│   │   │   ├── FilterBar.tsx       # Search bar, Genre & Year filters
-│   │   │   ├── MovieGrid.tsx       # Dynamic Movie Grid & Empty states
-│   │   │   ├── MovieCard.tsx       # Responsive Movie Card with Badges
-│   │   │   └── LoadingSkeleton.tsx # Shimmer loading animation
-│   │   ├── hooks/useDebounce.ts    # Custom Debounce Hook
-│   │   ├── lib/api.ts              # Type-safe API Client
-│   │   └── types/movie.ts          # Frontend TypeScript definitions
-│   ├── next.config.ts
+│   │   │   ├── admin/page.tsx           # Admin Studio Portal
+│   │   │   ├── movies/[id]/page.tsx     # Widescreen Movie Details Page
+│   │   │   └── page.tsx                 # Main Dashboard
+│   │   ├── components/                  # Navbar, HeroBanner, FilterBar, MovieGrid, MovieCard, ProfileModal
+│   │   ├── context/                     # AuthContext, MovieContext, WatchlistContext, ToastContext
+│   │   ├── lib/api.ts                   # Type-safe API Client
+│   │   └── utils/trailerMap.ts          # YouTube Trailer Dictionary & Fallback
 │   └── package.json
-├── package.json                    # Root scripts for running full-stack
 └── README.md
 ```
 
 ---
 
-
-
----
+## 🚀 Quickstart & Local Setup
 
 ### Step 1: Install Dependencies
-From the project root:
+From the repository root:
 ```bash
 npm run install:all
 ```
 
----
-
 ### Step 2: Seed the Database
-Populate MongoDB with sample movies:
+Populate MongoDB with curated blockbuster movies:
 ```bash
 npm run seed --workspace=backend
-# or cd backend && npm run seed
 ```
 
----
-
-### Step 3: Run the Application
-Run both backend and frontend concurrently with a single command:
+### Step 3: Start Development Servers
+Run frontend and backend concurrently:
 ```bash
 npm run dev
 ```
 
-- **Frontend Application:** [http://localhost:3000](http://localhost:3000)
-- **Backend REST API:** [http://localhost:5000/api/movies](http://localhost:5000/api/movies)
+- **Frontend:** [http://localhost:3000](http://localhost:3000)
+- **Backend API:** [http://localhost:5000/api](http://localhost:5000/api)
+- **Admin Studio:** [http://localhost:3000/admin](http://localhost:3000/admin) (Default: `admin@cineverse.com` / `Admin@12345`)
 
 ---
 
-## 📡 Backend API Endpoints
+## 📡 Key REST API Endpoints
 
-| Method | Endpoint | Query Parameters | Description |
-|---|---|---|---|
-| `GET` | `/api/movies` | `search`, `genre`, `release_year`, `sort` | Get all movies with multi-filtering |
-| `GET` | `/api/movies/:id` | None | Get single movie details by MongoDB `_id` |
-| `GET` | `/api/movies/genres` | None | Get distinct list of genres |
-| `GET` | `/api/movies/featured`| None | Get top rated featured movies for carousel |
-
----
-
-## 🧪 Testing & Verification
-
-Run the automated end-to-end verification script:
-```bash
-node "C:\Users\Lenovo\.gemini\antigravity-ide\brain\0c8a012a-56c4-4d16-b275-eca18adffb41\scratch\test_e2e.mjs"
-```
-Tests pass for:
-- Database connectivity & movie retrieval
-- Case-insensitive search
-- Genre & release year filters (individual & combined)
-- Featured movies & distinct genres
-- Single movie by ID
-- Frontend homepage & movie details routing
+| Method | Endpoint | Query / Body | Description | Access |
+| :--- | :--- | :--- | :--- | :--- |
+| `POST` | `/api/auth/phone/send-otp` | `{ identifier, mode }` | Sends 6-digit OTP via Email/SMS | Public |
+| `POST` | `/api/auth/phone/verify-otp`| `{ identifier, otp }` | Verifies bcrypt OTP & returns JWT token | Public |
+| `POST` | `/api/auth/login` | `{ email, password }` | Traditional login | Public |
+| `POST` | `/api/auth/google` | `{ name, email }` | Google OAuth authentication | Public |
+| `GET` | `/api/movies` | `search`, `genre`, `year`, `sort` | Fetches filtered & sorted movie catalog | Public |
+| `GET` | `/api/movies/:id` | `inc_view=true/false` | Fetches movie details & updates view count | Public |
+| `GET` | `/api/movies/featured` | None | Fetches Hero Carousel featured movies | Public |
+| `GET` | `/api/movies/genres` | None | Returns distinct genres dynamically | Public |
+| `GET` | `/api/movies/:id/reviews`| None | Fetches all community reviews for a movie | Public |
+| `POST` | `/api/movies/:id/reviews`| `{ rating, comment }` | Submits 5-star review & updates score | Private |
+| `POST` | `/api/movies` | Movie data payload | Creates new movie in catalog | Admin Only |
+| `PUT` | `/api/movies/:id` | Movie data payload | Updates movie details | Admin Only |
+| `DELETE`| `/api/movies/:id` | None | Deletes movie from catalog | Admin Only |
+| `POST` | `/api/movies/sync-popularity` | None | Synchronizes catalog with live IMDb ratings | Admin Only |
