@@ -898,10 +898,22 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
               <div className="flex flex-col sm:flex-row items-center justify-center gap-2 max-w-lg mx-auto">
                 <div className="relative w-full sm:flex-1">
                   {isNumericPhone && (
-                    <div className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-800/95 border border-slate-700 text-xs sm:text-sm font-bold text-white select-none pointer-events-none animate-in fade-in zoom-in-95 duration-150 z-10 shadow-sm">
-                      <span className="text-base">🇮🇳</span>
-                      <span className="text-slate-200 font-mono tracking-wide">+91</span>
-                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setIsCountryPickerOpen(true)}
+                      className="absolute left-2.5 top-1/2 -translate-y-1/2 flex items-center gap-1.5 px-2 py-1 rounded-md bg-slate-800/95 hover:bg-slate-700/95 border border-slate-600 hover:border-slate-400 text-xs sm:text-sm font-bold text-white transition-all cursor-pointer active:scale-95 z-10 shadow-sm group"
+                      title="Click to change country"
+                    >
+                      <span className="w-5 h-3.5 rounded-[2px] overflow-hidden shrink-0 shadow-sm border border-white/20 bg-slate-800 flex items-center justify-center">
+                        <img
+                          src={`https://flagcdn.com/w40/${selectedCountry.code.toLowerCase()}.png`}
+                          alt={selectedCountry.name}
+                          className="w-full h-full object-cover"
+                        />
+                      </span>
+                      <span className="text-slate-200 font-mono tracking-wide">{selectedCountry.dialCode}</span>
+                      <ChevronDown className="w-3 h-3 text-slate-400 group-hover:text-white transition-transform" />
+                    </button>
                   )}
                   <input
                     type="text"
@@ -912,10 +924,10 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                         e.preventDefault();
                       }
                     }}
-                    maxLength={isNumericPhone ? 10 : 50}
-                    placeholder={isNumericPhone ? "Enter 10-digit mobile" : "Email or mobile number"}
+                    maxLength={isNumericPhone ? selectedCountry.maxLength : 50}
+                    placeholder={isNumericPhone ? `Enter ${selectedCountry.maxLength}-digit mobile` : "Email or mobile number"}
                     className={`w-full py-3.5 rounded-md bg-slate-900 border border-slate-700 text-white text-sm focus:border-white focus:outline-none transition-all font-medium ${
-                      isNumericPhone ? "pl-23 sm:pl-25 pr-4 tracking-wider font-mono text-sm sm:text-base" : "px-4"
+                      isNumericPhone ? "pl-26 sm:pl-28 pr-4 tracking-wider font-mono text-sm sm:text-base" : "px-4"
                     }`}
                   />
                 </div>
@@ -1424,7 +1436,7 @@ export const PhoneAuthHero: React.FC<PhoneAuthHeroProps> = ({ sampleMovies = [] 
                     <span className="font-bold text-white tracking-wide">
                       {identifier.includes("@")
                         ? identifier.toLowerCase()
-                        : `+91 ${identifier.replace(/\D/g, "").slice(-10)}`}
+                        : `${selectedCountry.dialCode} ${identifier.replace(/\D/g, "").slice(-selectedCountry.maxLength)}`}
                     </span>                  </div>
                 </div>
               </div>
